@@ -1,0 +1,42 @@
+/* SelectGroup.css */
+.select-group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.select-group-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+  justify-content: "center";
+  text-align: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 12px; /* Added some padding for better appearance */
+  border: 1px solid #ccc; /* Added border for unselected state */
+  border-radius: 12px; /* Optional: rounded corners */
+  background-color: white; /* Default background */
+  transition: all 0.2s ease; /* Smooth transition for changes */
+}
+
+.select-group-item input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  display: none;
+}
+
+.select-group-item span {
+  user-select: none;
+}
+
+/* Selected state styling */
+.select-group-item.selected {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
