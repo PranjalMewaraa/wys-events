@@ -8,6 +8,10 @@
   flex-wrap: wrap;
 }
 
+#wae {
+  background: url("/public/wae.png");
+}
+
 .select-group-item {
   display: flex;
   width: 100%;
