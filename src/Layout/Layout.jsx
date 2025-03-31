@@ -1,30 +1,69 @@
-import React from "react";
-import {
-  IoDocumentAttachOutline,
-  IoDocumentOutline,
-  IoDocumentsOutline,
-} from "react-icons/io5";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { IoDocumentsOutline } from "react-icons/io5";
 import { MdChatBubbleOutline, MdEventNote, MdPeopleAlt } from "react-icons/md";
 import { RiHome9Line } from "react-icons/ri";
 
 const Layout = ({ children }) => {
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState("home");
+
+  // Define routes and matching patterns
+  const navItems = [
+    { id: "home", icon: <RiHome9Line size={28} />, to: "/" },
+    { id: "events", icon: <MdEventNote size={28} />, to: "/events" },
+    { id: "people", icon: <MdPeopleAlt size={28} />, to: "/people" },
+    { id: "docs", icon: <IoDocumentsOutline size={28} />, to: "/listing" },
+    { id: "chat", icon: <MdChatBubbleOutline size={28} />, to: "/chat" },
+  ];
+
+  // On mount, sync activeTab from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("activeTab");
+    if (stored) setActiveTab(stored);
+  }, []);
+
+  // Update active tab based on current path (e.g., /events/abc → "events")
+  useEffect(() => {
+    const matchedItem = navItems.find((item) =>
+      location.pathname.startsWith(item.to)
+    );
+    if (matchedItem && matchedItem.id !== activeTab) {
+      setActiveTab(matchedItem.id);
+      localStorage.setItem("activeTab", matchedItem.id);
+    }
+  }, [location.pathname]);
+
+  // When clicking a tab
+  const handleTabClick = (id) => {
+    setActiveTab(id);
+    localStorage.setItem("activeTab", id);
+  };
+
   return (
     <div className="w-full flex items-center flex-col-reverse md:flex-row h-screen">
-      {/* Bottom Nav on Mobile, Side Nav on Desktop */}
+      {/* Navigation */}
       <nav
         id="nav"
         className="flex max-h-16 md:max-h-full absolute bottom-4 w-[90%] md:static px-8 md:flex-col justify-between md:justify-start md:gap-6 items-center md:items-stretch
                  md:w-28 bg-[#333333] rounded-xl md:rounded-none h-16 md:h-full z-50 py-2 md:py-8"
       >
-        <RiHome9Line size={28} color="orange" className="md:w-full" />
-        <MdEventNote size={28} color="gray" className="md:w-full" />
-        <MdPeopleAlt size={28} color="gray" className="md:w-full" />
-        <IoDocumentsOutline size={28} color="gray" className="md:w-full" />
-        <MdChatBubbleOutline size={28} color="gray" className="md:w-full" />
+        {navItems.map((item) => (
+          <Link
+            key={item.id}
+            to={item.to}
+            onClick={() => handleTabClick(item.id)}
+            className="md:w-full flex justify-center items-center"
+          >
+            {React.cloneElement(item.icon, {
+              color: activeTab === item.id ? "orange" : "gray",
+            })}
+          </Link>
+        ))}
       </nav>
 
       {/* Main Content */}
-      <div className="w-full h-full  md:mb-0 md:flex-1 overflow-y-scroll">
+      <div className="w-full h-full md:mb-0 md:flex-1 overflow-y-scroll">
         {children}
       </div>
     </div>

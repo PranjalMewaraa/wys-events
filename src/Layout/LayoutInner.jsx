@@ -8,7 +8,9 @@ const LayoutInnerMain = ({ children }) => {
         <p className="poppins-black text-4xl">WYS</p>
         <FaUser size={24} />
       </div>
-      <div className="h-fit w-full overflow-y-scroll">{children}</div>
+      <div className="h-full flex-1 w-full flex overflow-y-scroll">
+        {children}
+      </div>
     </div>
   );
 };

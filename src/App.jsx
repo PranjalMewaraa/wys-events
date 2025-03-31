@@ -18,18 +18,29 @@ import Matching from "./Pages/Matching/Matching";
 import Signin from "./Pages/AuthPages/Signin";
 
 import PreOnboarding from "./Pages/Onboarding/PreOnboarding.jsx/PreOnboarding";
+import InputDesign from "./Pages/EvenListing/Screen5";
+import EventsView from "./Pages/EvenListing/Screen";
+import EventListing7 from "./Pages/EvenListing/Screen7";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import MatchingHome from "./Pages/Matching/MatchingHome";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/events" element={<Home />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/onboarding" element={<OnBoarding />} />
         <Route path="/pre/onboarding" element={<PreOnboarding />} />
         <Route path="/onboarding" element={<OnBoarding />} />
         <Route path="/event/himalayas" element={<EventDetail />} />
-        <Route path="/matching" element={<Matching />} />
+        <Route path="/people" element={<MatchingHome />} />
+        <Route path="/people/detail" element={<Matching />} />
+        <Route path="/listing" element={<EventsView />} />
+        <Route path="/listing/upcoming/detail" element={<EventListing7 />} />
+        <Route path="/listing/input" element={<InputDesign />} />
+        <Route path="/check" element={<EventListing7 />} />
       </Routes>
     </Router>
   );
