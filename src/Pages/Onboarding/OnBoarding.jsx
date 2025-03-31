@@ -34,29 +34,29 @@ const OnBoarding = () => {
     },
   ];
   const traveldesc2 = [
-    { label: "🌍 Explorer", value: "male" },
-    { label: "🍹 Relaxer", value: "ww" },
+    { label: "🌍 Hiking in mountain", value: "male" },
+    { label: "🍹 Tropical Beach Escape", value: "ww" },
     {
-      label: "🎉 Social Butterfly",
+      label: "🎉 Cultural and Historical Sites",
       value: "Nightlife, xw, people",
     },
     {
-      label: "🎒 Backpacker",
+      label: "🎒 Music Festival and Nightlife",
       value: "y",
     },
-    { label: "🗺 Planner", value: "x" },
+    { label: "🗺 Adventure Sport", value: "x" },
     {
-      label: "🚀 Spontaneous",
+      label: "🚀 A food hopping journey",
       value: "Book a ticket & go!",
     },
     {
-      label: "🎒 Backpacker",
+      label: "🎒 Road trips and long drive",
       value: "ys",
     },
-    { label: "🗺 Planner", value: "x" },
+    { label: "🗺 Camping and offbeat destinations", value: "x" },
   ];
   const traveldesc3 = [
-    { label: "🌍 Explorer", value: "male" },
+    { label: "🌍 Slow and Immersive", value: "male" },
     { label: "🍹 Relaxer", value: "ww" },
     {
       label: "🎉 Social Butterfly",
@@ -78,7 +78,7 @@ const OnBoarding = () => {
   return (
     <Layout>
       <div className="w-full h-full flex flex-col items-center mt-4 gap-6">
-        <ProgressBar />
+        <ProgressBar width={page + 1} />
         {page === 0 && (
           <div className="w-full flex flex-col gap-6">
             <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
@@ -93,15 +93,13 @@ const OnBoarding = () => {
                 name={"fullname"}
               />
               <InputBox
-                label={"Hey traveler!"}
-                label2={"What should we call you?"}
-                placeholder={"Full Name"}
+                label={"Where are you now?"}
+                placeholder={"City, Country"}
                 name={"fullname"}
               />
               <InputBox
-                label={"Hey traveler!"}
-                label2={"What should we call you?"}
-                placeholder={"Full Name"}
+                label={"When is your birthday!"}
+                placeholder={"Date of Birth"}
                 name={"fullname"}
               />
               <SelectGroup
@@ -146,8 +144,8 @@ const OnBoarding = () => {
         {page === 2 && (
           <div className="w-full flex flex-col gap-6">
             <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              How do you love <br />{" "}
-              <span className="text-amber-500 ">to travel</span>
+              What is your <br />{" "}
+              <span className="text-amber-500 ">Ideal Trip</span>
             </h1>
             <form className="flex px-8 w-full flex-col gap-8">
               <SelectGroup

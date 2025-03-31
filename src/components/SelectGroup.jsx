@@ -60,7 +60,7 @@ const SelectGroup = ({
           return (
             <label
               key={option.value}
-              className={`select-group-item text-sm poppins-light ${
+              className={`select-group-item text-sm w-fit poppins-light ${
                 isChecked ? "selected" : ""
               }`}
             >

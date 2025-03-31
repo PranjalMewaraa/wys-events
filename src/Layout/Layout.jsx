@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
       {/* Bottom Nav on Mobile, Side Nav on Desktop */}
       <nav
         id="nav"
-        className="flex max-h-16 absolute bottom-4 w-[90%] md:static px-8 md:flex-col justify-between md:justify-start md:gap-6 items-center md:items-stretch
+        className="flex max-h-16 md:max-h-full absolute bottom-4 w-[90%] md:static px-8 md:flex-col justify-between md:justify-start md:gap-6 items-center md:items-stretch
                  md:w-28 bg-[#333333] rounded-xl md:rounded-none h-16 md:h-full z-50 py-2 md:py-8"
       >
         <RiHome9Line size={28} color="orange" className="md:w-full" />

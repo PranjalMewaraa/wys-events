@@ -69,7 +69,14 @@ const Home = () => {
             })}
           </div>
 
-          <div className="space-y-4 w-full px-4 mt-4">
+          <div className="space-y-4 w-full flex gap-4 flex-wrap px-4 mt-4">
+            <EventCard />
+            <EventCard />
+            <EventCard />
+            <EventCard />
+            <EventCard />
+            <EventCard />
+            <EventCard />
             <EventCard />
           </div>
         </div>
@@ -131,7 +138,7 @@ const EventCard = () => {
   return (
     <Link
       to="/event/himalayas"
-      className="block bg-white drop-shadow-xl rounded-xl shadow"
+      className="block bg-white max-w-sm drop-shadow-xl rounded-xl shadow"
     >
       <img
         src="https://imgs.search.brave.com/Ah4hMz04IJ9Ncii-qAm0qbYmbCSl4MkNgTVHNBI9yF8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi9hL2E5L0hp/a2luZ190b190aGVf/SWNlX0xha2VzLl9T/YW5fSnVhbl9OYXRp/b25hbF9Gb3Jlc3Ql/MkNfQ29sb3JhZG8u/anBnLzk2MHB4LUhp/a2luZ190b190aGVf/SWNlX0xha2VzLl9T/YW5fSnVhbl9OYXRp/b25hbF9Gb3Jlc3Ql/MkNfQ29sb3JhZG8u/anBn"
