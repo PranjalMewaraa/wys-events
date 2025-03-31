@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import { Home } from "./Pages/Events/Event";
 import EventDetail from "./components/Events/EventDetail";
+import Profile from "./Pages/Profile/Profilehome";
 
 const App = () => {
   return (
@@ -21,6 +22,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/event/himalayas" element={<EventDetail />} />
+        <Route path="/profile" element={<Profile/>} />
+
       </Routes>
     </Router>
   );
