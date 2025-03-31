@@ -23,6 +23,8 @@ import EventsView from "./Pages/EvenListing/Screen";
 import EventListing7 from "./Pages/EvenListing/Screen7";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import MatchingHome from "./Pages/Matching/MatchingHome";
+import ChatOuter from "./components/Chat/ChatOuter";
+import ChatBox from "./components/Chat/ChatBox";
 
 const App = () => {
   return (
@@ -41,6 +43,8 @@ const App = () => {
         <Route path="/listing/upcoming/detail" element={<EventListing7 />} />
         <Route path="/listing/input" element={<InputDesign />} />
         <Route path="/check" element={<EventListing7 />} />
+        <Route path="/chat" element={<ChatOuter/>}/>
+        <Route path="/chats" element={<ChatBox/>}/>
       </Routes>
     </Router>
   );

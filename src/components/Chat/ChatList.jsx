@@ -1,8 +1,21 @@
-import React from 'react'
-
+import { useNavigate } from 'react-router-dom';
 const ChatList = ({image,name,message}) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate('/chats', {
+      state: {
+        chatDetails: {
+          name,
+          image,
+          participants: "3 out of 5 are going" // Add dynamic data if available
+        }
+      }
+    });
+  };
   return (
-    <div className='w-full'>
+    <div className='w-full cursor-pointer' onClick={handleNavigation}>
+      <div className='w-full'>
         <div className='p-3 flex gap-3'>
         <img className='' src={image}/>
         <div className='w-full border-b border-black flex flex-col'>
@@ -12,6 +25,11 @@ const ChatList = ({image,name,message}) => {
         </div>
 
     </div>
+    </div>
   )
 }
 export default ChatList
+
+// ChatList.jsx
+
+

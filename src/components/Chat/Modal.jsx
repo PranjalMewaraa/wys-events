@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 const Modal = ({ isOpen, onClose, onShowPopup }) => {
-  const [userType,setUserType]=useState("host")
+  const [userType, setUserType] = useState("seekers");
+  const [isEventOver, setEventOver] = useState(true);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -17,6 +18,7 @@ const Modal = ({ isOpen, onClose, onShowPopup }) => {
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+
   return (
     <div className="fixed top-[490px] right-0 left-0 flex items-end">
       <div
@@ -30,7 +32,13 @@ const Modal = ({ isOpen, onClose, onShowPopup }) => {
             onShowPopup(); // Open Popup
           }}
         >
-          {userType === "host" ? "Send RSVP" : "Are you attending?"}
+          {isEventOver 
+            ? userType === "host" 
+              ? "Ask for Review" 
+              : "Share Your Experience"
+            : userType === "host" 
+              ? "Send RSVP" 
+              : "Are you attending?"}
         </div>
         <button className="w-full py-4 text-center text-black hover:bg-gray-100 border-b border-gray-200">
           View Experience

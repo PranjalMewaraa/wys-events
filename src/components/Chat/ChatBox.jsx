@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import person1 from '../assets/images/person-1.png'
+import person1 from '../../assets/images/person-1.png'
 
 import ChatNav from './ChatNav'
 import Modal from './Modal'
@@ -14,9 +14,9 @@ const ChatBox = () => {
   
     const isOverlayVisible = isModalOpen || isPopupOpen;
   return (
-    <div className='w-full'>
-         {isOverlayVisible && (
-        <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
+    <div className='w-full relative'>
+         {isModalOpen || isPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm"></div>
       )}
         <ChatNav setIsModalOpen={setIsModalOpen}/>
         {
@@ -43,11 +43,15 @@ const ChatBox = () => {
           onShowPopup={() => {
             setIsPopupOpen(true);
           }}
+          className="z-[60]" // Higher than overlay
+
         />
       )}
 
       {/* Render Popup */}
-      {isPopupOpen && <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />}
+      {isPopupOpen && <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}
+            className="z-[60]" // Higher than overlay
+       />}
     </div>
   )
 }

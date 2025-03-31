@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import person1 from '../assets/images/person-1.png'
-import person2 from '../assets/images/person-2.png'
-import p2 from '../assets/images/person2.svg'
-import trip1 from '../assets/images/trip1.svg'
-import trip2 from '../assets/images/trip2.svg'
-import lens from '../assets/images/lens.png'
+import person1 from '../../assets/images/person-1.png'
+import person2 from '../../assets/images/person-2.png'
+import p2 from '../../assets/images/person2.svg'
+import trip1 from '../../assets/images/trip1.svg'
+import trip2 from '../../assets/images/trip2.svg'
+import lens from '../../assets/images/lens.png'
 import ChatList from './ChatList'
 const people=[
     {image:p2,
