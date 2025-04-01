@@ -1,7 +1,8 @@
+import { div } from "framer-motion/client";
 import React, { useEffect, useState } from "react";
 
 const Modal = ({ isOpen, onClose, onShowPopup }) => {
-  const [userType, setUserType] = useState("seekers");
+  const [userType, setUserType] = useState("host");
   const [isEventOver, setEventOver] = useState(true);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const Modal = ({ isOpen, onClose, onShowPopup }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-[490px] right-0 left-0 flex items-end">
+      <div className="fixed top-[490px] right-0 left-0 flex items-end">
       <div
         className="modal-content w-full bg-white rounded-t-2xl shadow-lg border border-transparent drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4"
         onClick={(e) => e.stopPropagation()}
@@ -48,6 +49,7 @@ const Modal = ({ isOpen, onClose, onShowPopup }) => {
         </button>
       </div>
     </div>
+    
   );
 };
 

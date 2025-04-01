@@ -4,7 +4,7 @@ import ConfirmPopup from './ConfirmPopup';
 
 const Popup = ({ isOpen, onClose }) => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-  const [userType, setUserType] = useState("seekers");
+  const [userType, setUserType] = useState("host");
   const [isEventOver, setEventOver] = useState(true);
   const [showReviewPopup, setShowReviewPopup] = useState(false); // Change to false initially
 
@@ -29,7 +29,7 @@ const Popup = ({ isOpen, onClose }) => {
         userType === "host" ? (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
             <div className="bg-white rounded-lg shadow-lg w-full px-6 py-5">
-              <p className="abeezee-regular text-center text-lg font-extrabold mb-5">
+              <p className="poppins-semibold text-center text-lg mb-5">
                 Ask for <span className="text-orange-400">review</span>
               </p>
               <p className="abeezee-regular text-center text-lg font-semibold mb-5">
@@ -54,7 +54,7 @@ const Popup = ({ isOpen, onClose }) => {
         ) : (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
             <div className="bg-white rounded-lg shadow-lg w-full px-6 py-5">
-              <p className="abeezee-regular text-center text-lg font-extrabold mb-5">
+              <p className="poppins-semibold text-center text-lg  mb-5">
                 Share your <span className="text-orange-400">Experience</span>
               </p>
               <p className="abeezee-regular text-center text-lg font-semibold mb-5">
@@ -80,7 +80,7 @@ const Popup = ({ isOpen, onClose }) => {
       ) : showConfirmPopup === false ? (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
           <div className="bg-white rounded-lg shadow-lg w-full px-6 py-5">
-            <p className="abeezee-regular text-center text-lg font-medium mb-5">
+            <p className="poppins-semibold text-center text-lg font-medium mb-5">
               Are you <span className="text-orange-400 font-semibold">attending</span>?
             </p>
             <div className="flex justify-center gap-4">

@@ -15,8 +15,8 @@ const ReviewPopUp = ({ onClose, onSubmit }) => {
 <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
       <div className=" bg-white rounded-lg w-full max-w-md mx-4 ">
         {/* Header */}
-        <div className="flex justify-center items-center p-4 border-b relative">
-          <h2 className="text-xl font-medium">
+        <div className="flex justify-center items-center p-4 relative">
+          <h2 className="text-xl poppins-semibold">
             Write a <span className="text-orange-400">review</span>
           </h2>
           <button 
@@ -30,9 +30,9 @@ const ReviewPopUp = ({ onClose, onSubmit }) => {
         </div>
         
         {/* Review Text Area */}
-        <div className="p-4 bg-gray-100">
+        <div className=" bg-gray-100 rounded-2xl m-2">
           <textarea
-            className="w-full h-32 p-3 rounded bg-gray-100 text-gray-400 resize-none outline-none font-['ABeeZee']"
+            className="w-full h-40 p-3 rounded bg-[#F0F0F0] text-[#333333] resize-none outline-none abeezee-regular"
             placeholder="Let us know how was your experience"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
@@ -41,7 +41,7 @@ const ReviewPopUp = ({ onClose, onSubmit }) => {
         
         {/* Rating Section */}
         <div className="p-6">
-          <p className="text-center text-lg font-medium mb-4">Rate your experience</p>
+          <p className="abeezee-regular text-center text-lg mb-4">Rate your experience</p>
           <div className="flex justify-center mb-6">
             {[1, 2, 3, 4, 5].map((star) => (
               <button

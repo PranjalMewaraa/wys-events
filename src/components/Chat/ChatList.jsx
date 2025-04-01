@@ -3,7 +3,7 @@ const ChatList = ({image,name,message}) => {
   const navigate = useNavigate();
 
   const handleNavigation = () => {
-    navigate('/chats', {
+    navigate(`/chats`, {
       state: {
         chatDetails: {
           name,

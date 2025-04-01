@@ -89,6 +89,8 @@ const ChatNav = () => {
         <button onClick={(e) => {
           e.stopPropagation();
           setIsModalOpen(true);
+          console.log("isModalOpen should be true now"); // ✅ Log to check update
+
         }}>
           <img src={dots} alt="Options" />
         </button>

@@ -5,7 +5,7 @@ const ConfirmPopup = ({onClose}) => {
     <div>  
         <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
           <div className="bg-white rounded-lg shadow-lg w-full px-6 py-5">
-            <p className="text-center text-lg font-medium mb-5">
+            <p className="poppins-semibold text-center text-lg font-medium mb-5">
               Want to leave <span className="text-orange-400 font-semibold">experience</span>?
             </p>
             <div className="flex justify-center gap-4">
