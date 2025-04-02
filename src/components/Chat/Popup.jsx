@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ReviewPopUp from './ReviewPopup';
 import ConfirmPopup from './ConfirmPopup';
+import useEventDetails from '../../utils/hooks/event';
 
 const Popup = ({ isOpen, onClose }) => {
+  const eventId="67e54a94840201363f001288"
+
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-  const [userType, setUserType] = useState("host");
   const [isEventOver, setEventOver] = useState(true);
   const [showReviewPopup, setShowReviewPopup] = useState(false); // Change to false initially
+  const {userRole } = useEventDetails(eventId);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -26,7 +29,7 @@ const Popup = ({ isOpen, onClose }) => {
       {showReviewPopup ? (
         <ReviewPopUp onClose={onClose}/>
       ) : isEventOver ? (
-        userType === "host" ? (
+        userRole === "host" ? (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
             <div className="bg-white rounded-lg shadow-lg w-full px-6 py-5">
               <p className="poppins-semibold text-center text-lg mb-5">

@@ -1,8 +1,9 @@
-import { div } from "framer-motion/client";
 import React, { useEffect, useState } from "react";
+import useEventDetails from "../../utils/hooks/event";
 
-const Modal = ({ isOpen, onClose, onShowPopup }) => {
-  const [userType, setUserType] = useState("host");
+const Modal = ({ isOpen, onClose, onShowPopup,eventId }) => {
+const {userRole } = useEventDetails(eventId);
+
   const [isEventOver, setEventOver] = useState(true);
 
   useEffect(() => {
@@ -18,10 +19,15 @@ const Modal = ({ isOpen, onClose, onShowPopup }) => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isOpen, onClose]);
 
+
+
+
   if (!isOpen) return null;
 
+
+
   return (
-      <div className="fixed top-[490px] right-0 left-0 flex items-end">
+      <div className="fixed top-[450px] right-0 left-0 flex ">
       <div
         className="modal-content w-full bg-white rounded-t-2xl shadow-lg border border-transparent drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4"
         onClick={(e) => e.stopPropagation()}
@@ -34,10 +40,10 @@ const Modal = ({ isOpen, onClose, onShowPopup }) => {
           }}
         >
           {isEventOver 
-            ? userType === "host" 
+            ? userRole === "host" 
               ? "Ask for Review" 
               : "Share Your Experience"
-            : userType === "host" 
+            : userRole === "host" 
               ? "Send RSVP" 
               : "Are you attending?"}
         </div>
@@ -45,7 +51,7 @@ const Modal = ({ isOpen, onClose, onShowPopup }) => {
           View Experience
         </button>
         <button className="w-full py-4 text-center text-black hover:bg-gray-100">
-          {userType === "host" ? "Close Listing" : "Leave Experience"}
+          {userRole === "host" ? "Close Listing" : "Leave Experience"}
         </button>
       </div>
     </div>

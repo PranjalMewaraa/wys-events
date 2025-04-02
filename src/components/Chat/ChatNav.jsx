@@ -58,7 +58,7 @@ import { useLocation } from "react-router-dom";
 // ChatNav.jsx
 
 
-const ChatNav = () => {
+const ChatNav = ({eventId}) => {
   const location = useLocation();
   const { chatDetails } = location.state || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,6 +102,7 @@ const ChatNav = () => {
           onShowPopup={() => {
             setIsPopupOpen(true);
           }}
+          eventId={eventId}
         />
       )}
 

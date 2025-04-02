@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -27,8 +27,9 @@ import ChatOuter from "./components/Chat/ChatOuter";
 import ChatBox from "./components/Chat/ChatBox";
 
 const App = () => {
+
   return (
-    <Router>
+      <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/events" element={<Home />} />
@@ -47,6 +48,8 @@ const App = () => {
         <Route path="/chats" element={<ChatBox/>}/>
       </Routes>
     </Router>
+
+    
   );
 };
 
