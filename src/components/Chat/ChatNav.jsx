@@ -5,59 +5,6 @@ import Modal from "./Modal";
 import Popup from "./Popup";
 import { useLocation } from "react-router-dom";
 
-
-// const ChatNav = () => {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-//   return (
-//     <div className="border border-transparent bg-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4">
-//       <div className="w-full flex gap-10 items-center justify-evenly">
-//         <button>
-//           <img src={arrow} />
-//         </button>
-//         <div className="flex gap-2">
-//           <img src={scene} />
-//           <div className="flex flex-col gap-0.5">
-//             <p className="abeezee-regular text-base leading-[100%] text-black">
-//               Himalayas Trek
-//             </p>
-//             <p className="abeezee-regular text-[12px] text-[#757575]">
-//               3 out of 5 are going
-//             </p>
-//           </div>
-//         </div>
-//         <button
-//           onClick={(e) => {
-//             e.stopPropagation();
-//             setIsModalOpen(true);
-//           }}
-//         >
-//           <img src={dots} />
-//         </button>
-//       </div>
-
-//       {/* Modal */}
-//       {isModalOpen && (
-//         <Modal
-//           isOpen={isModalOpen}
-//           onClose={() => setIsModalOpen(false)}
-//           onShowPopup={() => {
-//             setIsPopupOpen(true);
-//           }}
-//         />
-//       )}
-
-//       {/* Popup */}
-//     </div>
-//   );
-// };
-
-// export default ChatNav;
-
-// ChatNav.jsx
-
-
 const ChatNav = ({eventId}) => {
   const location = useLocation();
   const { chatDetails } = location.state || {};
@@ -89,7 +36,6 @@ const ChatNav = ({eventId}) => {
         <button onClick={(e) => {
           e.stopPropagation();
           setIsModalOpen(true);
-          console.log("isModalOpen should be true now"); // ✅ Log to check update
 
         }}>
           <img src={dots} alt="Options" />
@@ -107,7 +53,8 @@ const ChatNav = ({eventId}) => {
       )}
 
       {/* Modal and Popup components */}
-           {isPopupOpen && <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />}
+           {isPopupOpen && <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} 
+            eventId={eventId}/>}
 
     </div>
   );

@@ -6,7 +6,7 @@ const api = axios.create({
   baseURL: "https://wysbackend.onrender.com/api", // Replace with your backend API base URL
 });
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzUxNTUwOSwiZXhwIjoxNzQzNjAxOTA5fQ.a5d035sOj6L3bgF-Qrvz7Hv32vL7Vj0qk_ePe81rTlY";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzY2MTQyNywiZXhwIjoxNzQzNzQ3ODI3fQ.3S0E1Hh-IRocuEkk2K0E8pG_QtwHs3s80ikan8bwpgk";
 
 // Automatically add token to Authorization header
 // api.interceptors.request.use(async (config) => {

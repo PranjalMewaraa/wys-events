@@ -19,7 +19,7 @@ const ChatOuter = () => {
   const [loading, setLoading] = useState(false); // Loading state for groups
   const [error, setError] = useState(null); // Error state for groups
   const API_URL = "https://wysbackend.onrender.com/api"; // The API URL
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzUxNTUwOSwiZXhwIjoxNzQzNjAxOTA5fQ.a5d035sOj6L3bgF-Qrvz7Hv32vL7Vj0qk_ePe81rTlY"
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzY2MTQyNywiZXhwIjoxNzQzNzQ3ODI3fQ.3S0E1Hh-IRocuEkk2K0E8pG_QtwHs3s80ikan8bwpgk"
 
   // Fetch groups when the "Groups" tab is selected
   useEffect(() => {
@@ -29,11 +29,12 @@ const ChatOuter = () => {
         setError(null);
 
         try {
+          // const endpoint
           const res = await fetch(`${API_URL}/group/my-groups`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`, // Include the token in the header
+              'Authorization': `Bearer ${token}`, // Include the token in the heade
             }
           });
 

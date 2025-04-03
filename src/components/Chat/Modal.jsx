@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useEventDetails from "../../utils/hooks/event";
+import { useChat } from "../../utils/hooks/message";
 
-const Modal = ({ isOpen, onClose, onShowPopup,eventId }) => {
-const {userRole } = useEventDetails(eventId);
+const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
+  const { userRole, isEventOver } = useEventDetails(eventId);
+  
 
-  const [isEventOver, setEventOver] = useState(true);
+  const { triggerPollMessage } = useChat(eventId);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -15,38 +17,48 @@ const {userRole } = useEventDetails(eventId);
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, onClose]);
-
-
-
 
   if (!isOpen) return null;
 
+  const handlePrimaryAction = () => {
+    onClose(); // Close modal
 
+    if (userRole === "host") {
+      if (!isEventOver) {
+        // Host before event: Send RSVP poll in chat
+        triggerPollMessage("Have you made up your mind about attending?");
+      } else {
+        // Host after event: First open review popup
+        onShowPopup();
+      }
+    } else {
+      // Seeker: Just open popup, no poll in chat
+      onShowPopup();
+    }
+  };
 
   return (
-      <div className="fixed top-[450px] right-0 left-0 flex ">
+    <div className="fixed top-[450px] right-0 left-0 flex">
       <div
         className="modal-content w-full bg-white rounded-t-2xl shadow-lg border border-transparent drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div
           className="text-center text-lg font-medium border-b border-gray-200 pb-2 cursor-pointer"
-          onClick={() => {
-            onClose(); // Close modal
-            onShowPopup(); // Open Popup
-          }}
+          onClick={handlePrimaryAction}
         >
-          {isEventOver 
-            ? userRole === "host" 
-              ? "Ask for Review" 
+          {isEventOver
+            ? userRole === "host"
+              ? "Ask for Review"
               : "Share Your Experience"
-            : userRole === "host" 
-              ? "Send RSVP" 
-              : "Are you attending?"}
+            : userRole === "host"
+            ? "Send RSVP"
+            : "Are you attending?"}
         </div>
+
         <button className="w-full py-4 text-center text-black hover:bg-gray-100 border-b border-gray-200">
           View Experience
         </button>
@@ -55,7 +67,6 @@ const {userRole } = useEventDetails(eventId);
         </button>
       </div>
     </div>
-    
   );
 };
 

@@ -17,9 +17,19 @@ export const useChat = (eventId) => {
     loadMessages();
     const interval = setInterval(loadMessages, 3000);
     return () => clearInterval(interval);
-  }, [eventId, setMessages]);
+  }, [eventId]);
 
-  // Send message and update Recoil state
+  // Function to send poll messages
+  const triggerPollMessage = async (pollMessage) => {
+    const newMessage = await sendMessage(groupId, pollMessage, {
+      type: "poll",
+    });
+    if (newMessage) {
+      setMessages((prev) => [...prev, newMessage]);
+    }
+  };
+
+  // Send normal messages
   const handleSendMessage = async () => {
     if (!message.trim()) return;
     const newMessage = await sendMessage(groupId, message);
@@ -29,5 +39,11 @@ export const useChat = (eventId) => {
     }
   };
 
-  return { messages, message, setMessage, handleSendMessage };
+  return {
+    messages,
+    message,
+    setMessage,
+    handleSendMessage,
+    triggerPollMessage,
+  };
 };
