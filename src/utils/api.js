@@ -1,12 +1,8 @@
-// src/utils/axiosClient.js
 import axios from "axios";
-// import { getToken } from "@clerk/clerk-js";
-
 const api = axios.create({
-  baseURL: "https://wysbackend.onrender.com/api", // Replace with your backend API base URL
+  baseURL: "https://wysbackend.onrender.com/api",
 });
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzY2MTQyNywiZXhwIjoxNzQzNzQ3ODI3fQ.3S0E1Hh-IRocuEkk2K0E8pG_QtwHs3s80ikan8bwpgk";
+const token = import.meta.env.VITE_AUTH_TOKEN;
 
 // Automatically add token to Authorization header
 // api.interceptors.request.use(async (config) => {
@@ -20,6 +16,7 @@ const token =
 // export default api;
 
 //event
+//auth login & signup
 
 export const fetchEventById = async (eventId) => {
   try {
@@ -34,6 +31,37 @@ export const fetchEventById = async (eventId) => {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response.data);
     }
+    throw error;
+  }
+};
+//group api
+
+export const fetchGroups = async (token) => {
+  try {
+    const res = await api.get("/group/my-groups", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data; // Axios automatically parses JSON
+  } catch (error) {
+    console.error("Failed to fetch groups", error);
+    throw error;
+  }
+};
+
+export const fetchFriends = async (token) => {
+  try {
+    const res = await api.get("/message/getAllFriends", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Failed to fetch friends", error);
     throw error;
   }
 };
@@ -77,7 +105,7 @@ export const sendMessage = async (groupId, message) => {
   try {
     const response = await api.post(
       `/group/messages/send/${groupId}`,
-      { content: message }, // Send the message in the request body
+      { content: message },
       {
         headers: {
           "Content-Type": "application/json",
@@ -93,6 +121,45 @@ export const sendMessage = async (groupId, message) => {
     } else {
       console.error("Error sending message:", error);
     }
+    return null;
+  }
+};
+
+export const fetchDirectMessages = async (userId) => {
+  try {
+    const response = await api.get(`/message/conversation/${userId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return {
+      messages: response.data.messages || [],
+    };
+  } catch (error) {
+    console.error("Error fetching direct messages:", error);
+    return { messages: [] };
+  }
+};
+
+export const sendDirectMessage = async (userId, message) => {
+  try {
+    console.log("Sending direct message to:", userId);
+
+    const response = await api.post(
+      `/message/send/${userId}`,
+      { content: message },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.message;
+  } catch (error) {
+    console.error("Error sending direct message:", error);
     return null;
   }
 };

@@ -6,61 +6,23 @@ import trip1 from '../../assets/images/trip1.svg';
 import trip2 from '../../assets/images/trip2.svg';
 import lens from '../../assets/images/lens.png';
 import ChatList from './ChatList';
+import { useChatList } from '../../utils/hooks/group';
 
-const people = [
-  { image: p2, name: "Aditi Wanderlust", message: "Let’s connect this evening to discuss" },
-  { image: p2, name: "Aditi Wanderlust", message: "Sure we can discuss" },
-  { image: p2, name: "Aditi Wanderlust", message: "Sure we can discuss" }
-];
+
 
 const ChatOuter = () => {
   const [activeTab, setActiveTab] = useState('people'); // Default: People tab
-  const [groups, setGroups] = useState([]); // To store the fetched groups
-  const [loading, setLoading] = useState(false); // Loading state for groups
-  const [error, setError] = useState(null); // Error state for groups
+
+  // Error state for groups
   const API_URL = "https://wysbackend.onrender.com/api"; // The API URL
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzY2MTQyNywiZXhwIjoxNzQzNzQ3ODI3fQ.3S0E1Hh-IRocuEkk2K0E8pG_QtwHs3s80ikan8bwpgk"
+  const token = import.meta.env.VITE_AUTH_TOKEN
 
   // Fetch groups when the "Groups" tab is selected
-  useEffect(() => {
-    if (activeTab === 'group') {
-      const fetchGroups = async () => {
-        setLoading(true);
-        setError(null);
+  const { groups, people, loading, error } = useChatList(activeTab, token);
 
-        try {
-          // const endpoint
-          const res = await fetch(`${API_URL}/group/my-groups`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`, // Include the token in the heade
-            }
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            setGroups(data);
-            console.log(data) 
-            console.log(data[0].eventId._id)
-            localStorage.setItem(data[0].eventId._id,"eventId")
-            // Assuming the response has a `groups` property
-          } else {
-            setError("Failed to fetch groups");
-          }
-        } catch (error) {
-          setError("Error fetching groups");
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchGroups();
-    }
-  }, [activeTab]); // Runs the fetch when the tab is changed to "group"
 
   return (
-    <div className='w-full bg-gray-100'>
+    <div className='w-full h-full bg-gray-100'>
       <div className='w-9/10 container m-auto mt-6 border border-transparent rounded-2xl bg-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)]'>
         <div className='min-w-9/10 m-5 flex flex-col gap-5 md:gap-9'>
           <p className='text-base abeezee-regular leading-6 md:text-4xl'>Seekers</p>
@@ -102,7 +64,7 @@ const ChatOuter = () => {
         </div>
       </div>
 
-      <div className='w-full border border-transparent rounded-t-3xl bg-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)]'>
+      <div className='w-full h-screen border border-transparent rounded-t-3xl bg-white drop-shadow-[0_-4px_6px_rgba(0,0,0,0.1)]'>
         <div className="w-9/10 m-auto mt-3 flex items-center gap-2 border-2 border-gray-400 rounded-lg px-3 py-2 focus-within:ring-2">
           <span className="text-gray-400">
             <img src={lens} />
@@ -115,21 +77,26 @@ const ChatOuter = () => {
         </div>
 
         <div className='h-full mb-40'>
-          {/* Show loading spinner if fetching groups */}
-          {loading && <p>Loading groups...</p>}
+     {activeTab=="group"?groups.map((group)=>(
+      <ChatList key={group._id}
+      image={group.image}
+      name={group.groupName}
+      eventId={group.eventId._id}
+      activeTab="group"
+      token={token}
+      />
+     )):
+     people.map((user)=>(
+      <ChatList
+      key={user._id}
+      image={user.avatar}
+      name={user.name}
+      userId={user._id}
+      activeTab="people"
+      token={token}
+      />
+     ))}
 
-          {/* Show error message if fetching groups fails */}
-          {error && <p className="text-red-500">{error}</p>}
-
-          {/* Render People or Groups based on the activeTab */}
-          {(activeTab === 'people' ? people : groups).map((item, index) => (
-            <ChatList
-              key={index}
-              image={item.image}
-              name={item.groupName}
-              message={item.message}
-            />
-          ))}
         </div>
       </div>
     </div>

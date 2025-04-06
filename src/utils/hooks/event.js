@@ -9,11 +9,8 @@ const useEventDetails = (eventId) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzY2MTQyNywiZXhwIjoxNzQzNzQ3ODI3fQ.3S0E1Hh-IRocuEkk2K0E8pG_QtwHs3s80ikan8bwpgk";
-
+  const token = import.meta.env.VITE_AUTH_TOKEN;
   const userId = decodeToken(token)?._id;
-
   useEffect(() => {
     if (!eventId || !userId) return;
 

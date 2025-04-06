@@ -27,7 +27,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+        {/* Public Route */}
         <Route path="/signin" element={<UnifiedAuth />} />
 
         {/* Protected Routes */}
@@ -128,7 +128,15 @@ const App = () => {
           }
         />
         <Route
-          path="/chats"
+          path="/chats/group/:eventId"
+          element={
+            <AuthWrapper>
+              <ChatBox />
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/chats/user/:userId"
           element={
             <AuthWrapper>
               <ChatBox />
