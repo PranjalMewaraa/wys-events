@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReviewPopUp from './ReviewPopup';
 import ConfirmPopup from './ConfirmPopup';
 import useEventDetails from '../../utils/hooks/event';
-import { useChat } from "../../utils/hooks/message";
+import { useGroupChat } from "../../utils/hooks/Groupmessage";
 
 const Popup = ({ isOpen, onClose, eventId }) => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -10,7 +10,7 @@ const Popup = ({ isOpen, onClose, eventId }) => {
 
   // Mock user role and event status (Replace with hook when needed)
   const { userRole, isEventOver } = useEventDetails(eventId);
-  const { triggerPollMessage } = useChat(eventId); // Hook to send messages in chat
+  const { triggerPollMessage } = useGroupChat(eventId); // Hook to send messages in chat
 
   useEffect(() => {
     if (!isOpen) return;

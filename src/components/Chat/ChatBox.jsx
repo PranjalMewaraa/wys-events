@@ -6,19 +6,24 @@ import Modal from "./Modal";
 import Popup from "./Popup";
 import { useParams } from "react-router-dom";
 import { decodeToken } from "../../utils/helper";
-import { useChat } from "../../utils/hooks/message";
+import { useGroupChat } from "../../utils/hooks/Groupmessage";
+import { useDirectChat } from "../../utils/hooks/DirectMessage";
 
 const ChatBox = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const{eventId,userId}=useParams()
+  const isGroupChat = !!eventId 
+
  
-  const eventId="67e54a94840201363f001288"
-
-  const { messages, message, setMessage, handleSendMessage } = useChat(eventId);
-
-  const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VhNGQ3MmU2YWEyMmRlYzQ3NzJmMWMiLCJuYW1lIjoibWFpIGh1IGFkbWluIiwiZW1haWwiOiJhZG1pbnVkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MzY2MTQyNywiZXhwIjoxNzQzNzQ3ODI3fQ.3S0E1Hh-IRocuEkk2K0E8pG_QtwHs3s80ikan8bwpgk";
-  const userId = decodeToken(token)?._id;
+  const {
+    messages,
+    message,
+    setMessage,
+    handleSendMessage
+  } = isGroupChat ? useGroupChat(eventId): useDirectChat(userId);
+  const token =import.meta.env.VITE_AUTH_TOKEN
+  const Id = decodeToken(token)?._id;
 
   const chatContainerRef = useRef(null);
 
@@ -52,7 +57,7 @@ const ChatBox = () => {
       style={{ scrollBehavior: "smooth" }} // Ensures smooth scrolling
     >
       {messages.map((item, index) =>
-        item.senderId === userId ? (
+        item.senderId === Id ? (
           <div key={item.id || index} className="flex justify-end">
             <div className="bg-[#F38E1C] text-white p-3 rounded-xl rounded-br-none w-max max-w-xs">
               {item.content}

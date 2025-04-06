@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchMessages, sendMessage } from "../api";
 
-export const useChat = (eventId) => {
+export const useGroupChat = (eventId) => {
   const [messages, setMessages] = useState([]);
   const [groupId, setGroupId] = useState(null);
   const [message, setMessage] = useState("");

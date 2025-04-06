@@ -27,7 +27,6 @@ import ChatOuter from "./components/Chat/ChatOuter";
 import ChatBox from "./components/Chat/ChatBox";
 
 const App = () => {
-
   return (
       <Router>
       <Routes>
@@ -45,8 +44,9 @@ const App = () => {
         <Route path="/listing/input" element={<InputDesign />} />
         <Route path="/check" element={<EventListing7 />} />
         <Route path="/chat" element={<ChatOuter/>}/>
-        <Route path="/chats" element={<ChatBox/>}/>
-      </Routes>
+        <Route path="/chats/group/:eventId" element={<ChatBox />} />
+        <Route path="/chats/user/:userId" element={<ChatBox />} />      
+        </Routes>
     </Router>
 
     

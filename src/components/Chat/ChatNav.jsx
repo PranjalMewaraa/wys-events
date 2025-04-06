@@ -5,7 +5,7 @@ import Modal from "./Modal";
 import Popup from "./Popup";
 import { useLocation } from "react-router-dom";
 
-const ChatNav = ({eventId}) => {
+const ChatNav = ({ eventId }) => {
   const location = useLocation();
   const { chatDetails } = location.state || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,34 +13,41 @@ const ChatNav = ({eventId}) => {
 
   return (
     <div className="border border-transparent bg-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4">
-      <div className="w-full flex gap-10 items-center justify-evenly">
-        {/* Back button */}
-        <button onClick={() => window.history.back()}>
-          <img src={arrow} alt="Back" />
-        </button>
-        
-        {/* Chat Details */}
-        <div className="flex gap-2">
-          <img src={chatDetails?.image} alt="Group" className="w-8 h-8" />
-          <div className="flex flex-col gap-0.5">
-            <p className="abeezee-regular text-base leading-[100%] text-black">
-              {chatDetails?.name || "Group Name"}
-            </p>
-            <p className="abeezee-regular text-[12px] text-[#757575]">
-              {chatDetails?.participants || "Participants info"}
-            </p>
+      <div className="w-full flex items-center justify-between px-4">
+        {/* Left: Back button + Chat Details */}
+        <div className="flex items-center gap-16">
+          <button onClick={() => window.history.back()}>
+            <img src={arrow} alt="Back" />
+          </button>
+
+          {/* Chat Details */}
+          <div className="flex gap-2 items-center">
+            <img src={chatDetails?.image} alt="Chat" className="w-8 h-8" />
+            <div className="flex flex-col gap-0.5">
+              <p className="abeezee-regular text-base leading-[100%] text-black">
+                {chatDetails?.name || "Group Name"}
+              </p>
+              <p className="abeezee-regular text-[12px] text-[#757575]">
+                {chatDetails?.participants || "Participants info"}
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Options button */}
-        <button onClick={(e) => {
-          e.stopPropagation();
-          setIsModalOpen(true);
-
-        }}>
-          <img src={dots} alt="Options" />
-        </button>
+        {/* Right: Options button (only for group chat) */}
+        {eventId && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsModalOpen(true);
+            }}
+          >
+            <img src={dots} alt="Options" />
+          </button>
+        )}
       </div>
+
+      {/* Modal and Popup */}
       {isModalOpen && (
         <Modal
           isOpen={isModalOpen}
@@ -52,10 +59,13 @@ const ChatNav = ({eventId}) => {
         />
       )}
 
-      {/* Modal and Popup components */}
-           {isPopupOpen && <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} 
-            eventId={eventId}/>}
-
+      {isPopupOpen && (
+        <Popup
+          isOpen={isPopupOpen}
+          onClose={() => setIsPopupOpen(false)}
+          eventId={eventId}
+        />
+      )}
     </div>
   );
 };

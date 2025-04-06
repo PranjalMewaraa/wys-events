@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import useEventDetails from "../../utils/hooks/event";
-import { useChat } from "../../utils/hooks/message";
+import { useGroupChat } from "../../utils/hooks/Groupmessage";
 
 const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
   const { userRole, isEventOver } = useEventDetails(eventId);
-  
-
-  const { triggerPollMessage } = useChat(eventId);
+  const { triggerPollMessage } = useGroupChat(eventId);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -41,12 +39,12 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
   };
 
   return (
-    <div className="fixed top-[450px] right-0 left-0 flex">
+    <div className="fixed top-[510px] right-0 left-0 flex">
       <div
         className="modal-content w-full bg-white rounded-t-2xl shadow-lg border border-transparent drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <div
+        {/* <div
           className="text-center text-lg font-medium border-b border-gray-200 pb-2 cursor-pointer"
           onClick={handlePrimaryAction}
         >
@@ -57,12 +55,12 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
             : userRole === "host"
             ? "Send RSVP"
             : "Are you attending?"}
-        </div>
+        </div> */}
 
-        <button className="w-full py-4 text-center text-black hover:bg-gray-100 border-b border-gray-200">
+        <button className="w-full py-3 text-center text-black hover:bg-gray-100 border-b border-gray-200">
           View Experience
         </button>
-        <button className="w-full py-4 text-center text-black hover:bg-gray-100">
+        <button className="w-full py-3 text-center text-black hover:bg-gray-100">
           {userRole === "host" ? "Close Listing" : "Leave Experience"}
         </button>
       </div>
