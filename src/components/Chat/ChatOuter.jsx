@@ -7,6 +7,9 @@ import trip2 from '../../assets/images/trip2.svg';
 import lens from '../../assets/images/lens.png';
 import ChatList from './ChatList';
 import { useChatList } from '../../utils/hooks/group';
+import Layout from '../../Layout/Layout';
+import DashLayout from '../../Layout/DashLayout';
+import LayoutInnerMain from '../../Layout/LayoutInner';
 
 
 
@@ -22,7 +25,9 @@ const ChatOuter = () => {
 
 
   return (
-    <div className='w-full h-full bg-gray-100'>
+    <Layout>
+      <LayoutInnerMain></LayoutInnerMain>
+    <div className='w-full h-full '>
       <div className='w-9/10 container m-auto mt-6 border border-transparent rounded-2xl bg-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)]'>
         <div className='min-w-9/10 m-5 flex flex-col gap-5 md:gap-9'>
           <p className='text-base abeezee-regular leading-6 md:text-4xl'>Seekers</p>
@@ -100,6 +105,7 @@ const ChatOuter = () => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 
