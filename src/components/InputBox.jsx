@@ -23,14 +23,16 @@ const InputBox = ({
       </div>
 
       <input
-        type={type}
-        id={name}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChangeFn}
-        className=" focus:outline-none border-b border-black"
-      />
+  type={type}
+  id={name}
+  name={name}
+  placeholder={placeholder}
+  {...(onChangeFn
+    ? { value, onChange: onChangeFn }
+    : { defaultValue: value })} // Uncontrolled fallback
+  className="focus:outline-none border-b border-black"
+/>
+
     </div>
   );
 };
