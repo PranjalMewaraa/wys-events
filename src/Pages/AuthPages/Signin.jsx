@@ -7,7 +7,7 @@ import ProgressBar from "../../components/ProgressBar";
 import InputBox from "../../components/InputBox";
 import SelectGroup from "../../components/SelectGroup";
 import PhotoPicker from "../../components/PhotoPicker";
-
+import "../../App.css";
 const UnifiedAuth = () => {
   const [firebaseToken, setFirebaseToken] = useState(null);
   const [page, setPage] = useState(-1); // -1 means not started onboarding yet
@@ -74,41 +74,45 @@ const UnifiedAuth = () => {
   ];
 
   const handleGoogleSignIn = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const token = await result.user.getIdToken();
-    const email = result.user.email;
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const token = await result.user.getIdToken();
+      const email = result.user.email;
 
-    setFirebaseToken(token);
+      setFirebaseToken(token);
 
-    // Check if user exists
-    const res = await axios.post("https://wysbackend.onrender.com/api/users/check-user", {
-      firebaseToken: token,
-    });
+      // Check if user exists
+      const res = await axios.post(
+        "https://wysbackend.onrender.com/api/users/check-user",
+        {
+          firebaseToken: token,
+        }
+      );
 
-    if (res.data.exists) {
-      // Login request
-      const loginRes = await axios.post("https://wysbackend.onrender.com/api/users/login", {
-        firebaseToken: token,
-      });
+      if (res.data.exists) {
+        // Login request
+        const loginRes = await axios.post(
+          "https://wysbackend.onrender.com/api/users/login",
+          {
+            firebaseToken: token,
+          }
+        );
 
-      const accessToken = loginRes.data.data.accessToken; 
-      const userID = loginRes.data.data.user._id; 
-      localStorage.setItem("userID", userID);
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("authToken", token);
+        const accessToken = loginRes.data.data.accessToken;
+        const userID = loginRes.data.data.user._id;
+        localStorage.setItem("userID", userID);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("authToken", token);
 
-      window.location.href = "/"; // or use navigate("/")
-    } else {
-      setPage(0); // start onboarding
+        window.location.href = "/"; // or use navigate("/")
+      } else {
+        setPage(0); // start onboarding
+      }
+    } catch (error) {
+      console.error("Google sign-in failed", error);
     }
-
-  } catch (error) {
-    console.error("Google sign-in failed", error);
-  }
-};
-
+  };
 
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -134,47 +138,52 @@ const UnifiedAuth = () => {
     payload.append("firebaseToken", firebaseToken);
     console.log("Submitting with data: ", formData);
 
-  
     try {
       // Register the user
-      await axios.post("https://wysbackend.onrender.com/api/users/register", payload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-  
+      await axios.post(
+        "https://wysbackend.onrender.com/api/users/register",
+        payload,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
       // Then login
-      const loginRes = await axios.post("https://wysbackend.onrender.com/api/users/login", {
-        firebaseToken,
-      });
-      const accessToken = loginRes.data.data.accessToken; 
-      const userID = loginRes.data.data.user._id; 
+      const loginRes = await axios.post(
+        "https://wysbackend.onrender.com/api/users/login",
+        {
+          firebaseToken,
+        }
+      );
+      const accessToken = loginRes.data.data.accessToken;
+      const userID = loginRes.data.data.user._id;
       localStorage.setItem("userID", userID);
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("authToken", token);
-      window.location.href = "/"; 
-  
+      window.location.href = "/";
     } catch (error) {
       console.error("Final submission failed:", error);
     }
   };
-  
+
   if (page === -1) {
     return (
       <Layout>
         <div className="flex  flex-col h-full flex-1 w-full justify-center gap-8 items-center">
-        <p className=" poppins-semibold-italic text-2xl text-center w-full">
-          Place worth <span className="text-orange-400">Going</span>,
-          <br />
-          place worth <span className="text-orange-400">Knowing</span>
-        </p>
-        <button
-      onClick={handleGoogleSignIn}
-      className="flex items-center gap-3 px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 transition"
-    >
-      <img src="/google.webp" alt="Google" className="w-5 h-5" />
-      <span className="text-base text-gray-700 font-medium">
-        Sign in with Google
-      </span>
-    </button>
+          <p className=" poppins-semibold-italic text-2xl text-center w-full">
+            Place worth <span className="text-orange-400">Going</span>,
+            <br />
+            place worth <span className="text-orange-400">Knowing</span>
+          </p>
+          <button
+            onClick={handleGoogleSignIn}
+            className="flex items-center gap-3 px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 transition"
+          >
+            <img src="/google.webp" alt="Google" className="w-5 h-5" />
+            <span className="text-base text-gray-700 font-medium">
+              Sign in with Google
+            </span>
+          </button>
         </div>
       </Layout>
     );
@@ -183,7 +192,7 @@ const UnifiedAuth = () => {
   // render onboarding steps like your existing logic (same structure as before)
   return (
     <Layout>
-       <div className="w-full h-full flex flex-col items-center mt-4 gap-6">
+      <div className="w-full h-full flex flex-col items-center mt-4 gap-6">
         <ProgressBar width={page + 1} />
         {page === 0 && (
           <div className="w-full flex flex-col gap-6">
@@ -207,6 +216,7 @@ const UnifiedAuth = () => {
                 label={"When is your birthday!"}
                 placeholder={"Date of Birth"}
                 name={"fullname"}
+                type="date"
               />
               <SelectGroup
                 options={genderOption}
@@ -380,55 +390,58 @@ const UnifiedAuth = () => {
             </form>
           </div>
         )}
-       {page === 8 && (
-  <div className="w-full flex flex-col gap-6">
-    <h1 className="poppins-light-italic flex flex-col text-center items-center leading-6 text-2xl">
-      Let's Make your <br />{" "}
-      <span className="text-amber-500 ">Profile Interesting</span>
-    </h1>
-    <form className="flex px-8 w-full flex-col gap-8" onSubmit={(e) => {
-      e.preventDefault();
-      handleFinalSubmit();
-    }}>
-      <PhotoPicker
-        label="Multiple Photos (Max 3)"
-        isMulti={true}
-        maxSelections={6}
-        onImageSelect={handleImageSelect}
-      />
-      <InputBox
-        label={"Hey traveler!"}
-        label2={"What should we call you?"}
-        placeholder={"Full Name"}
-        name={"fullname"}
-      />
-      <InputBox
-        label={"Where are you now?"}
-        placeholder={"City, Country"}
-        name={"location"}
-      />
-      <InputBox
-        label={"When is your birthday?"}
-        placeholder={"Date of Birth"}
-        name={"dob"}
-      />
-      <SelectGroup
-        options={genderOption}
-        onChange={handleSelectionChange}
-      />
-      <PhotoPicker
-        onImageSelect={handleImageSelect}
-        label={"Pick a profile photo to \n\n show your vibe!"}
-      />
-      <button
-        type="submit"
-        className="px-4 w-full bg-black rounded-xl text-white py-3"
-      >
-        Finish & Start Exploring
-      </button>
-    </form>
-  </div>
-)}
+        {page === 8 && (
+          <div className="w-full flex flex-col gap-6">
+            <h1 className="poppins-light-italic flex flex-col text-center items-center leading-6 text-2xl">
+              Let's Make your <br />{" "}
+              <span className="text-amber-500 ">Profile Interesting</span>
+            </h1>
+            <form
+              className="flex px-8 w-full flex-col gap-8"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleFinalSubmit();
+              }}
+            >
+              <PhotoPicker
+                label="Multiple Photos (Max 3)"
+                isMulti={true}
+                maxSelections={6}
+                onImageSelect={handleImageSelect}
+              />
+              <InputBox
+                label={"Hey traveler!"}
+                label2={"What should we call you?"}
+                placeholder={"Full Name"}
+                name={"fullname"}
+              />
+              <InputBox
+                label={"Where are you now?"}
+                placeholder={"City, Country"}
+                name={"location"}
+              />
+              <InputBox
+                label={"When is your birthday?"}
+                placeholder={"Date of Birth"}
+                name={"dob"}
+              />
+              <SelectGroup
+                options={genderOption}
+                onChange={handleSelectionChange}
+              />
+              <PhotoPicker
+                onImageSelect={handleImageSelect}
+                label={"Pick a profile photo to \n\n show your vibe!"}
+              />
+              <button
+                type="submit"
+                className="px-4 w-full bg-black rounded-xl text-white py-3"
+              >
+                Finish & Start Exploring
+              </button>
+            </form>
+          </div>
+        )}
       </div>
     </Layout>
   );
