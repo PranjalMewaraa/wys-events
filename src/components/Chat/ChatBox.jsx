@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import person1 from "../../assets/images/person-1.png";
-import messageArrow from "../../assets/images/rectangle 246.svg";
+import messageArrow from "../../assets/images/rectangle_246.svg";
 import ChatNav from "./ChatNav";
 import Modal from "./Modal";
 import Popup from "./Popup";
