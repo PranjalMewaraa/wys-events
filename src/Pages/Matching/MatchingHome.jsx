@@ -1,11 +1,14 @@
 import React from "react";
-import { FaInstagram, FaLinkedin, FaStar } from "react-icons/fa";
+import { FaInstagram, FaLinkedin } from "react-icons/fa";
 import { GrLocationPin } from "react-icons/gr";
+import { Link } from "react-router-dom";
 import Layout from "../../Layout/Layout";
 import LayoutInnerMain from "../../Layout/LayoutInner";
-import { Link } from "react-router-dom";
+import useMatchedUsers, { useCompatibility } from "../../utils/hooks/user";
 
 const MatchingHome = () => {
+  const { matchedUsers, loading, error } = useMatchedUsers();
+
   return (
     <Layout>
       <LayoutInnerMain>
@@ -16,51 +19,76 @@ const MatchingHome = () => {
             <p>Find Experiences</p>
           </div>
 
-          <Card />
-          <Card />
+          {/* Loader & Error */}
+          {loading && <p className="text-center">Loading matches...</p>}
+          {error && (
+            <p className="text-center text-red-500">
+              Something went wrong while fetching matches.
+            </p>
+          )}
+
+          {/* No Matches */}
+          {!loading && !error && matchedUsers.length === 0 && (
+            <p className="text-center text-gray-400 mt-4">No matched users found.</p>
+          )}
+
+          {/* Matched Users */}
+          {!loading && matchedUsers.length > 0 &&
+            matchedUsers.map((user) => <Card key={user._id} user={user} />)}
 
           {/* Say Hello Button */}
-          <button className="mt-6 w-full bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium">
+          {/* <button className="mt-6 w-full bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium">
             👋 Say Hello
-          </button>
+          </button> */}
         </div>
       </LayoutInnerMain>
     </Layout>
   );
 };
 
-const Card = () => {
+const Card = ({ user }) => {
+  const {
+    _id,
+    name = "No Name",
+    avatar = "https://via.placeholder.com/150",
+    location = "Unknown",
+    gender = "Not Specified",
+  } = user;
+
+  const { compatibility, loading } = useCompatibility(_id);
+  const matchPercentage = compatibility?.compatibilityScore ?? "…";
+
   return (
+
     <Link
-      to={"/people/detail"}
+      to={`/people/detail/${_id}`}
       className="flex flex-col mt-4 max-w-sm w-full max-h-96 gap-4 items-center"
     >
       <div className="w-full h-full aspect-square object-fill overflow-hidden rounded-xl">
         <img
-          src="https://imgs.search.brave.com/VHUvL7y6Eh8PrBgb1vDIOWhqQwsV7dxyDXNlLWHtT0k/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1i/ZWF1dGlmdWwtZ2ly/bC1ibGFjay10c2hp/cnRfNDI3NzcxLTM3/MC5qcGc_c2VtdD1h/aXNfaHlicmlk"
+          src={avatar}
           className="h-full origin-top object-top object-cover w-full"
-          alt=""
+          alt={`${name}'s avatar`}
         />
       </div>
       <div className="flex gap-2 justify-between px-2 w-full">
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold">Aditi WanderLust</h2>
-          <div className="flex flex-wrap items-center text-sm">
-            <p className=" text-gray-500">Female</p>
-            <p className="flex items-center  text-gray-500">
-              <GrLocationPin /> Mumbai, India
+          <h2 className="text-lg font-bold">{name}</h2>
+          <div className="flex flex-wrap items-center text-sm gap-2">
+            <p className="text-gray-500">{gender}</p>
+            <p className="flex items-center text-gray-500">
+              <GrLocationPin className="mr-1" />
+              {location}
             </p>
           </div>
-          <div className="flex gap-2 py-2">
+          <div className="flex gap-2 py-2 text-gray-600">
             <FaInstagram />
             <FaLinkedin />
           </div>
         </div>
         <div className="flex gap-2 items-center">
-          <div className="h-fit flex gap-2 items-center">
-            <div className="flex justify-center h-full items-center bg-green-700 p-2 text-white poppins-semibold rounded-lg">
-              80%
-            </div>
+          <div className="flex justify-center items-center bg-green-700 p-2 text-white poppins-semibold rounded-lg">
+            {loading ? "..." : `${matchPercentage}%`}
           </div>
         </div>
       </div>

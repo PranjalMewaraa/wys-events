@@ -38,13 +38,13 @@ const {pendingRequests}=useDirectChat();
       <p className='text-base abeezee-regular leading-6 md:text-4xl'>Requests</p>
       <div className='flex gap-5'>
         <div className='w-full flex flex-col gap-2 p-2 border border-transparent rounded-2xl drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)]'>
-          <div className='flex gap-2.5 items-center'>
+          <div className='flex flex-col gap-2.5 items-start'>
             <img
               src={req.senderId.avatar}
               alt="User Avatar"
               className="w-10 h-10 rounded-full object-cover"
             />
-            <p className="text-white text-base">{req.senderId.name}</p>
+            <p className="text-black text-base">{req.senderId.name}</p>
           </div>
         </div>
       </div>

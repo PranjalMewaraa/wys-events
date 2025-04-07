@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchEventById, getEventsCreatedByUser } from "../api";
+import { fetchEventById, fetchEvents, getEventsCreatedByUser } from "../api";
 import { decodeToken } from "../helper";
 
 const useEventDetails = (eventId) => {
@@ -22,7 +22,6 @@ const useEventDetails = (eventId) => {
           fetchEventById(eventId),
           getEventsCreatedByUser(),
         ]);
-
         setEvent(eventData);
         setEventsByUser(userEvents);
 
@@ -46,3 +45,19 @@ const useEventDetails = (eventId) => {
 };
 
 export default useEventDetails;
+
+export const useEvents = () => {
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    const getEventsData = async () => {
+      try {
+        const eventsData = await fetchEvents();
+        setEvents(eventsData);
+      } catch (error) {
+        console.error("Error fetching event details:", error);
+      }
+    };
+    getEventsData();
+  }, []);
+  return { events };
+};

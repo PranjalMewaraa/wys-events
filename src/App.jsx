@@ -48,7 +48,7 @@ const App = () => {
           }
         />
         <Route
-          path="/event/himalayas"
+          path="/event/:eventId"
           element={
             <AuthWrapper>
               <EventDetail />
@@ -63,8 +63,8 @@ const App = () => {
             </AuthWrapper>
           }
         />
-        <Route
-          path="/people/detail"
+       <Route
+          path="/people/detail/:userId"
           element={
             <AuthWrapper>
               <Matching />
@@ -167,6 +167,7 @@ const App = () => {
             </AuthWrapper>
           }
         />
+       
         <Route
           path="/profile/detail/preference"
           element={

@@ -2,7 +2,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "https://wysbackend.onrender.com/api",
 });
-const token = import.meta.env.VITE_AUTH_TOKEN;
+const token = localStorage.getItem("accessToken");
 
 // Automatically add token to Authorization header
 // api.interceptors.request.use(async (config) => {
@@ -26,7 +26,41 @@ export const getMatchedUsers = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(res.data);
     return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response.data);
+    }
+    throw error;
+  }
+};
+export const getCompatibility = async (id) => {
+  try {
+    const res = await api.get(`/matching/compatibility/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response.data);
+    }
+    throw error;
+  }
+};
+export const fetchUserByIdForMatching = async (id) => {
+  try {
+    const res = await api.get(`/matching/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res.data.data);
+    return res.data.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response.data);
@@ -37,6 +71,22 @@ export const getMatchedUsers = async () => {
 export const getEventsCreatedByUser = async () => {
   try {
     const response = await api.get(`/events/created`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response.data);
+    }
+    throw error;
+  }
+};
+export const fetchEvents = async () => {
+  try {
+    const response = await api.get(`/events`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
