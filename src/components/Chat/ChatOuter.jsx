@@ -19,7 +19,7 @@ const ChatOuter = () => {
 const {pendingRequests}=useDirectChat();
   // Error state for groups
   const API_URL = "https://wysbackend.onrender.com/api"; // The API URL
-  const token = import.meta.env.VITE_AUTH_TOKEN
+  const token = localStorage.getItem("accessToken")
 
   // Fetch groups when the "Groups" tab is selected
   const { groups, people, loading, error } = useChatList(activeTab, token);
