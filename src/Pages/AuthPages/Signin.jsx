@@ -8,69 +8,44 @@ import InputBox from "../../components/InputBox";
 import SelectGroup from "../../components/SelectGroup";
 import PhotoPicker from "../../components/PhotoPicker";
 import "../../App.css";
+
 const UnifiedAuth = () => {
   const [firebaseToken, setFirebaseToken] = useState(null);
-  const [page, setPage] = useState(-1); // -1 means not started onboarding yet
+  const [page, setPage] = useState(-1);
   const [formData, setFormData] = useState({});
+
   const genderOption = [
-    { label: "Male", value: "maale" },
-    { label: "Female", value: "n" },
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
     { label: "Other", value: "other" },
   ];
+
   const traveldesc = [
-    { label: "🌍 Explorer", value: "male", desc: "I want to see it" },
-    { label: "🍹 Relaxer", value: "ww", desc: "Beach, spa, easygoing" },
-    {
-      label: "🎉 Social Butterfly",
-      value: "Nightlife, xw, people",
-      desc: "Nightlife, events, people",
-    },
-    {
-      label: "🎒 Backpacker",
-      value: "y",
-      desc: "Low-budget, high-adventure",
-    },
-    { label: "🗺 Planner", value: "x", desc: "I love making itineraries" },
-    {
-      label: "🚀 Spontaneous",
-      value: "Book a ticket & go!",
-      desc: "Book a ticket & go!",
-    },
+    { label: "🌍 Explorer", value: "explorer", desc: "I want to see it" },
+    { label: "🍹 Relaxer", value: "relaxer", desc: "Beach, spa, easygoing" },
+    { label: "🎉 Social Butterfly", value: "social", desc: "Nightlife, events, people" },
+    { label: "🎒 Backpacker", value: "backpacker", desc: "Low-budget, high-adventure" },
+    { label: "🗘 Planner", value: "planner", desc: "I love making itineraries" },
+    { label: "🚀 Spontaneous", value: "spontaneous", desc: "Book a ticket & go!" },
   ];
+
   const traveldesc2 = [
-    { label: "🌍 Hiking in mountain", value: "male" },
-    { label: "🍹 Tropical Beach Escape", value: "ww" },
-    {
-      label: "🎉 Cultural and Historical Sites",
-      value: "Nightlife, xw, people",
-    },
-    {
-      label: "🎒 Music Festival and Nightlife",
-      value: "y",
-    },
-    { label: "🗺 Adventure Sport", value: "x" },
-    {
-      label: "🚀 A food hopping journey",
-      value: "Book a ticket & go!",
-    },
-    {
-      label: "🎒 Road trips and long drive",
-      value: "ys",
-    },
-    { label: "🗺 Camping and offbeat destinations", value: "x" },
+    { label: "🌍 Hiking in mountain", value: "hiking" },
+    { label: "🍹 Tropical Beach Escape", value: "beach" },
+    { label: "🎉 Cultural and Historical Sites", value: "culture" },
+    { label: "🎒 Music Festival and Nightlife", value: "music" },
+    { label: "🗘 Adventure Sport", value: "adventure" },
+    { label: "🚀 A food hopping journey", value: "food" },
+    { label: "🎒 Road trips and long drive", value: "roadtrip" },
+    { label: "🗘 Camping and offbeat destinations", value: "camping" },
   ];
-  const traveldesc3 = [
-    { label: "🌍 Slow and Immersive", value: "male" },
-    { label: "🍹 Relaxer", value: "ww" },
-    {
-      label: "🎉 Social Butterfly",
-      value: "Nightlife, xw, people",
-    },
-    {
-      label: "🎒 Backpacker",
-      value: "y",
-    },
-    { label: "🗺 Planner", value: "x" },
+
+  const travelGeneric = [
+    { label: "🌍 Slow and Immersive", value: "slow" },
+    { label: "🍹 Relaxer", value: "relaxer" },
+    { label: "🎉 Social Butterfly", value: "social" },
+    { label: "🎒 Backpacker", value: "backpacker" },
+    { label: "🗘 Planner", value: "planner" },
   ];
 
   const handleGoogleSignIn = async () => {
@@ -78,36 +53,28 @@ const UnifiedAuth = () => {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
-      const email = result.user.email;
 
       setFirebaseToken(token);
 
-      // Check if user exists
-      const res = await axios.post(
-        "https://wysbackend.onrender.com/api/users/check-user",
-        {
-          firebaseToken: token,
-        }
-      );
+      const res = await axios.post("https://wysbackend.onrender.com/api/users/check-user", {
+        firebaseToken: token,
+      });
 
       if (res.data.exists) {
-        // Login request
-        const loginRes = await axios.post(
-          "https://wysbackend.onrender.com/api/users/login",
-          {
-            firebaseToken: token,
-          }
-        );
+        const loginRes = await axios.post("https://wysbackend.onrender.com/api/users/login", {
+          firebaseToken: token,
+        });
 
         const accessToken = loginRes.data.data.accessToken;
         const userID = loginRes.data.data.user._id;
+
         localStorage.setItem("userID", userID);
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("authToken", token);
 
-        window.location.href = "/"; // or use navigate("/")
+        window.location.href = "/";
       } else {
-        setPage(0); // start onboarding
+        setPage(0);
       }
     } catch (error) {
       console.error("Google sign-in failed", error);
@@ -136,30 +103,23 @@ const UnifiedAuth = () => {
       }
     });
     payload.append("firebaseToken", firebaseToken);
-    console.log("Submitting with data: ", formData);
 
     try {
-      // Register the user
-      await axios.post(
-        "https://wysbackend.onrender.com/api/users/register",
-        payload,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      await axios.post("https://wysbackend.onrender.com/api/users/register", payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      // Then login
-      const loginRes = await axios.post(
-        "https://wysbackend.onrender.com/api/users/login",
-        {
-          firebaseToken,
-        }
-      );
+      const loginRes = await axios.post("https://wysbackend.onrender.com/api/users/login", {
+        firebaseToken,
+      });
+
       const accessToken = loginRes.data.data.accessToken;
       const userID = loginRes.data.data.user._id;
+
       localStorage.setItem("userID", userID);
       localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("authToken", token);
+      localStorage.setItem("authToken", firebaseToken);
+
       window.location.href = "/";
     } catch (error) {
       console.error("Final submission failed:", error);
@@ -169,10 +129,9 @@ const UnifiedAuth = () => {
   if (page === -1) {
     return (
       <Layout>
-        <div className="flex  flex-col h-full flex-1 w-full justify-center gap-8 items-center">
-          <p className=" poppins-semibold-italic text-2xl text-center w-full">
-            Place worth <span className="text-orange-400">Going</span>,
-            <br />
+        <div className="flex flex-col h-full flex-1 w-full justify-center gap-8 items-center">
+          <p className="poppins-semibold-italic text-2xl text-center w-full">
+            Place worth <span className="text-orange-400">Going</span>,<br />
             place worth <span className="text-orange-400">Knowing</span>
           </p>
           <button
@@ -189,259 +148,64 @@ const UnifiedAuth = () => {
     );
   }
 
-  // render onboarding steps like your existing logic (same structure as before)
+  const stepConfigs = [
+    { title: "Create your", highlight: "account", content: (
+      <>
+        <InputBox label={"Hey traveler!"} label2={"What should we call you?"} placeholder={"Full Name"} name={"fullname"} onChange={handleInputChange} />
+        <InputBox label={"Where are you now?"} placeholder={"City, Country"} name={"location"} onChange={handleInputChange} />
+        <InputBox label={"When is your birthday!"} placeholder={"Date of Birth"} name={"dob"} type="date" onChange={handleInputChange} />
+        <SelectGroup options={genderOption} onChange={(selected) => handleSelectionChange(selected, "gender")} />
+        <PhotoPicker onImageSelect={(file) => handleImageSelect(file, "profilePic")} label={"Pick a profile photo to show your vibe!"} />
+      </>
+    ) },
+    { title: "How do you love", highlight: "to travel", options: traveldesc, name: "travelStyle", isMulti: true, maxSelections: 3 },
+    { title: "What is your", highlight: "Ideal Trip", options: traveldesc2, name: "idealTrip", isMulti: true, maxSelections: 3 },
+    { title: "What is your", highlight: "travel Energy", options: travelGeneric, name: "travelEnergy", isMulti: true, maxSelections: 1 },
+    { title: "Who do you", highlight: "Vibe with best", options: travelGeneric, name: "vibeMatch", isMulti: true, maxSelections: 1 },
+    { title: "Last Minute trip", highlight: "What do you do", options: travelGeneric, name: "lastMinute", isMulti: true, maxSelections: 1 },
+    { title: "Are you", highlight: "here for", options: travelGeneric, name: "hereFor", isMulti: true, maxSelections: 1 },
+    { title: "Want to verify your profile for", highlight: "trust & safety", options: travelGeneric, name: "verifyReason", isMulti: true, maxSelections: 1 },
+    { title: "Let's Make your", highlight: "Profile Interesting", content: (
+      <>
+        <PhotoPicker label="Multiple Photos (Max 3)" isMulti={true} maxSelections={6} onImageSelect={(files) => handleImageSelect(files, "gallery")} />
+        <button type="submit" className="px-4 w-full bg-black rounded-xl text-white py-3">Finish & Start Exploring</button>
+      </>
+    ), finalStep: true }
+  ];
+
+  const currentStep = stepConfigs[page];
+
   return (
     <Layout>
       <div className="w-full h-full flex flex-col items-center mt-4 gap-6">
         <ProgressBar width={page + 1} />
-        {page === 0 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              Create your <br />{" "}
-              <span className="text-amber-500 ">account</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <InputBox
-                label={"Hey traveler!"}
-                label2={"What should we call you?"}
-                placeholder={"Full Name"}
-                name={"fullname"}
-              />
-              <InputBox
-                label={"Where are you now?"}
-                placeholder={"City, Country"}
-                name={"fullname"}
-              />
-              <InputBox
-                label={"When is your birthday!"}
-                placeholder={"Date of Birth"}
-                name={"fullname"}
-                type="date"
-              />
+        <div className="w-full flex flex-col gap-6">
+          <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
+            {currentStep.title}<br /> <span className="text-amber-500 ">{currentStep.highlight}</span>
+          </h1>
+          <form
+            className="flex px-8 w-full flex-col gap-8"
+            onSubmit={(e) => {
+              if (!currentStep.finalStep) e.preventDefault();
+              currentStep.finalStep ? handleFinalSubmit() : setPage(page + 1);
+            }}
+          >
+            {currentStep.content}
+            {currentStep.options && (
               <SelectGroup
-                options={genderOption}
-                onChange={handleSelectionChange}
+                options={currentStep.options}
+                isMulti={currentStep.isMulti}
+                maxSelections={currentStep.maxSelections}
+                onChange={(selected) => handleSelectionChange(selected, currentStep.name)}
               />
-              <PhotoPicker
-                onImageSelect={handleImageSelect}
-                label={"Pick a profile photo to \n\n show your vibe!"}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
+            )}
+            {!currentStep.finalStep && (
+              <button type="submit" className="px-4 w-full bg-black rounded-xl text-white py-3">
                 Continue
               </button>
-            </form>
-          </div>
-        )}
-        {page === 1 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              How do you love <br />{" "}
-              <span className="text-amber-500 ">to travel</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <SelectGroup
-                options={traveldesc}
-                isMulti={true}
-                maxSelections={3}
-                onChange={handleSelectionChange}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
-                Continue
-              </button>
-            </form>
-          </div>
-        )}
-        {page === 2 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              What is your <br />{" "}
-              <span className="text-amber-500 ">Ideal Trip</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <SelectGroup
-                options={traveldesc2}
-                isMulti={true}
-                maxSelections={3}
-                onChange={handleSelectionChange}
-                clx={"w-full h-full grid grid-cols-2 gap-4"}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
-                Continue
-              </button>
-            </form>
-          </div>
-        )}
-        {page === 3 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              What is your <br />{" "}
-              <span className="text-amber-500 ">travel Energy</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <SelectGroup
-                options={traveldesc3}
-                isMulti={true}
-                maxSelections={1}
-                onChange={handleSelectionChange}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
-                Continue
-              </button>
-            </form>
-          </div>
-        )}
-        {page === 4 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              Who do you
-              <br /> <span className="text-amber-500 ">Vibe with best</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <SelectGroup
-                options={traveldesc3}
-                isMulti={true}
-                maxSelections={1}
-                onChange={handleSelectionChange}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
-                Continue
-              </button>
-            </form>
-          </div>
-        )}
-        {page === 5 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              Last Minute trip
-              <br /> <span className="text-amber-500 ">What do you do</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <SelectGroup
-                options={traveldesc3}
-                isMulti={true}
-                maxSelections={1}
-                onChange={handleSelectionChange}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
-                Continue
-              </button>
-            </form>
-          </div>
-        )}
-        {page === 6 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
-              Are you
-              <br /> <span className="text-amber-500 ">here for</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <SelectGroup
-                options={traveldesc3}
-                isMulti={true}
-                maxSelections={1}
-                onChange={handleSelectionChange}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
-                Continue
-              </button>
-            </form>
-          </div>
-        )}
-        {page === 7 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-medium-italic flex text-center flex-col items-center leading-6 text-2xl">
-              Want to verify your profile for
-              <br /> <span className="text-amber-500 ">trust & safety</span>
-            </h1>
-            <form className="flex px-8 w-full flex-col gap-8">
-              <SelectGroup
-                options={traveldesc3}
-                isMulti={true}
-                maxSelections={1}
-                onChange={handleSelectionChange}
-              />
-              <button
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-                onClick={() => setPage(page + 1)}
-              >
-                Continue
-              </button>
-            </form>
-          </div>
-        )}
-        {page === 8 && (
-          <div className="w-full flex flex-col gap-6">
-            <h1 className="poppins-light-italic flex flex-col text-center items-center leading-6 text-2xl">
-              Let's Make your <br />{" "}
-              <span className="text-amber-500 ">Profile Interesting</span>
-            </h1>
-            <form
-              className="flex px-8 w-full flex-col gap-8"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleFinalSubmit();
-              }}
-            >
-              <PhotoPicker
-                label="Multiple Photos (Max 3)"
-                isMulti={true}
-                maxSelections={6}
-                onImageSelect={handleImageSelect}
-              />
-              <InputBox
-                label={"Hey traveler!"}
-                label2={"What should we call you?"}
-                placeholder={"Full Name"}
-                name={"fullname"}
-              />
-              <InputBox
-                label={"Where are you now?"}
-                placeholder={"City, Country"}
-                name={"location"}
-              />
-              <InputBox
-                label={"When is your birthday?"}
-                placeholder={"Date of Birth"}
-                name={"dob"}
-              />
-              <SelectGroup
-                options={genderOption}
-                onChange={handleSelectionChange}
-              />
-              <PhotoPicker
-                onImageSelect={handleImageSelect}
-                label={"Pick a profile photo to \n\n show your vibe!"}
-              />
-              <button
-                type="submit"
-                className="px-4 w-full bg-black rounded-xl text-white py-3"
-              >
-                Finish & Start Exploring
-              </button>
-            </form>
-          </div>
-        )}
+            )}
+          </form>
+        </div>
       </div>
     </Layout>
   );

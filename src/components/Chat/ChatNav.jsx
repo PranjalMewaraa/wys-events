@@ -22,14 +22,14 @@ const ChatNav = ({ eventId }) => {
 
           {/* Chat Details */}
           <div className="flex gap-2 items-center">
-            <img src={chatDetails?.image} alt="Chat" className="w-8 h-8" />
+            <img src={chatDetails?.image} alt="" className="w-8 h-8" />
             <div className="flex flex-col gap-0.5">
               <p className="abeezee-regular text-base leading-[100%] text-black">
                 {chatDetails?.name || "Group Name"}
               </p>
-              <p className="abeezee-regular text-[12px] text-[#757575]">
+              {/* <p className="abeezee-regular text-[12px] text-[#757575]">
                 {chatDetails?.participants || "Participants info"}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

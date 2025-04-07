@@ -17,8 +17,7 @@ const ChatList = ({ image, name, activeTab,token ,userId,eventId}) => {
         state: {
           chatDetails: {
             name,
-            image,
-            participants: "3 out of 5 are going"
+            image
           }
         }
       });

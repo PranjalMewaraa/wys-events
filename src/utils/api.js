@@ -18,6 +18,38 @@ const token = import.meta.env.VITE_AUTH_TOKEN;
 //event
 //auth login & signup
 
+export const getMatchedUsers = async () => {
+  try {
+    const res = await api.get(`/matching/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response.data);
+    }
+    throw error;
+  }
+};
+export const getEventsCreatedByUser = async () => {
+  try {
+    const response = await api.get(`/events/created`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response.data);
+    }
+    throw error;
+  }
+};
 export const fetchEventById = async (eventId) => {
   try {
     const response = await api.get(`/events/${eventId}`, {
@@ -47,6 +79,22 @@ export const fetchGroups = async (token) => {
     return res.data; // Axios automatically parses JSON
   } catch (error) {
     console.error("Failed to fetch groups", error);
+    throw error;
+  }
+};
+
+export const pendingRequest = async () => {
+  try {
+    const res = await api.get("/message/pending", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res.data.pendingRequests);
+    return res.data.pendingRequests;
+  } catch (error) {
+    console.error("Failed to pending request", error);
     throw error;
   }
 };

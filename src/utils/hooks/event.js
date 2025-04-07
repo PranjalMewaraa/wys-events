@@ -1,32 +1,35 @@
 import { useState, useEffect } from "react";
-import { fetchEventById } from "../api";
+import { fetchEventById, getEventsCreatedByUser } from "../api";
 import { decodeToken } from "../helper";
 
 const useEventDetails = (eventId) => {
   const [event, setEvent] = useState(null);
+  const [eventsByUser, setEventsByUser] = useState([]);
   const [userRole, setUserRole] = useState(null);
   const [isEventOver, setIsEventOver] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const token = import.meta.env.VITE_AUTH_TOKEN;
   const userId = decodeToken(token)?._id;
+
   useEffect(() => {
     if (!eventId || !userId) return;
 
     const getEventDetails = async () => {
       setLoading(true);
       try {
-        const eventData = await fetchEventById(eventId);
-        setEvent(eventData);
+        const [eventData, userEvents] = await Promise.all([
+          fetchEventById(eventId),
+          getEventsCreatedByUser(),
+        ]);
 
-        // Determine if the user is the host or a seeker
+        setEvent(eventData);
+        setEventsByUser(userEvents);
+
         setUserRole(eventData.createdBy === userId ? "host" : "seeker");
 
-        // Check if the event is over
         const currentDate = new Date();
         const eventEndDate = new Date(eventData.toDate);
-
         setIsEventOver(currentDate > eventEndDate);
       } catch (error) {
         console.error("Error fetching event details:", error);
@@ -39,7 +42,7 @@ const useEventDetails = (eventId) => {
     getEventDetails();
   }, [eventId, userId]);
 
-  return { event, userRole, isEventOver, loading, error };
+  return { event, eventsByUser, userRole, isEventOver, loading, error };
 };
 
 export default useEventDetails;
