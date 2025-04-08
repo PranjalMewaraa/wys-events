@@ -28,7 +28,7 @@ function InputDesign() {
   const [isCostInvolved, setIsCostInvolved] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState("");
   const [descriptionCount, setDescriptionCount] = React.useState(0);
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
+
   const [experience, setExperience] = React.useState({
     name: "",
     description: "",
@@ -49,10 +49,6 @@ function InputDesign() {
     { label: "Split the Amount", value: "split" },
     { label: "Admission Fee", value: "fee" },
   ];
-
-  const handleSelectionChange = (selected) => {
-    setSelectedCategory(selected);
-  };
 
   const handleChange = (field, value) => {
     setExperience((prev) => ({ ...prev, [field]: value }));
@@ -131,7 +127,7 @@ function InputDesign() {
             options={Categories}
             isMulti={false}
             maxSelections={1}
-            onChange={handleSelectionChange}
+            onChange={(val) => handleChange("category", val)}
           />
 
           <p className="mt-5">How many people can join you?</p>
