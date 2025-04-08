@@ -2,9 +2,19 @@ import * as React from "react";
 import Layout from "../../Layout/Layout";
 import LayoutInnerMain from "../../Layout/LayoutInner";
 import { Link, Links } from "react-router-dom";
+import { apiGet } from "../../utils/call";
 const EventsView = () => {
   const [activeTab, setActiveTab] = React.useState("upcoming");
+  const [myevents, setEvents] = React.useState([]);
+  const CallUpcomingEvents = async () => {
+    const res = await apiGet("/events/created");
+    console.log(res);
+    setEvents(res);
+  };
 
+  React.useEffect(() => {
+    CallUpcomingEvents();
+  }, []);
   return (
     <Layout>
       <LayoutInnerMain>
@@ -13,7 +23,7 @@ const EventsView = () => {
           rel="stylesheet"
         />
         <div
-          className="relative mx-auto my-0 w-full h-screen bg-white max-w-[390px] max-sm:w-full overflow-hidden"
+          className="relative mx-auto h-fit mb-40 my-0 w-full min-h-screen bg-white max-w-[390px] max-sm:w-full overflow-hidden"
           role="main"
         >
           {/* Tabs */}
@@ -63,7 +73,7 @@ const EventsView = () => {
           {activeTab === "yourEvents" && (
             <section
               aria-labelledby="your-events-section"
-              className="relative h-full pb-20"
+              className="relative h-full"
             >
               <h2
                 id="your-events-section"
@@ -71,7 +81,11 @@ const EventsView = () => {
               >
                 Your Events
               </h2>
-              <MyEventCard />
+              <div className="flex flex-col min-h-fit h-full gap-4">
+                {myevents.map((item) => {
+                  return <MyEventCard item={item} />;
+                })}
+              </div>
 
               {/* FAB Button */}
               <Link
@@ -82,13 +96,6 @@ const EventsView = () => {
               </Link>
             </section>
           )}
-
-          {/* Previous Events */}
-          <section aria-labelledby="previous-section">
-            <h2 id="previous-section" className="px-16 py-5 text-xs text-black">
-              Previous Events
-            </h2>
-          </section>
         </div>
       </LayoutInnerMain>
     </Layout>
@@ -171,9 +178,9 @@ function UpcomingEventCard() {
     </article>
   );
 }
-function MyEventCard() {
+function MyEventCard({ item }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-
+  console.log(item);
   const companions = [
     "https://randomuser.me/api/portraits/women/1.jpg",
     "https://randomuser.me/api/portraits/men/2.jpg",
@@ -182,9 +189,18 @@ function MyEventCard() {
     "https://randomuser.me/api/portraits/men/5.jpg",
     "https://randomuser.me/api/portraits/women/6.jpg",
   ];
+  function formatDate(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  }
 
   return (
-    <article
+    <Link
+      to={`/listing/myevent/detail/${item._id}`}
       onClick={() => setIsExpanded(!isExpanded)}
       className="cursor-pointer overflow-hidden mx-16 my-0 bg-white rounded-2xl shadow-sm max-sm:mx-5 max-sm:my-0 transition-all duration-300"
     >
@@ -196,28 +212,30 @@ function MyEventCard() {
         />
       </div>
       <div className="px-4 py-5">
-        <h3 className="mb-3.5 text-xl">Himalayas Trek</h3>
+        <h3 className="mb-3.5 text-xl">{item?.name}</h3>
         <div className="flex flex-col gap-3 text-xs">
           <div className="flex gap-2 items-center">
             <i className="ti ti-calendar" aria-hidden="true" />
-            <span>26 Jun 2025</span>
+            <span>{formatDate(item?.fromDate)}</span>
             <div
               className="w-0.5 h-0.5 rounded-full bg-zinc-800"
               aria-hidden="true"
             />
-            <span>8:00 AM</span>
+            <span>{item?.time}</span>
           </div>
           <div className="flex gap-2 items-center">
             <i className="ti ti-map-pin" aria-hidden="true" />
-            <span>Praygraj, Uttarakhand</span>
+            <span>{item.location}</span>
           </div>
           <div className="flex gap-2 items-center">
             <i className="ti ti-users" aria-hidden="true" />
-            <span className="text-red-300">Slots Left : 2</span>
+            <span className="text-red-300">
+              Slots Left : {item.availableSlots}
+            </span>
           </div>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 export default EventsView;

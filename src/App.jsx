@@ -22,6 +22,15 @@ import Travelpreference from "./Pages/Profile/Travelpreference";
 import CompanionMatching from "./Pages/Profile/Matching";
 import Companions from "./Pages/Profile/Companions";
 import Listing from "./Pages/Profile/Listing";
+import DashboardAdmin from "./admin/Dashboard";
+import DashboardAdminMatchmaking from "./admin/AdminMatchMaking";
+import UserProfile from "./admin/UserProfile";
+import MatchingDash from "./admin/MatchingDash";
+import MatchingInner from "./admin/MatchingInner";
+import EventAdmin from "./admin/EventAdmin";
+import EventDetailAdmin from "./admin/EventDetailAdmin";
+import EventDetailMY from "./components/Events/EventDetailMy";
+import Request from "./Pages/Request/Request";
 
 const App = () => {
   return (
@@ -200,6 +209,16 @@ const App = () => {
             </AuthWrapper>
           }
         />
+        <Route path="/listing/myevent/detail/:id" element={<EventDetailMY />} />
+        <Route path="/request/:event/:id" element={<Request />} />
+
+        <Route path="/admin" element={<DashboardAdmin />} />
+        <Route path="/admin/people" element={<DashboardAdminMatchmaking />} />
+        <Route path="/admin/user/profile/:id" element={<UserProfile />} />
+        <Route path="/admin/people/match/:id" element={<MatchingDash />} />
+        <Route path="/admin/match/:id1/:id2" element={<MatchingInner />} />
+        <Route path="/admin/event" element={<EventAdmin />} />
+        <Route path="/admin/event/:id" element={<EventDetailAdmin />} />
       </Routes>
     </Router>
   );
