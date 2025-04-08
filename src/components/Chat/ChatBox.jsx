@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import messageArrow from "../../assets/images/rectangle 246.svg";
+import messageArrow from "../../assets/images/rectangle_246.svg";
 import ChatNav from "./ChatNav";
 import Modal from "./Modal";
 import Popup from "./Popup";
@@ -14,12 +14,9 @@ const ChatBox = () => {
   const { eventId, userId } = useParams();
   const isGroupChat = !!eventId;
 
-  const {
-    messages,
-    message,
-    setMessage,
-    handleSendMessage
-  } = isGroupChat ? useGroupChat(eventId) : useDirectChat(userId);
+  const { messages, message, setMessage, handleSendMessage } = isGroupChat
+    ? useGroupChat(eventId)
+    : useDirectChat(userId);
 
   const token = localStorage.getItem("accessToken");
   const Id = decodeToken(token)?._id;

@@ -28,7 +28,7 @@ function InputDesign() {
   const [isCostInvolved, setIsCostInvolved] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState("");
   const [descriptionCount, setDescriptionCount] = React.useState(0);
-
+  const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [experience, setExperience] = React.useState({
     name: "",
     description: "",
@@ -49,6 +49,10 @@ function InputDesign() {
     { label: "Split the Amount", value: "split" },
     { label: "Admission Fee", value: "fee" },
   ];
+
+  const handleSelectionChange = (selected) => {
+    setSelectedCategory(selected);
+  };
 
   const handleChange = (field, value) => {
     setExperience((prev) => ({ ...prev, [field]: value }));
@@ -120,14 +124,6 @@ function InputDesign() {
             className="px-12 py-0 text-lg rounded-xl border border-solid border-zinc-800 h-[60px] text-neutral-400 w-full"
             value={experience.name}
             onChange={(e) => handleChange("name", e.target.value)}
-          />
-
-          <p className="mt-4">Select a Category</p>
-          <SelectGroup
-            options={Categories}
-            isMulti={false}
-            maxSelections={1}
-            onChange={(val) => handleChange("category", val)}
           />
 
           <p className="mt-4">Select a Category</p>
