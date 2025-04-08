@@ -3,83 +3,97 @@ import * as React from "react";
 import Layout from "../../Layout/Layout";
 import { Link } from "react-router-dom";
 import SelectGroup from "../../components/SelectGroup";
+import { apiPost } from "../../utils/call";
+
+const Categories = [
+  { label: "Music & Concerts", value: "Music & Concerts" },
+  { label: "Sports & Fitness", value: "Sports & Fitness" },
+  { label: "Arts & Culture", value: "Arts & Culture" },
+  { label: "Movies & Entertainment", value: "Movies & Entertainment" },
+  { label: "Social & Networking", value: "Social & Networking" },
+  { label: "Food & Drink", value: "Food & Drink" },
+  { label: "Education & Workshops", value: "Education & Workshops" },
+  { label: "Wellness & Spirituality", value: "Wellness & Spirituality" },
+  { label: "Business & Tech", value: "Business & Tech" },
+  { label: "Family & Kids", value: "Family & Kids" },
+  { label: "Outdoor & Adventure", value: "Outdoor & Adventure" },
+  { label: "Gaming & Esports", value: "Gaming & Esports" },
+  { label: "Volunteer & Causes", value: "Volunteer & Causes" },
+  { label: "Festivals & Celebrations", value: "Festivals & Celebrations" },
+  { label: "Local & Community Events", value: "Local & Community Events" },
+  { label: "Other", value: "Other" },
+];
 
 function InputDesign() {
   const [isCostInvolved, setIsCostInvolved] = React.useState(false);
-  const [description, setDescription] = React.useState("");
   const [selectedOption, setSelectedOption] = React.useState("");
-  const [experienceName, setExperienceName] = React.useState("");
-  const [peopleCount, setPeopleCount] = React.useState(null);
-  const [fromDate, setFromDate] = React.useState("");
-  const [fromTime, setFromTime] = React.useState("");
-  const [toDate, setToDate] = React.useState("");
-  const [toTime, setToTime] = React.useState("");
-  const [location, setLocation] = React.useState("");
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
+  const [descriptionCount, setDescriptionCount] = React.useState(0);
 
-  const paymentOptions = ["Go dutch", "Split the amount", "Admission fee"];
+  const [experience, setExperience] = React.useState({
+    name: "",
+    description: "",
+    state: "",
+    city: "",
 
-  const Categories = [
-    { label: "Music & Concerts", value: "music-concerts" },
-    { label: "Sports and Fitness", value: "sports-fitness" },
-    { label: "Arts & Culture", value: "arts-culture" },
-    { label: "Movies & Theater", value: "movies-theater" },
-    { label: "Food & Drink", value: "food-drink" },
-    { label: "Social & Networking", value: "social-networking" },
-    { label: "Education and Workshop", value: "education-workshop" },
-    { label: "Wellness and Stupidity", value: "wellness-stupidity" },
-    { label: "Business and Tech", value: "business-tech" },
-    { label: "Family and Kid", value: "family-kid" },
-    { label: "Outdoor and Adventure", value: "outdoor-adventure" },
-    { label: "Gaming and Esports", value: "gaming-esports" },
+    category: "",
+    fromDate: "",
+    toDate: "",
+    time: "",
+    totalSlots: null,
+    cost: null,
+    paymentType: null,
+  });
+
+  const paymentOptions = [
+    { label: "Go Dutch", value: "dutch" },
+    { label: "Split the Amount", value: "split" },
+    { label: "Admission Fee", value: "fee" },
   ];
+
+  const handleChange = (field, value) => {
+    setExperience((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleToggleCost = () => {
     setIsCostInvolved((prev) => !prev);
-    setSelectedOption(""); // reset option when toggled off
+    setSelectedOption("");
+    handleChange("cost", null);
+    handleChange("paymentType", null);
   };
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
+  const handleOptionSelect = (value) => {
+    setSelectedOption(value);
+    handleChange("paymentType", value);
   };
 
-  const handleSelectionChange = (selected) => {
-    setSelectedCategory(selected);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const experienceData = {
-      name: experienceName,
-      category: selectedCategory,
-      dateFrom: `${fromDate} ${fromTime}`,
-      dateTo: `${toDate} ${toTime}`,
-      peopleCount,
-      location,
-      description,
-      isCostInvolved,
-      paymentType: isCostInvolved ? selectedOption : null,
+    const finalData = {
+      ...experience,
+      availableSlots: experience.totalSlots,
+      cost: isCostInvolved ? experience.cost : 0,
+      paymentType: isCostInvolved ? experience.paymentType : null,
     };
 
-    console.log("Experience Created:", experienceData);
-
-    // You can now send this data to your backend or handle as needed
+    console.log("Experience Created:", finalData);
+    try {
+      const res = await apiPost("/events", finalData);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+    // Send finalData to backend here
   };
 
   return (
     <Layout>
-      <link
-        href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap"
-        rel="stylesheet"
-      />
       <div
         className="relative mx-auto my-0 mb-24 w-full bg-white max-w-sm px-8 max-sm:w-full"
         role="main"
       >
         <nav className="flex gap-5 items-center p-4">
           <Link to={"/listing"} aria-label="Go back">
-            {/* Back arrow icon */}
             <svg
               width="17"
               height="16"
@@ -100,21 +114,20 @@ function InputDesign() {
         </nav>
 
         <form className="space-y-5 w-full" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Name your experience"
+            className="px-12 py-0 text-lg rounded-xl border border-solid border-zinc-800 h-[60px] text-neutral-400 w-full"
+            value={experience.name}
+            onChange={(e) => handleChange("name", e.target.value)}
+          />
+
           <p className="mt-4">Select a Category</p>
           <SelectGroup
             options={Categories}
             isMulti={false}
             maxSelections={1}
-            onChange={handleSelectionChange}
-          />
-
-          <input
-            name="experienceName"
-            type="text"
-            placeholder="Name your experience"
-            className="px-12 py-0 text-lg rounded-xl border border-solid border-zinc-800 h-[60px] text-neutral-400 w-full"
-            value={experienceName}
-            onChange={(e) => setExperienceName(e.target.value)}
+            onChange={(val) => handleChange("category", val)}
           />
 
           <p className="mt-5">How many people can join you?</p>
@@ -123,9 +136,11 @@ function InputDesign() {
               <button
                 key={num}
                 type="button"
-                onClick={() => setPeopleCount(num)}
+                onClick={() => handleChange("totalSlots", num)}
                 className={`text-xl rounded-xl border border-solid border-zinc-800 h-[35px] w-[35px] ${
-                  peopleCount === num ? "bg-zinc-800 text-white" : "text-black"
+                  experience.totalSlots === num
+                    ? "bg-zinc-800 text-white"
+                    : "text-black"
                 }`}
               >
                 {num}
@@ -133,90 +148,65 @@ function InputDesign() {
             ))}
           </div>
 
-          <div className="px-0 py-0 mb-5">
-            <label className="mb-2.5 text-base text-black block">From</label>
-            <div className="flex gap-2">
-              <div className="flex items-center gap-2.5 px-2 w-1/2 rounded-xl border border-solid border-zinc-800 h-[42px]">
-                📅
-                <input
-                  type="date"
-                  value={fromDate}
-                  onChange={(e) => setFromDate(e.target.value)}
-                  className="text-sm text-stone-300 bg-transparent border-none focus:outline-none"
-                />
-              </div>
-              <div className="flex items-center gap-2.5 px-2 w-1/2 rounded-xl border border-solid border-zinc-800 h-[42px]">
-                ⏰
-                <input
-                  type="time"
-                  value={fromTime}
-                  onChange={(e) => setFromTime(e.target.value)}
-                  className="text-sm text-stone-300 bg-transparent border-none focus:outline-none"
-                />
-              </div>
-            </div>
+          <label className="text-base text-black block">From Date</label>
+          <input
+            type="date"
+            value={experience.fromDate}
+            onChange={(e) => handleChange("fromDate", e.target.value)}
+            className="w-full rounded-xl border border-zinc-800 px-2 h-[42px]"
+          />
+
+          <label className="text-base text-black block">To Date</label>
+          <input
+            type="date"
+            value={experience.toDate}
+            onChange={(e) => handleChange("toDate", e.target.value)}
+            className="w-full rounded-xl border border-zinc-800 px-2 h-[42px]"
+          />
+
+          <label className="text-base text-black block">Time</label>
+          <input
+            type="text"
+            placeholder="e.g. 5:00 PM"
+            value={experience.time}
+            onChange={(e) => handleChange("time", e.target.value)}
+            className="w-full rounded-xl border border-zinc-800 px-4 py-2 text-sm"
+          />
+
+          <input
+            type="text"
+            placeholder="City"
+            value={experience.city}
+            onChange={(e) => handleChange("city", e.target.value)}
+            className="text-sm rounded-xl border border-zinc-800 px-4 py-2 w-full"
+          />
+
+          <input
+            type="text"
+            placeholder="State"
+            value={experience.state}
+            onChange={(e) => handleChange("state", e.target.value)}
+            className="text-sm rounded-xl border border-zinc-800 px-4 py-2 w-full"
+          />
+
+          <textarea
+            placeholder="Give a description about your event"
+            className="p-4 text-lg rounded-xl border border-zinc-800 h-[76px] w-full text-neutral-400 resize-none"
+            minLength={30}
+            maxLength={150}
+            value={experience.description}
+            onChange={(e) => {
+              handleChange("description", e.target.value);
+              setDescriptionCount(e.target.value.length);
+            }}
+          />
+          <div className="flex gap-3.5 justify-end mt-1 text-xs text-neutral-400">
+            <div>Min 30</div>
+            <div>{descriptionCount}/150</div>
           </div>
 
-          <div className="px-0 py-0 mb-5">
-            <label className="mb-2.5 text-base text-black block">To</label>
-            <div className="flex gap-2">
-              <div className="flex items-center gap-2.5 px-2 w-1/2 rounded-xl border border-solid border-zinc-800 h-[42px]">
-                📅
-                <input
-                  type="date"
-                  value={toDate}
-                  onChange={(e) => setToDate(e.target.value)}
-                  className="text-sm text-stone-300 bg-transparent border-none focus:outline-none"
-                />
-              </div>
-              <div className="flex items-center gap-2.5 px-2 w-1/2 rounded-xl border border-solid border-zinc-800 h-[42px]">
-                ⏰
-                <input
-                  type="time"
-                  value={toTime}
-                  onChange={(e) => setToTime(e.target.value)}
-                  className="text-sm text-stone-300 bg-transparent border-none focus:outline-none"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-2.5 items-center px-4 py-4 my-5 rounded-xl border border-solid border-zinc-800 h-fit">
-            📍
-            <input
-              name="location"
-              type="text"
-              placeholder="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="text-sm text-stone-300 bg-transparent border-none focus:outline-none w-full"
-            />
-          </div>
-
-          <div className="my-5">
-            <textarea
-              name="description"
-              placeholder="Give a description about your event"
-              className="p-4 text-lg rounded-xl border border-solid border-zinc-800 h-[76px] w-full text-neutral-400 resize-none"
-              minLength={30}
-              maxLength={150}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <div className="flex gap-3.5 justify-end mt-1 text-xs text-neutral-400">
-              <div>Min 30</div>
-              <div>{description.length}/150</div>
-            </div>
-          </div>
-
-          {/* Cost Toggle and Options */}
           <div className="my-5">
             <div className="flex gap-2.5 items-center">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/5d86b0902f259a50df41694d4b2b7ec555b671ab"
-                alt=""
-                className="w-6 h-6"
-              />
               <label className="text-lg text-black">
                 Is there a cost involved?
               </label>
@@ -237,28 +227,37 @@ function InputDesign() {
                   Select how payments will happen
                 </div>
                 <div className="flex flex-wrap gap-2.5 mt-3">
-                  {paymentOptions.map((option) => (
+                  {paymentOptions.map(({ label, value }) => (
                     <button
-                      key={option}
+                      key={value}
                       type="button"
-                      onClick={() => handleOptionSelect(option)}
-                      className={`px-4 py-1 text-xs whitespace-nowrap rounded-3xl border h-[21px] focus:outline-none ${
-                        selectedOption === option
+                      onClick={() => handleOptionSelect(value)}
+                      className={`px-4 py-1 text-xs rounded-3xl border h-[21px] focus:outline-none ${
+                        experience.paymentType === value
                           ? "border-zinc-800 text-zinc-800 bg-zinc-100"
                           : "border-stone-300 text-stone-300"
                       }`}
                     >
-                      {option}
+                      {label}
                     </button>
                   ))}
                 </div>
+                <input
+                  type="number"
+                  placeholder="Enter cost in INR"
+                  className="mt-3 w-full rounded-xl border border-zinc-800 p-2 text-sm"
+                  value={experience.cost || ""}
+                  onChange={(e) =>
+                    handleChange("cost", parseFloat(e.target.value))
+                  }
+                />
               </>
             )}
           </div>
 
           <button
             type="submit"
-            className="mx-auto my-8 text-xl text-white rounded-3xl cursor-pointer bg-zinc-800 h-fit p-4 w-full max-sm:w-4/5 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-800"
+            className="mx-auto my-8 text-xl text-white rounded-3xl bg-zinc-800 h-fit p-4 w-full max-sm:w-4/5"
           >
             🤟 Create Experience
           </button>

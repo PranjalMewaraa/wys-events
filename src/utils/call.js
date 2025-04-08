@@ -41,7 +41,7 @@ apiClient.interceptors.response.use(
 // Example function to get user token from localStorage
 const getUserToken = () => {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("userToken");
+    return localStorage.getItem("accessToken");
   }
   return null;
 };

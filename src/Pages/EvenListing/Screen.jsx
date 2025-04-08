@@ -2,9 +2,18 @@ import * as React from "react";
 import Layout from "../../Layout/Layout";
 import LayoutInnerMain from "../../Layout/LayoutInner";
 import { Link, Links } from "react-router-dom";
+import { apiGet } from "../../utils/call";
 const EventsView = () => {
   const [activeTab, setActiveTab] = React.useState("upcoming");
 
+  const CallUpcomingEvents = async () => {
+    const res = await apiGet("/events/upcoming");
+    console.log(res);
+  };
+
+  React.useEffect(() => {
+    CallUpcomingEvents();
+  }, []);
   return (
     <Layout>
       <LayoutInnerMain>
