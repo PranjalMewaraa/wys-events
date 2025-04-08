@@ -14,6 +14,7 @@ import LayoutInnerMain from "../../Layout/LayoutInner";
 const EventDetailMY = () => {
   const { id } = useParams();
   const [event, setEvent] = useState({});
+
   const [userslist, setUserlists] = useState([]);
   const [showActionModal, setShowActionModal] = useState(false);
   const [showRejectReasonModal, setShowRejectReasonModal] = useState(false);
