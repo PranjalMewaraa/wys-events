@@ -41,7 +41,7 @@ const UnifiedAuth = () => {
       value: "Music festivals & nightlife",
     },
     { label: "🗘 Adventure Sport", value: "Adventure sports" },
-    { label: "🚀 A food hopping journey", value: "A food hopping journe" },
+    { label: "🚀 A food hopping journey", value: "A food hopping journey" },
     {
       label: "🎒 Road trips and long drive",
       value: "Road trips & long drives",
@@ -72,7 +72,7 @@ const UnifiedAuth = () => {
   const vibe = [
     {
       label: "🎭 Opposites attract",
-      value: "Opposites attract",
+      value: "Opposite attract",
       desc: "(I enjoy different perspectives)",
     },
     {
@@ -126,16 +126,11 @@ const UnifiedAuth = () => {
   const trustVerification = [
     {
       label: "✅ Yes, I feel safer that way",
-      value: "✅ Yes, I feel safer that way",
+      value: "true",
     },
     {
       label: "🚀 Not necessary, I trust good vibes",
-      value: "🚀 Not necessary, I trust good vibes",
-    },
-
-    {
-      label: "🔍 I’d verify myself if it helps others trust me",
-      value: "🔍 I’d verify myself if it helps others trust me",
+      value: "false",
     },
   ];
 
@@ -189,13 +184,15 @@ const UnifiedAuth = () => {
   const handleFinalSubmit = async () => {
     const payload = new FormData();
 
+    payload.append("firebaseToken", firebaseToken);
+
     const stringFields = [
-      "firebaseToken",
       "name",
       "currentLocation",
       "mobileNo",
       "dateOfBirth",
       "gender",
+      "lastMinuteTripChoices",
       "travelEnergy",
       "vibe",
     ];
@@ -206,9 +203,7 @@ const UnifiedAuth = () => {
     const arrayFields = [
       "travelPreferences",
       "idealTrip",
-      "lastMinuteTripChoices",
       "purpose",
-      "trustVerification",
     ];
     arrayFields.forEach((key) => {
       if (formData[key]) payload.append(key, JSON.stringify(formData[key]));
@@ -228,18 +223,19 @@ const UnifiedAuth = () => {
       );
     }
 
-    if (firebaseToken) {
-      payload.append("firebaseToken", firebaseToken);
+    if (typeof formData.trustVerification === "boolean") {
+      payload.append("trustVerification", JSON.stringify(formData.trustVerification));
     }
-    console.log(firebaseToken);
+
+    // if (firebaseToken) {
+    //   payload.append("firebaseToken", firebaseToken);
+    // }
+    // console.log(firebaseToken);
     if (firebaseToken)
       try {
         await axios.post(
           "https://wysbackend.onrender.com/api/users/register",
-          payload,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
+          payload
         );
 
         const loginRes = await axios.post(
