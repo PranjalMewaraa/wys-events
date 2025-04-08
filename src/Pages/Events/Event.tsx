@@ -136,7 +136,7 @@ const EventDetails = () => {
               month: "long",
               day: "numeric",
             })}{" "}
-            - {convertToAmPm(event.time)} | {event.location}
+            - {event.time} | {event.location}
           </p>
           <p>Total Slots: {event.totalSlots} | Slots Available: 2</p>
           <p>Rs. {event.cost} per person</p>

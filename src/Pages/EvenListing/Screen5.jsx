@@ -21,17 +21,21 @@ function InputDesign() {
 
   const Categories = [
     { label: "Music & Concerts", value: "music-concerts" },
-    { label: "Sports and Fitness", value: "sports-fitness" },
+    { label: "Sports & Fitness", value: "sports-fitness" },
     { label: "Arts & Culture", value: "arts-culture" },
-    { label: "Movies & Theater", value: "movies-theater" },
-    { label: "Food & Drink", value: "food-drink" },
+    { label: "Movies & Entertainment", value: "movies-entertainment" },
     { label: "Social & Networking", value: "social-networking" },
-    { label: "Education and Workshop", value: "education-workshop" },
-    { label: "Wellness and Stupidity", value: "wellness-stupidity" },
-    { label: "Business and Tech", value: "business-tech" },
-    { label: "Family and Kid", value: "family-kid" },
-    { label: "Outdoor and Adventure", value: "outdoor-adventure" },
-    { label: "Gaming and Esports", value: "gaming-esports" },
+    { label: "Food & Drink", value: "food-drink" },
+    { label: "Education & Workshops", value: "education-workshops" },
+    { label: "Wellness & Spirituality", value: "wellness-spirituality" },
+    { label: "Business & Tech", value: "business-tech" },
+    { label: "Family & Kids", value: "family-kids" },
+    { label: "Outdoor & Adventure", value: "outdoor-adventure" },
+    { label: "Gaming & Esports", value: "gaming-esports" },
+    { label: "Volunteer & Causes", value: "volunteer-causes" },
+    { label: "Festivals & Celebrations", value: "festivals-celebrations" },
+    { label: "Local & Community Events", value: "local-community-events" },
+    { label: "Other", value: "other" },
   ];
 
   const handleToggleCost = () => {
