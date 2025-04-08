@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaMoneyBill1Wave, FaStar } from "react-icons/fa6";
 import { FiTarget } from "react-icons/fi";
@@ -15,7 +15,7 @@ const EventDetail = () => {
   const [joining, setJoining] = useState(false);
   const [hasJoined, setHasJoined] = useState(false);
   const [message, setMessage] = useState(null);
-
+  const [userId, setUserId] = useState("");
   const handleJoin = async () => {
     setMessage(null);
     setJoining(true);
@@ -23,12 +23,11 @@ const EventDetail = () => {
       const response = await eventRequest(eventId);
 
       // Use status from the actual axios response (e.g., response.status === 200)
-      if (response?.status === 200) {
-        setHasJoined(true);
-        setMessage("Request sent successfully.");
-      } else {
-        setMessage("Failed to send request.");
-      }
+
+      setHasJoined(true);
+      setMessage("Request sent successfully.");
+      window.location.reload;
+      setReqStatus(checkParticipantStatus(event.participants, userId));
 
       console.log("Join response:", response);
     } catch (err) {
@@ -39,6 +38,30 @@ const EventDetail = () => {
     }
   };
 
+  const [reqStatus, setReqStatus] = useState();
+
+  useEffect(() => {
+    setUserId(localStorage.getItem("userID"));
+    function checkParticipantStatus(participants = [], userId) {
+      console.log(participants);
+      console.log(userId);
+      if (!Array.isArray(participants) || participants.length === 0) {
+        return { isPresent: false, status: null };
+      }
+
+      const match = participants.find((p) => p.user === userId);
+      setHasJoined(!!match);
+      return {
+        isPresent: !!match,
+        status: match?.requestStatus || null,
+      };
+    }
+    if (event) {
+      setReqStatus(checkParticipantStatus(event.participants, userId));
+    }
+  }, [event]);
+
+  console.log(reqStatus);
   return (
     <Layout>
       <LayoutInnerMain>
@@ -53,22 +76,32 @@ const EventDetail = () => {
             <div className="w-full h-1/2 flex-col gap-4 py-4">
               <div className="flex text-2xl mb-4 items-center justify-between w-full">
                 <p>{event.name}</p>
-                <button
-                  onClick={handleJoin}
-                  disabled={joining || hasJoined}
-                  className="p-4 py-2 md:py-4 md:px-6 text-sm md:text-base text-yellow-500 border border-yellow-500 rounded-full disabled:opacity-50"
-                >
-                  {hasJoined
-                    ? "Request sent"
-                    : joining
-                    ? "Requesting..."
-                    : "Request to join"}
-                </button>
+                {event.createdBy === userId ? (
+                  <div>
+                    <p className="p-4 py-2 md:py-4 md:px-6 text-sm md:text-base text-yellow-500  rounded-full disabled:opacity-50">
+                      Event created by you
+                    </p>
+                  </div>
+                ) : event.eventStatus === "ongoing" ? (
+                  <button
+                    onClick={handleJoin}
+                    disabled={joining || hasJoined}
+                    className="p-4 py-2 md:py-4 md:px-6 text-sm md:text-base text-yellow-500 border border-yellow-500 rounded-full disabled:opacity-50"
+                  >
+                    {hasJoined && reqStatus.status === "requested"
+                      ? "Request sent"
+                      : hasJoined && reqStatus.status === "accepted"
+                      ? "Joined"
+                      : "Request to join"}
+                  </button>
+                ) : (
+                  <div>
+                    <p className="p-4 py-2 md:py-4 md:px-6 text-sm md:text-base text-yellow-500 border border-yellow-500 rounded-full disabled:opacity-50">
+                      {event.eventStatus}
+                    </p>
+                  </div>
+                )}
               </div>
-
-              {message && (
-                <p className="text-sm text-blue-600 mb-2">{message}</p>
-              )}
 
               <div className="flex flex-col gap-4 py-4">
                 <p className="flex text-base gap-2 items-center">
