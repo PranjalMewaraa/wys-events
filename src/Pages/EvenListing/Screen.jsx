@@ -23,7 +23,7 @@ const EventsView = () => {
           rel="stylesheet"
         />
         <div
-          className="relative mx-auto mb-40 my-0 w-full h-screen bg-white max-w-[390px] max-sm:w-full overflow-hidden"
+          className="relative mx-auto h-fit mb-40 my-0 w-full min-h-screen bg-white max-w-[390px] max-sm:w-full overflow-hidden"
           role="main"
         >
           {/* Tabs */}
@@ -73,7 +73,7 @@ const EventsView = () => {
           {activeTab === "yourEvents" && (
             <section
               aria-labelledby="your-events-section"
-              className="relative h-full pb-20"
+              className="relative h-full"
             >
               <h2
                 id="your-events-section"
@@ -81,7 +81,7 @@ const EventsView = () => {
               >
                 Your Events
               </h2>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col min-h-fit h-full gap-4">
                 {myevents.map((item) => {
                   return <MyEventCard item={item} />;
                 })}
@@ -96,13 +96,6 @@ const EventsView = () => {
               </Link>
             </section>
           )}
-
-          {/* Previous Events */}
-          <section aria-labelledby="previous-section">
-            <h2 id="previous-section" className="px-16 py-5 text-xs text-black">
-              Previous Events
-            </h2>
-          </section>
         </div>
       </LayoutInnerMain>
     </Layout>
@@ -206,7 +199,8 @@ function MyEventCard({ item }) {
   }
 
   return (
-    <article
+    <Link
+      to={`/listing/myevent/detail/${item._id}`}
       onClick={() => setIsExpanded(!isExpanded)}
       className="cursor-pointer overflow-hidden mx-16 my-0 bg-white rounded-2xl shadow-sm max-sm:mx-5 max-sm:my-0 transition-all duration-300"
     >
@@ -241,7 +235,7 @@ function MyEventCard({ item }) {
           </div>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 export default EventsView;

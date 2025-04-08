@@ -32,6 +32,8 @@ import MatchingDash from "./admin/MatchingDash";
 import MatchingInner from "./admin/MatchingInner";
 import EventAdmin from "./admin/EventAdmin";
 import EventDetailAdmin from "./admin/EventDetailAdmin";
+import EventDetailMY from "./components/Events/EventDetailMy";
+import Request from "./Pages/Request/Request";
 
 const App = () => {
   return (
@@ -52,6 +54,8 @@ const App = () => {
         <Route path="/check" element={<EventListing7 />} />
         <Route path="/chat" element={<ChatOuter />} />
         <Route path="/chats" element={<ChatBox />} />
+        <Route path="/listing/myevent/detail/:id" element={<EventDetailMY />} />
+        <Route path="/request/:event/:id" element={<Request />} />
 
         <Route path="/admin" element={<DashboardAdmin />} />
         <Route path="/admin/people" element={<DashboardAdminMatchmaking />} />
