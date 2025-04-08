@@ -66,6 +66,7 @@ const SelectGroup = ({
             >
               <input
                 type="checkbox"
+                name={option.label}
                 checked={isChecked}
                 onChange={() => handleChange(option.value)}
               />

@@ -7,7 +7,7 @@ const InputBox = ({
   value = "",
   name,
   type = "text",
-  onChangeFn,
+  onChange,
 }) => {
   return (
     <div className="flex gap-2 flex-col">
@@ -23,16 +23,14 @@ const InputBox = ({
       </div>
 
       <input
-  type={type}
-  id={name}
-  name={name}
-  placeholder={placeholder}
-  {...(onChangeFn
-    ? { value, onChange: onChangeFn }
-    : { defaultValue: value })} // Uncontrolled fallback
-  className="focus:outline-none border-b border-black"
-/>
-
+        type={type}
+        id={name}
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(name, e.target.value)}
+        className="focus:outline-none border-b border-black"
+      />
     </div>
   );
 };

@@ -53,13 +53,6 @@ const Home = () => {
             Events curated for you ...
           </motion.h2>
 
-          <Link
-            to="/search"
-            className=" bg-gray-100 p-4  rounded m-4 flex items-center"
-          >
-            <FaSearch className="mr-2" /> Search events, trips & more
-          </Link>
-
           <div className="w-full py-2 px-4 flex gap-2 md:gap-4 max-w-[100vw] overflow-x-auto">
             {tags_for_chips.map((item, id) => {
               return (
@@ -143,7 +136,7 @@ const EventDetails = () => {
               month: "long",
               day: "numeric",
             })}{" "}
-            - {convertToAmPm(event.time)} | {event.location}
+            - {event.time} | {event.location}
           </p>
           <p>Total Slots: {event.totalSlots} | Slots Available: 2</p>
           <p>Rs. {event.cost} per person</p>
