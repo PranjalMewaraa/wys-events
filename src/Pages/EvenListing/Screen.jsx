@@ -5,10 +5,11 @@ import { Link, Links } from "react-router-dom";
 import { apiGet } from "../../utils/call";
 const EventsView = () => {
   const [activeTab, setActiveTab] = React.useState("upcoming");
-
+  const [myevents, setEvents] = React.useState([]);
   const CallUpcomingEvents = async () => {
-    const res = await apiGet("/events/upcoming");
+    const res = await apiGet("/events/created");
     console.log(res);
+    setEvents(res);
   };
 
   React.useEffect(() => {
@@ -22,7 +23,7 @@ const EventsView = () => {
           rel="stylesheet"
         />
         <div
-          className="relative mx-auto my-0 w-full h-screen bg-white max-w-[390px] max-sm:w-full overflow-hidden"
+          className="relative mx-auto mb-40 my-0 w-full h-screen bg-white max-w-[390px] max-sm:w-full overflow-hidden"
           role="main"
         >
           {/* Tabs */}
@@ -80,7 +81,11 @@ const EventsView = () => {
               >
                 Your Events
               </h2>
-              <MyEventCard />
+              <div className="flex flex-col gap-4">
+                {myevents.map((item) => {
+                  return <MyEventCard item={item} />;
+                })}
+              </div>
 
               {/* FAB Button */}
               <Link
@@ -180,9 +185,9 @@ function UpcomingEventCard() {
     </article>
   );
 }
-function MyEventCard() {
+function MyEventCard({ item }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-
+  console.log(item);
   const companions = [
     "https://randomuser.me/api/portraits/women/1.jpg",
     "https://randomuser.me/api/portraits/men/2.jpg",
@@ -191,6 +196,14 @@ function MyEventCard() {
     "https://randomuser.me/api/portraits/men/5.jpg",
     "https://randomuser.me/api/portraits/women/6.jpg",
   ];
+  function formatDate(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  }
 
   return (
     <article
@@ -205,24 +218,26 @@ function MyEventCard() {
         />
       </div>
       <div className="px-4 py-5">
-        <h3 className="mb-3.5 text-xl">Himalayas Trek</h3>
+        <h3 className="mb-3.5 text-xl">{item?.name}</h3>
         <div className="flex flex-col gap-3 text-xs">
           <div className="flex gap-2 items-center">
             <i className="ti ti-calendar" aria-hidden="true" />
-            <span>26 Jun 2025</span>
+            <span>{formatDate(item?.fromDate)}</span>
             <div
               className="w-0.5 h-0.5 rounded-full bg-zinc-800"
               aria-hidden="true"
             />
-            <span>8:00 AM</span>
+            <span>{item?.time}</span>
           </div>
           <div className="flex gap-2 items-center">
             <i className="ti ti-map-pin" aria-hidden="true" />
-            <span>Praygraj, Uttarakhand</span>
+            <span>{item.location}</span>
           </div>
           <div className="flex gap-2 items-center">
             <i className="ti ti-users" aria-hidden="true" />
-            <span className="text-red-300">Slots Left : 2</span>
+            <span className="text-red-300">
+              Slots Left : {item.availableSlots}
+            </span>
           </div>
         </div>
       </div>
