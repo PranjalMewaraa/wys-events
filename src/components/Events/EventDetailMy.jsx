@@ -36,7 +36,7 @@ const EventDetailMY = () => {
   }, []);
 
   const getParticipants = () => {
-    const participantIds = event.participants?.map((p) => p?.user);
+    const participantIds = event.participants?.map((p) => p?.user._id);
     console.log(
       "ss",
       userslist.filter((user) => participantIds?.includes(user?._id))
@@ -135,7 +135,7 @@ const EventDetailMY = () => {
               </p>
               <div className="flex flex-col w-full gap-2">
                 {getParticipants()?.length > 0 ? (
-                  getParticipants().map((item) => (
+                  getParticipants().map((item, index) => (
                     <Link
                       to={`/request/${event._id}/${item._id}`}
                       key={item._id}
@@ -150,6 +150,9 @@ const EventDetailMY = () => {
                         <p className="text-sm font-medium">{item.name}</p>
                         <p className="text-sm text-gray-600">
                           Location: {item.currentLocation || "N/A"}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Status: {event.participants[index].requestStatus}
                         </p>
                       </div>
                     </Link>

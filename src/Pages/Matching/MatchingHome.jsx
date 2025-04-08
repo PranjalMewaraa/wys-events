@@ -14,9 +14,9 @@ const MatchingHome = () => {
       <LayoutInnerMain>
         <div className="w-full h-full mb-24 bg-white mx-auto p-4 overflow-y-scroll">
           {/* Header */}
-          <div className="w-full p-4 poppins-light-italic flex justify-center flex-col items-center text-xl">
+          <div className="w-full p-4 poppins-light-italic flex justify-center flex-col items-center text-2xl">
             <p>Find Seekers</p>
-            <p>Find Experiences</p>
+            <p className="text-orange-400">Find Experiences</p>
           </div>
 
           {/* Loader & Error */}
@@ -29,11 +29,14 @@ const MatchingHome = () => {
 
           {/* No Matches */}
           {!loading && !error && matchedUsers.length === 0 && (
-            <p className="text-center text-gray-400 mt-4">No matched users found.</p>
+            <p className="text-center text-gray-400 mt-4">
+              No matched users found.
+            </p>
           )}
 
           {/* Matched Users */}
-          {!loading && matchedUsers.length > 0 &&
+          {!loading &&
+            matchedUsers.length > 0 &&
             matchedUsers.map((user) => <Card key={user._id} user={user} />)}
 
           {/* Say Hello Button */}
@@ -59,7 +62,6 @@ const Card = ({ user }) => {
   const matchPercentage = compatibility?.compatibilityScore ?? "…";
 
   return (
-
     <Link
       to={`/people/detail/${_id}`}
       className="flex flex-col mt-4 max-w-sm w-full max-h-96 gap-4 items-center"

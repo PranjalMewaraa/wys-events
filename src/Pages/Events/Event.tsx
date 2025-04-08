@@ -68,13 +68,6 @@ const Home = () => {
 
           <div className="space-y-4 w-full flex gap-4 flex-wrap px-4 mt-4">
             <EventCard />
-            <EventCard />
-            <EventCard />
-            <EventCard />
-            <EventCard />
-            <EventCard />
-            <EventCard />
-            <EventCard />
           </div>
         </div>
       </LayoutInnerMain>

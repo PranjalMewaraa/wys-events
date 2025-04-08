@@ -23,7 +23,7 @@ const Request = () => {
     try {
       const res = await apiPatch(`/events/${event}/request/${id}/approve`);
       console.log(res);
-      alert(res.message);
+
       nav(`/listing/myevent/detail/${event}`);
     } catch (error) {
       console.log(error);
@@ -33,6 +33,7 @@ const Request = () => {
     try {
       const res = await apiPatch(`/events/${event}/request/${id}/reject`);
       console.log(res);
+      nav(`/listing/myevent/detail/${event}`);
     } catch (error) {
       console.log(error);
     }

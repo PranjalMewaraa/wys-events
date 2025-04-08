@@ -12,12 +12,11 @@ const Matching = () => {
   const matchPercentage = compatibility?.compatibilityScore ?? "…";
 
   return (
-    
     <div>
- {loading && <div className="p-4">Loading...</div>}
+      {loading && <div className="p-4">Loading...</div>}
       {error && <div className="p-4 text-red-500">Something went wrong</div>}
       {user && (
-        <div className="w-full h-full bg-white mx-auto p-4 overflow-y-scroll">
+        <div className="w-full pb-20 h-full bg-white mx-auto p-4 overflow-y-scroll">
           {/* Header */}
           <div className="flex items-center justify-between">
             <button>&larr;</button>
@@ -63,7 +62,7 @@ const Matching = () => {
           <div className="grid grid-cols-3 gap-2 mt-4">
             {user.profileImages.map((image, i) => (
               <div key={i} className="w-full h-24 bg-gray-200 rounded-lg">
-                <img src={image}/>
+                <img src={image} />
               </div>
             ))}
           </div>
@@ -102,7 +101,10 @@ const Matching = () => {
                 answer: user.profileDetails?.favoriteTravelMovie || "N/A",
               },
             ].map((item, index) => (
-              <div key={index} className="bg-orange-400 text-white p-4 rounded-lg">
+              <div
+                key={index}
+                className="bg-orange-400 text-white p-4 rounded-lg"
+              >
                 <p className="font-semibold italic">
                   {item.icon} {item.question}
                 </p>
@@ -143,13 +145,20 @@ const Matching = () => {
                 />
                 <div className="p-3">
                   <h3 className="font-semibold text-lg">{event.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">📅  {new Date(event.fromDate).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })}</p>
-                  <p className="text-sm text-gray-600 mt-1">📍 {event.location}</p>
-                  <p className="text-sm text-gray-600 mt-1">👥 {event.participants?.length || 0} Seekers</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    📅{" "}
+                    {new Date(event.fromDate).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    📍 {event.location}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    👥 {event.participants?.length || 0} Seekers
+                  </p>
                   <div className="mt-2">
                     <span className="bg-green-500 text-white px-2 py-1 text-xs rounded-md">
                       Rating {event.rating || "4.2"} ★
@@ -163,7 +172,9 @@ const Matching = () => {
           {/* Events Attended Section */}
           <h2 className="mt-6 font-semibold text-lg">Events attended</h2>
           {user.eventsAttended?.length === 0 ? (
-            <p className="text-gray-500 text-sm mt-2">No events attended yet.</p>
+            <p className="text-gray-500 text-sm mt-2">
+              No events attended yet.
+            </p>
           ) : (
             user.eventsAttended.map((event, index) => (
               <div
@@ -177,13 +188,20 @@ const Matching = () => {
                 />
                 <div className="p-3">
                   <h3 className="font-semibold text-lg">{event.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">📅 {new Date(event.fromDate).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  })}</p>
-                  <p className="text-sm text-gray-600 mt-1">📍 {event.location}</p>
-                  <p className="text-sm text-gray-600 mt-1">👥 {event.participants?.length || 0} Seekers</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    📅{" "}
+                    {new Date(event.fromDate).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    📍 {event.location}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    👥 {event.participants?.length || 0} Seekers
+                  </p>
                   <div className="mt-2">
                     <span className="bg-green-500 text-white px-2 py-1 text-xs rounded-md">
                       Rating {event.rating || "4.2"} ★
@@ -196,14 +214,11 @@ const Matching = () => {
 
           {/* Say Hello Button */}
           <button className="fixed bottom-4 left-4 right-4 bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium z-50">
-  👋 Say Hello
-</button>
-
+            👋 Say Hello
+          </button>
         </div>
       )}
     </div>
-
-     
   );
 };
 

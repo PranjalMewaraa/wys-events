@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Layout from "../../Layout/Layout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SelectGroup from "../../components/SelectGroup";
 import { apiPost } from "../../utils/call";
 
@@ -28,7 +28,7 @@ function InputDesign() {
   const [isCostInvolved, setIsCostInvolved] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState("");
   const [descriptionCount, setDescriptionCount] = React.useState(0);
-
+  const nav = useNavigate();
   const [experience, setExperience] = React.useState({
     name: "",
     description: "",
@@ -80,6 +80,7 @@ function InputDesign() {
     try {
       const res = await apiPost("/events", finalData);
       console.log(res);
+      nav("/events");
     } catch (error) {
       console.log(error);
     }
