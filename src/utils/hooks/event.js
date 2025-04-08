@@ -9,7 +9,7 @@ const useEventDetails = (eventId) => {
   const [isEventOver, setIsEventOver] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const token = import.meta.env.VITE_AUTH_TOKEN;
+  const token = localStorage.getItem("accessToken");
   const userId = decodeToken(token)?._id;
 
   useEffect(() => {

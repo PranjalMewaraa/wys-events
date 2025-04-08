@@ -10,7 +10,6 @@ export const useChatList = (activeTab, token) => {
     const loadData = async () => {
       setLoading(true);
       setError(null);
-
       try {
         if (activeTab === "group") {
           const groupData = await fetchGroups(token);

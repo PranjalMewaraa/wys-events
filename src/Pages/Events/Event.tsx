@@ -61,9 +61,12 @@ const Home = () => {
           </Link>
 
           <div className="w-full py-2 px-4 flex gap-2 md:gap-4 max-w-[100vw] overflow-x-auto">
-            {tags_for_chips.map((item) => {
+            {tags_for_chips.map((item, id) => {
               return (
-                <div className="p-2 px-3 text-xs drop-shadow bg-gray-50 rounded-xl w-fit text-nowrap">
+                <div
+                  key={id}
+                  className="p-2 px-3 text-xs drop-shadow bg-gray-50 rounded-xl w-fit text-nowrap"
+                >
                   {item}
                 </div>
               );

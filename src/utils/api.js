@@ -108,6 +108,7 @@ export const fetchEventById = async (eventId) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -116,6 +117,75 @@ export const fetchEventById = async (eventId) => {
     throw error;
   }
 };
+
+export const eventRequest = async (eventId) => {
+  try {
+    const res = api.post(
+      `/events/${eventId}/join`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response.data);
+    }
+    throw error;
+  }
+};
+
+export const leaveEvent = async (eventId) => {
+  try {
+    const res = await api.post(
+      `/events/${eventId}/leave`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "Axios error (leave event):",
+        error.response?.data || error.message
+      );
+    }
+    throw error;
+  }
+};
+export const cancelEvent = async (eventId) => {
+  try {
+    const res = await api.patch(
+      `/events/${eventId}/cancel`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "Axios error (cancel event):",
+        error.response?.data || error.message
+      );
+    }
+    throw error;
+  }
+};
+
 //group api
 
 export const fetchGroups = async (token) => {

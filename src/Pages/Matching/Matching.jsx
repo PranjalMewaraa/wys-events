@@ -178,10 +178,10 @@ const Matching = () => {
                 <div className="p-3">
                   <h3 className="font-semibold text-lg">{event.name}</h3>
                   <p className="text-sm text-gray-600 mt-1">📅 {new Date(event.fromDate).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })}</p>
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  })}</p>
                   <p className="text-sm text-gray-600 mt-1">📍 {event.location}</p>
                   <p className="text-sm text-gray-600 mt-1">👥 {event.participants?.length || 0} Seekers</p>
                   <div className="mt-2">

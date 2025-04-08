@@ -33,7 +33,7 @@ const {pendingRequests}=useDirectChat();
     <div className='w-full h-full '>
       <div className='w-9/10 container m-auto mt-6 border border-transparent rounded-2xl bg-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)]'>
       {Array.isArray(pendingRequests) && pendingRequests.length > 0 ? (
-  pendingRequests.map(req => (
+        pendingRequests.map(req => (
     <div key={req._id} className='min-w-9/10 m-5 flex flex-col gap-5 md:gap-9'>
       <p className='text-base abeezee-regular leading-6 md:text-4xl'>Requests</p>
       <div className='flex gap-5'>

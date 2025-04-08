@@ -21,7 +21,7 @@ const ChatBox = () => {
     handleSendMessage
   } = isGroupChat ? useGroupChat(eventId) : useDirectChat(userId);
 
-  const token = import.meta.env.VITE_AUTH_TOKEN;
+  const token = localStorage.getItem("accessToken");
   const Id = decodeToken(token)?._id;
 
   const chatContainerRef = useRef(null);
