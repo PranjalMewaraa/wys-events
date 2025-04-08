@@ -126,19 +126,16 @@ const UnifiedAuth = () => {
   const trustVerification = [
     {
       label: "✅ Yes, I feel safer that way",
-      value: "yes",
+      value: "✅ Yes, I feel safer that way",
     },
     {
       label: "🚀 Not necessary, I trust good vibes",
-      value: "No",
+      value: "🚀 Not necessary, I trust good vibes",
     },
+
     {
-      label: "🎭 Host events & bring people together",
-      value: "Host events & bring people together",
-    },
-    {
-      label: "🤷 Just exploring for now",
-      value: "Just exploring for now",
+      label: "🔍 I’d verify myself if it helps others trust me",
+      value: "🔍 I’d verify myself if it helps others trust me",
     },
   ];
 
@@ -392,8 +389,6 @@ const UnifiedAuth = () => {
             <SelectGroup
               key={`step-${page}`}
               options={lastMinuteTrip}
-              isMulti
-              maxSelections={1}
               onChange={(val) =>
                 handleSelectionChange(val, "lastMinuteTripChoices")
               }
@@ -425,7 +420,7 @@ const UnifiedAuth = () => {
             </h1>
             <SelectGroup
               key={`step-${page}`}
-              options={travelGeneric}
+              options={trustVerification}
               isMulti
               maxSelections={1}
               onChange={(val) =>
