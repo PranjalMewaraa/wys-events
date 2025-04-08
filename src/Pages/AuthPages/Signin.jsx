@@ -228,32 +228,35 @@ const UnifiedAuth = () => {
       );
     }
 
-    console.log(payload);
-
-    try {
-      await axios.post(
-        "https://wysbackend.onrender.com/api/users/register",
-        payload,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      const loginRes = await axios.post(
-        "https://wysbackend.onrender.com/api/users/login",
-        {
-          firebaseToken,
-        }
-      );
-
-      const { accessToken, user } = loginRes.data.data;
-      localStorage.setItem("userID", user._id);
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("authToken", firebaseToken);
-      window.location.href = "/";
-    } catch (err) {
-      console.error("Final submission failed", err);
+    if (firebaseToken) {
+      payload.append("firebaseToken", firebaseToken);
     }
+    console.log(firebaseToken);
+    if (firebaseToken)
+      try {
+        await axios.post(
+          "https://wysbackend.onrender.com/api/users/register",
+          payload,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        const loginRes = await axios.post(
+          "https://wysbackend.onrender.com/api/users/login",
+          {
+            firebaseToken,
+          }
+        );
+
+        const { accessToken, user } = loginRes.data.data;
+        localStorage.setItem("userID", user._id);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("authToken", firebaseToken);
+        window.location.href = "/";
+      } catch (err) {
+        console.error("Final submission failed", err);
+      }
   };
 
   const renderStep = () => {

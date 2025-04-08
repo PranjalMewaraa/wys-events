@@ -100,14 +100,6 @@ function InputDesign() {
         </nav>
 
         <form className="space-y-5 w-full" onSubmit={handleSubmit}>
-          <p className="mt-4">Select a Category</p>
-          <SelectGroup
-            options={Categories}
-            isMulti={false}
-            maxSelections={1}
-            onChange={handleSelectionChange}
-          />
-
           <input
             name="experienceName"
             type="text"
@@ -115,6 +107,14 @@ function InputDesign() {
             className="px-12 py-0 text-lg rounded-xl border border-solid border-zinc-800 h-[60px] text-neutral-400 w-full"
             value={experienceName}
             onChange={(e) => setExperienceName(e.target.value)}
+          />
+
+          <p className="mt-4">Select a Category</p>
+          <SelectGroup
+            options={Categories}
+            isMulti={false}
+            maxSelections={1}
+            onChange={handleSelectionChange}
           />
 
           <p className="mt-5">How many people can join you?</p>
