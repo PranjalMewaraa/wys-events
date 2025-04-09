@@ -33,8 +33,7 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -93,7 +92,9 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
           className={`text-center text-lg font-medium border-b border-gray-200 pb-2 cursor-pointer ${
             isLoading ? "text-gray-400 cursor-not-allowed" : ""
           }`}
-          onClick={!isLoading ? handlePrimaryAction : null}
+          onClick={
+            !isLoading && rsvpStatus == false ? handlePrimaryAction : null
+          }
         >
           {primaryActionText}
         </div>
