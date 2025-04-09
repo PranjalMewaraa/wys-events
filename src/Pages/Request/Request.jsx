@@ -11,7 +11,7 @@ const Request = () => {
   const nav = useNavigate();
   useEffect(() => {
     const getProfile = async () => {
-      const res = await apiGet(`/admin/user/${id}`);
+      const res = await apiGet(`/user/${id}`);
       setUser(res.data);
     };
     getProfile();
