@@ -33,12 +33,12 @@ const MatchingHome = () => {
               No matched users found.
             </p>
           )}
-
-          {/* Matched Users */}
-          {!loading &&
-            matchedUsers.length > 0 &&
-            matchedUsers.map((user) => <Card key={user._id} user={user} />)}
-
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Matched Users */}
+            {!loading &&
+              matchedUsers.length > 0 &&
+              matchedUsers.map((user) => <Card key={user._id} user={user} />)}
+          </div>
           {/* Say Hello Button */}
           {/* <button className="mt-6 w-full bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium">
             👋 Say Hello
@@ -64,7 +64,7 @@ const Card = ({ user }) => {
   return (
     <Link
       to={`/people/detail/${_id}`}
-      className="flex flex-col mt-4 max-w-sm w-full max-h-96 gap-4 items-center"
+      className="flex flex-col mt-4 max-w-md min-w-sm w-full max-h-96 gap-4 items-center"
     >
       <div className="w-full h-full aspect-square object-fill overflow-hidden rounded-xl">
         <img
