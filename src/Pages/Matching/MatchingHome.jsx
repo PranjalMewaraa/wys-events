@@ -12,7 +12,7 @@ const MatchingHome = () => {
   return (
     <Layout>
       <LayoutInnerMain>
-        <div className="w-full h-full mb-24 bg-white mx-auto p-4 overflow-y-scroll">
+        <div className="w-full h-full mb-24 bg-white mx-auto p-4 ">
           {/* Header */}
           <div className="w-full p-4 poppins-light-italic flex justify-center flex-col items-center text-2xl">
             <p>Find Seekers</p>

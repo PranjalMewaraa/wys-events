@@ -63,7 +63,9 @@ const EventAdmin = () => {
             <p className="w-full text-2xl poppins-bold">Event Management</p>
             <div className="w-full h-full grid grid-cols-1 md:grid-cols-4 gap-4">
               {filteredUsers?.length > 0 ? (
-                filteredUsers?.map((item) => <EventCard item={item} />)
+                filteredUsers
+                  .reverse()
+                  ?.map((item) => <EventCard item={item} />)
               ) : (
                 <p className="col-span-full text-center text-gray-500">
                   No Events found.
