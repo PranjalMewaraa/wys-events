@@ -8,12 +8,13 @@ import InputBox from "../../components/InputBox";
 import SelectGroup from "../../components/SelectGroup";
 import PhotoPicker from "../../components/PhotoPicker";
 import "../../App.css";
+import { FaArrowLeft, FaArrowRotateLeft } from "react-icons/fa6";
 
 const UnifiedAuth = () => {
   const [firebaseToken, setFirebaseToken] = useState(null);
   const [page, setPage] = useState(-1);
   const [formData, setFormData] = useState({});
-
+  const [err, setErr] = useState("");
   const genderOption = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -200,11 +201,7 @@ const UnifiedAuth = () => {
       if (formData[key]) payload.append(key, formData[key]);
     });
 
-    const arrayFields = [
-      "travelPreferences",
-      "idealTrip",
-      "purpose",
-    ];
+    const arrayFields = ["travelPreferences", "idealTrip", "purpose"];
     arrayFields.forEach((key) => {
       if (formData[key]) payload.append(key, JSON.stringify(formData[key]));
     });
@@ -224,7 +221,10 @@ const UnifiedAuth = () => {
     }
 
     if (typeof formData.trustVerification === "boolean") {
-      payload.append("trustVerification", JSON.stringify(formData.trustVerification));
+      payload.append(
+        "trustVerification",
+        JSON.stringify(formData.trustVerification)
+      );
     }
 
     // if (firebaseToken) {
@@ -405,7 +405,7 @@ const UnifiedAuth = () => {
               key={`step-${page}`}
               options={purpose}
               isMulti
-              maxSelections={1}
+              maxSelections={2}
               onChange={(val) => handleSelectionChange(val, "purpose")}
             />
           </>
@@ -550,6 +550,116 @@ const UnifiedAuth = () => {
     }
   };
 
+  const validateStepAndContinue = (page) => {
+    switch (page) {
+      case 0:
+        if (!formData.mobileNo) {
+          alert("Phone number is required");
+        } else if (formData.mobileNo.length !== 10) {
+          alert("Mobile should be of length 10");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 1:
+        if (!formData.name) {
+          alert("Name is required");
+        } else if (!formData.currentLocation) {
+          alert("Location is required");
+        } else if (!formData.dateOfBirth) {
+          alert("Date of Birth is required");
+        } else if (!formData.gender) {
+          alert("Gender is required");
+        } else if (!formData.avatar) {
+          alert("Profile picture is required");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 2:
+        if (
+          !formData.travelPreferences ||
+          formData.travelPreferences.length === 0
+        ) {
+          alert("Select at least one travel preference");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 3:
+        if (!formData.idealTrip || formData.idealTrip.length === 0) {
+          alert("Select at least one ideal trip");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 4:
+        if (!formData.travelEnergy) {
+          alert("Select your travel energy");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 5:
+        if (!formData.vibe) {
+          alert("Select your vibe preference");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 6:
+        if (!formData.lastMinuteTripChoices) {
+          alert("Select at least one last minute trip choice");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 7:
+        if (!formData.purpose || formData.purpose.length === 0) {
+          alert("Select at least one purpose of your trip");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 8:
+        if (
+          formData.trustVerification[0] !== "true" &&
+          formData.trustVerification[0] !== "false"
+        ) {
+          console.log(formData.trustVerification);
+          alert("trust verification choice is needed");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      case 9:
+        if (!formData.profileDetails.alwaysPack) {
+          alert("This field is required");
+        } else if (!formData.profileDetails.travelSoundtrack) {
+          alert("All field is required");
+        } else if (!formData.profileDetails.idealEvening) {
+          alert("All field is required");
+        } else if (!formData.profileDetails.favoriteTravelMovie) {
+          alert("All field is required");
+        } else if (!formData.socialLinks.instagram) {
+          alert("All field is required");
+        } else if (!formData.socialLinks.linkedin) {
+          alert("All field is required");
+        } else if (
+          !formData.profileImages ||
+          formData.profileImages.length === 0
+        ) {
+          alert("Select at least one profile image");
+        } else {
+          setPage(page + 1);
+        }
+        break;
+      default:
+        setPage(page + 1);
+        break;
+    }
+  };
+
   if (page === -1) {
     return (
       <Layout>
@@ -580,9 +690,14 @@ const UnifiedAuth = () => {
           className="w-full px-6 py-4 flex flex-col gap-6"
           onSubmit={(e) => {
             e.preventDefault();
-            page === 9 ? handleFinalSubmit() : setPage(page + 1);
+            page === 9 ? handleFinalSubmit() : validateStepAndContinue(page);
           }}
         >
+          {page >= 1 && (
+            <div>
+              <FaArrowLeft onClick={() => setPage(page - 1)} />
+            </div>
+          )}
           {renderStep()}
           <button
             type="submit"
