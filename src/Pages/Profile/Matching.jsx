@@ -71,20 +71,16 @@ const Matching = () => {
 
           {/* Sections */}
           <Section
-            title="My vibe"
+            title="Who do you vibe with best?"
             description="Add or change your preferences"
             items={[user.vibe]}
           />
           <Section
-            title="My last minute trip"
+            title="Last-minute trip! What do you do?"
             description="Add or change your preferences"
             items={[user.lastMinuteTripChoices]}
           />
-          <Section
-            title="My goals"
-            description="Add or change your preferences"
-            items={user.purpose}
-          />
+          
         </div>
       </div>
     </Layout>

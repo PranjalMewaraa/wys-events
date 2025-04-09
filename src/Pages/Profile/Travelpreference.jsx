@@ -20,6 +20,7 @@ const Section = ({ title, description, items }) => (
       <FiPlus className="text-gray-600" />
     </div>
     <div className="flex flex-wrap gap-2 mt-2">
+
       {items?.map((item, index) => (
         <span
           key={index}
@@ -74,20 +75,21 @@ const Travelpreference = () => {
 
           {/* Sections */}
           <Section
-            title="My vibe"
-            description="Add or change your preferences"
-            items={[user.vibe]}
-          />
-          <Section
-            title="My last minute trip"
-            description="Add or change your preferences"
-            items={[user.lastMinuteTripChoices]}
-          />
-          <Section
-            title="My goals"
-            description="Add or change your preferences"
-            items={user.purpose}
-          />
+  title="How do you love to travel?"
+  description="Add or change your preferences"
+  items={Array.isArray(user.travelPreferences) ? user.travelPreferences : []}
+/>
+<Section
+  title="What's your ideal trip?"
+  description="Add or change your preferences"
+  items={Array.isArray(user.idealTrip) ? user.idealTrip : []}
+/>
+<Section
+  title="What's your travel energy?"
+  description="Add or change your preferences"
+  items={[user.travelEnergy]}
+/>
+
         </div>
       </div>
     </Layout>

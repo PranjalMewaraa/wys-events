@@ -31,6 +31,8 @@ import EventAdmin from "./admin/EventAdmin";
 import EventDetailAdmin from "./admin/EventDetailAdmin";
 import EventDetailMY from "./components/Events/EventDetailMy";
 import Request from "./Pages/Request/Request";
+import Userdetailed from "./Pages/Profile/Userdetailed";
+import Trust from "./Pages/Profile/trust";
 
 const App = () => {
   return (
@@ -190,6 +192,22 @@ const App = () => {
           element={
             <AuthWrapper>
               <CompanionMatching />
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/profile/detail/about"
+          element={
+            <AuthWrapper>
+              <Userdetailed />
+            </AuthWrapper>
+          }
+        />
+         <Route
+          path="/profile/detail/trust"
+          element={
+            <AuthWrapper>
+              <Trust />
             </AuthWrapper>
           }
         />
