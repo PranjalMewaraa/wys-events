@@ -6,11 +6,18 @@ import { LiaUserFriendsSolid } from "react-icons/lia";
 import { BsCardChecklist } from "react-icons/bs";
 import { MdErrorOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Profile = () => {
   const [user, setUser] = useState(null);
   const token = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userID");
-  
+  const navigate = useNavigate(); // Initialize navigate
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userID");
+    navigate("/signin"); // Replace with your login route
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -82,7 +89,12 @@ const Profile = () => {
             </Link>
             <div className="border-t p-3 flex items-center gap-3">
             <MdErrorOutline className="text-2xl" />
-            <p>About us</p>
+            <button
+            onClick={handleLogout}
+            className=" bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg transition duration-300"
+          >
+            Logout
+          </button>
             </div>
           </div>
     <div className="text-left w-full">

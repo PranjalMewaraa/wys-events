@@ -26,7 +26,6 @@ const AccountDetail = () => {
           }
         );
         setUser(response.data.data);
-        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
@@ -72,11 +71,10 @@ const AccountDetail = () => {
           {/* Checklist with Links */}
           <div className="w-full mt-6 space-y-3 grid ">
             {[
-              { label: "About you", done: true, link: "/about" },
-              { label: "Phone Number", done: true, link: "/phone" },
+              { label: "About you", done: true, link: "/profile/detail/about" },
               { label: "Travel Preferences", done: true, link: "/profile/detail/preference" },
               { label: "Companion Matching", done: true, link: "/profile/detail/matching" },
-              { label: "Trust & Safety", done: false, link: "/trust-safety" },
+              { label: "Trust & Safety", done: false, link: "/profile/detail/trust" },
             ].map((item, index) => (
               <Link to={item.link} key={index}>
                 <div className=" bg-gray-100 rounded-lg px-4 py-3 flex justify-between items-center hover:bg-gray-200 transition-all">
