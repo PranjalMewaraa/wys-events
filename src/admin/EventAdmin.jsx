@@ -88,7 +88,7 @@ const EventCard = ({ item }) => {
       >
         <div className="w-full h-[160px] relative">
           <img
-            src="/images/screenshot.png" // Replace with actual hosted image
+            src={item.images || "/event/hikinh.webp"} // Replace with actual hosted image
             alt="Himalayas Trek"
             className="w-full h-full object-cover"
           />

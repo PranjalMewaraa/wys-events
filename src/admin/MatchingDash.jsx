@@ -10,6 +10,7 @@ const MatchingDash = () => {
   const [matches, setMatches] = useState([]);
   const [opposites, setOpposites] = useState([]);
   const [scores, setScores] = useState({});
+  const [scoresOpp, setScoresOpp] = useState({});
 
   useEffect(() => {
     getProfile();
@@ -33,6 +34,7 @@ const MatchingDash = () => {
 
       // Fetch compatibility scores for all matches
       const scoresObj = {};
+      const scoresObjOpp = {};
       await Promise.all(
         res.data.matches.map(async (match) => {
           try {
@@ -45,7 +47,20 @@ const MatchingDash = () => {
           }
         })
       );
+      await Promise.all(
+        res.data.opposites.map(async (match) => {
+          try {
+            const scoreRes = await apiGet(
+              `/admin/matchmaking/compatibility/${id}/${match._id}`
+            );
+            scoresObjOpp[match._id] = scoreRes.data.compatibility;
+          } catch (err) {
+            scoresObjOpp[match._id] = "N/A";
+          }
+        })
+      );
       setScores(scoresObj);
+      setScoresOpp(scoresObjOpp);
     } catch (err) {
       console.error("Error fetching matches", err);
     }
@@ -142,18 +157,35 @@ const MatchingDash = () => {
                 <Link
                   to={`/admin/match/${id}/${item._id}`}
                   key={item._id}
-                  className="bg-gray-100 h-28 items-center p-4 rounded-xl flex gap-3"
+                  className="bg-gray-100 h-28 items-center p-4 rounded-xl flex justify-between"
                 >
-                  <img
-                    src={item.avatar}
-                    alt={item.name}
-                    className="rounded-full w-16 h-16 object-cover"
-                  />
-                  <div className="flex flex-col">
-                    <p className="text-base poppins-medium">{item.name}</p>
-                    <p className="text-xs max-w-28">
-                      Joined: {formatDate(item.createdAt)}
-                    </p>
+                  <div className="flex gap-3 items-center">
+                    <img
+                      src={item.avatar}
+                      alt={item.name}
+                      className="rounded-full w-16 h-16 object-cover"
+                    />
+                    <div className="flex flex-col">
+                      <p className="text-base poppins-medium">{item.name}</p>
+                      <p className="text-xs max-w-28">
+                        Joined: {formatDate(item.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="text-right text-sm font-semibold text-white rounded-xl py-4 px-2"
+                    style={{
+                      backgroundImage: "url('/wae.png')",
+                      backgroundSize: "cover",
+                      backgroundOrigin: "center",
+                      backgroundRepeat: "no-repeat",
+                    }}
+                  >
+                    <span>
+                      {scoresOpp[item._id] !== undefined
+                        ? `${scoresOpp[item._id]}%`
+                        : "Loading..."}
+                    </span>
                   </div>
                 </Link>
               ))

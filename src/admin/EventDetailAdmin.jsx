@@ -3,17 +3,16 @@ import { MdDateRange, MdLocationOn } from "react-icons/md";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { FiTarget } from "react-icons/fi";
 import { SiTicktick } from "react-icons/si";
+import { FaRegUserCircle } from "react-icons/fa";
 import AdminLayout from "../Layout/AdminLayouts/AdminLayout";
 import LayoutInnerMain from "../Layout/LayoutInner";
-import { apiGet, apiPost, apiPut } from "../utils/call";
+import { apiGet, apiPut } from "../utils/call";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
-import { FaRegUserCircle } from "react-icons/fa";
 
 const EventDetailAdmin = () => {
   const { id } = useParams();
   const [event, setEvent] = useState({});
-  const [userslist, setUserlists] = useState([]);
   const [showActionModal, setShowActionModal] = useState(false);
   const [showRejectReasonModal, setShowRejectReasonModal] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
@@ -23,20 +22,9 @@ const EventDetailAdmin = () => {
     setEvent(res);
   };
 
-  const getProfile = async () => {
-    const res = await apiGet(`/admin/users`);
-    setUserlists(res.data);
-  };
-
   useEffect(() => {
-    getProfile();
     getEventbyId();
   }, []);
-
-  const getParticipants = () => {
-    const participantIds = event.participants?.map((p) => p?.user);
-    return userslist.filter((user) => participantIds?.includes(user?._id));
-  };
 
   const handleItem = () => {
     if (event.status === "pending") {
@@ -46,8 +34,7 @@ const EventDetailAdmin = () => {
 
   const approveEvent = async () => {
     try {
-      const res = await apiPut(`/admin/events/${id}/approve`);
-      console.log("Event Approved:", res);
+      await apiPut(`/admin/events/${id}/approve`);
       setShowActionModal(false);
       getEventbyId();
     } catch (error) {
@@ -61,10 +48,9 @@ const EventDetailAdmin = () => {
       return;
     }
     try {
-      const res = await apiPut(`/admin/events/${id}/reject`, {
+      await apiPut(`/admin/events/${id}/reject`, {
         rejectionReason: rejectReason,
       });
-      console.log("Event Rejected:", res);
       setShowRejectReasonModal(false);
       setRejectReason("");
       getEventbyId();
@@ -73,12 +59,17 @@ const EventDetailAdmin = () => {
     }
   };
 
+  const goingParticipants =
+    event.participants?.filter((p) => p.rsvpStatus === "yes") || [];
+  const thinkingParticipants =
+    event.participants?.filter((p) => p.rsvpStatus !== "yes") || [];
+
   return (
     <AdminLayout>
       <LayoutInnerMain>
         <div className="flex overflow-hidden pb-28 p-4 flex-col h-fit rounded-xl max-w-7xl bg-white">
           <img
-            src="https://imgs.search.brave.com/Ah4hMz04IJ9Ncii-qAm0qbYmbCSl4MkNgTVHNBI9yF8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh..."
+            src={event.image || "/event/hikinh.webp"}
             alt="hiking"
             className="h-1/2 max-h-72 rounded-xl object-cover"
           />
@@ -139,33 +130,71 @@ const EventDetailAdmin = () => {
               </div>
             </div>
 
-            <div>
-              <p className="flex gap-2 items-center">
-                Going <SiTicktick color="orange" />
+            {/* Going Participants */}
+            <div className="mt-6">
+              <p className="flex gap-2 items-center text-lg font-semibold">
+                ✅ Going <SiTicktick color="orange" />
               </p>
-              <div className="flex flex-col w-full gap-2">
-                {getParticipants()?.length > 0 ? (
-                  getParticipants().map((item) => (
+              <div className="flex flex-col w-full gap-2 mt-2">
+                {goingParticipants.length > 0 ? (
+                  goingParticipants.map((item) => (
                     <div
-                      key={item._id}
+                      key={item.user._id}
                       className="w-full flex items-center gap-4"
                     >
                       <img
-                        src={item.avatar}
-                        alt={item.name}
+                        src={item.user.avatar}
+                        alt={item.user.name}
                         className="w-12 h-12 rounded-full object-cover"
                       />
                       <div>
-                        <p className="text-sm font-medium">{item.name}</p>
+                        <p className="text-sm font-medium">{item.user.name}</p>
                         <p className="text-sm text-gray-600">
-                          Location: {item.currentLocation || "N/A"}
+                          Location: {item.user.currentLocation || "N/A"}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Request Status: {item.requestStatus || "N/A"}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-sm">No one confirmed yet.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Thinking Participants */}
+            <div className="mt-6">
+              <p className="flex gap-2 items-center text-lg font-semibold">
+                🤔 Thinking About It
+              </p>
+              <div className="flex flex-col w-full gap-2 mt-2">
+                {thinkingParticipants.length > 0 ? (
+                  thinkingParticipants.map((item) => (
+                    <div
+                      key={item.user._id}
+                      className="w-full flex items-center gap-4"
+                    >
+                      <img
+                        src={item.user.avatar}
+                        alt={item.user.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div>
+                        <p className="text-sm font-medium">{item.user.name}</p>
+                        <p className="text-sm text-gray-600">
+                          Location: {item.user.currentLocation || "N/A"}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Request Status: {item.requestStatus || "N/A"}
                         </p>
                       </div>
                     </div>
                   ))
                 ) : (
                   <p className="text-gray-500 text-sm">
-                    No participants till now.
+                    No unsure participants yet.
                   </p>
                 )}
               </div>

@@ -33,7 +33,7 @@ const MatchingHome = () => {
               No matched users found.
             </p>
           )}
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="w-full flex flex-wrap gap-6">
             {/* Matched Users */}
             {!loading &&
               matchedUsers.length > 0 &&
@@ -54,8 +54,9 @@ const Card = ({ user }) => {
     _id,
     name = "No Name",
     avatar = "https://via.placeholder.com/150",
-    location = "Unknown",
+    currentLocation = "Unknown",
     gender = "Not Specified",
+    social = null,
   } = user;
 
   const { compatibility, loading } = useCompatibility(_id);
@@ -64,7 +65,7 @@ const Card = ({ user }) => {
   return (
     <Link
       to={`/people/detail/${_id}`}
-      className="flex flex-col mt-4 max-w-md min-w-sm w-full max-h-96 gap-4 items-center"
+      className="flex flex-col mt-4 max-w-sm min-w-sm w-full max-h-96 gap-4 items-center"
     >
       <div className="w-full h-full aspect-square object-fill overflow-hidden rounded-xl">
         <img
@@ -80,16 +81,20 @@ const Card = ({ user }) => {
             <p className="text-gray-500">{gender}</p>
             <p className="flex items-center text-gray-500">
               <GrLocationPin className="mr-1" />
-              {location}
+              {currentLocation}
             </p>
-          </div>
-          <div className="flex gap-2 py-2 text-gray-600">
-            <FaInstagram />
-            <FaLinkedin />
           </div>
         </div>
         <div className="flex gap-2 items-center">
-          <div className="flex justify-center items-center bg-green-700 p-2 text-white poppins-semibold rounded-lg">
+          <div
+            className="text-right text-sm font-semibold text-white rounded-xl py-4 px-2"
+            style={{
+              backgroundImage: "url('/wae.png')",
+              backgroundSize: "cover",
+              backgroundOrigin: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
             {loading ? "..." : `${matchPercentage}%`}
           </div>
         </div>
