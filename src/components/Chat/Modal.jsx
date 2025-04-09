@@ -93,7 +93,9 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
             isLoading ? "text-gray-400 cursor-not-allowed" : ""
           }`}
           onClick={
-            !isLoading && rsvpStatus == false ? handlePrimaryAction : null
+            !isLoading && primaryActionText !== "You are going"
+              ? handlePrimaryAction
+              : null
           }
         >
           {primaryActionText}
