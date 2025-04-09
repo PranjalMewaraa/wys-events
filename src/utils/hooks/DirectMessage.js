@@ -5,8 +5,9 @@ import { fetchDirectMessages, pendingRequest, sendDirectMessage } from "../api";
 export const useDirectChat = (userId) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [pendingRequests, setPendingRequests] = useState([]); // NEW STATE
+  const [pendingRequests, setPendingRequests] = useState([]);
 
+  // NEW STATE
   useEffect(() => {
     if (!userId) return;
 
@@ -47,6 +48,7 @@ export const useDirectChat = (userId) => {
     message,
     setMessage,
     handleSendMessage,
-    pendingRequests, // optionally return this
+    pendingRequests,
+    userId, // optionally return this
   };
 };

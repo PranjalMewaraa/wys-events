@@ -202,7 +202,43 @@ export const fetchGroups = async (token) => {
     throw error;
   }
 };
+export const sendFriendRequest = async (userId, content) => {
+  try {
+    const response = await api.post(
+      `/message/request/${userId}`,
+      { content }, // body
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
+    return response.data; // optionally return the request result
+  } catch (error) {
+    console.error("Failed to send friend request", error);
+    throw error;
+  }
+};
+export const acceptFriendRequest = async (userId) => {
+  try {
+    const response = await api.post(
+      `/message/accept/${userId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to accept friend request", error);
+    throw error;
+  }
+};
 export const pendingRequest = async () => {
   try {
     const res = await api.get("/message/pending", {
@@ -255,7 +291,7 @@ export const fetchMessages = async (eventId) => {
       };
     } else {
       console.warn("No messages found.");
-      return { messages: [], groupId: null };
+      return { messages: [], groupId: eventId };
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -263,7 +299,7 @@ export const fetchMessages = async (eventId) => {
     } else {
       console.error("Error fetching messages:", error);
     }
-    return { messages: [], groupId: null };
+    return { messages: [], groupId: eventId };
   }
 };
 

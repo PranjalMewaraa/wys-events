@@ -16,27 +16,7 @@ const EventDetail = () => {
   const [hasJoined, setHasJoined] = useState(false);
   const [message, setMessage] = useState(null);
   const [userId, setUserId] = useState("");
-  const handleJoin = async () => {
-    setMessage(null);
-    setJoining(true);
-    try {
-      const response = await eventRequest(eventId);
 
-      // Use status from the actual axios response (e.g., response.status === 200)
-
-      setHasJoined(true);
-      setMessage("Request sent successfully.");
-      window.location.reload;
-      setReqStatus(checkParticipantStatus(event.participants, userId));
-
-      console.log("Join response:", response);
-    } catch (err) {
-      setMessage("Failed to send join request.");
-      console.error("Join error:", err);
-    } finally {
-      setJoining(false);
-    }
-  };
 
   const [reqStatus, setReqStatus] = useState();
 
@@ -60,6 +40,27 @@ const EventDetail = () => {
       setReqStatus(checkParticipantStatus(event.participants, userId));
     }
   }, [event]);
+    const handleJoin = async () => {
+    setMessage(null);
+    setJoining(true);
+    try {
+      const response = await eventRequest(eventId);
+
+      // Use status from the actual axios response (e.g., response.status === 200)
+
+      setHasJoined(true);
+      setMessage("Request sent successfully.");
+      window.location.reload;
+      setReqStatus(checkParticipantStatus(event.participants, userId));
+
+      console.log("Join response:", response);
+    } catch (err) {
+      setMessage("Failed to send join request.");
+      console.error("Join error:", err);
+    } finally {
+      setJoining(false);
+    }
+  };
 
   console.log(reqStatus);
   return (

@@ -4,13 +4,24 @@ import { GrLocationPin } from "react-icons/gr";
 import Layout from "../../Layout/Layout";
 import { useParams } from "react-router-dom";
 import { useCompatibility, useUserById } from "../../utils/hooks/user";
+import { sendFriendRequest } from "../../utils/api";
 
 const Matching = () => {
   const { userId } = useParams();
   const { user, loading, error } = useUserById(userId);
   const { compatibility } = useCompatibility(userId);
   const matchPercentage = compatibility?.compatibilityScore ?? "…";
-
+  const handleSendMessageReq = async () => {
+    try {
+      const message = "Hey Happy to connect with you! ";
+      const res = await sendFriendRequest(userId, message);
+      alert("Friend request sent!");
+      console.log("Request response:", res);
+    } catch (err) {
+      console.error("Failed to send friend request:", err);
+      alert("Something went wrong!");
+    }
+  };
   return (
     <div>
       {loading && <div className="p-4">Loading...</div>}
@@ -213,7 +224,7 @@ const Matching = () => {
           )}
 
           {/* Say Hello Button */}
-          <button className="fixed bottom-4 left-4 right-4 bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium z-50">
+          <button className="fixed bottom-4 left-4 right-4 bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium z-50" onClick={handleSendMessageReq}>
             👋 Say Hello
           </button>
         </div>

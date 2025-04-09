@@ -11,7 +11,7 @@ export const useGroupChat = (eventId) => {
     const loadMessages = async () => {
       const { messages, groupId } = await fetchMessages(eventId);
       setMessages(messages);
-      if (groupId) setGroupId(groupId);
+      setGroupId(groupId || eventId);
     };
 
     loadMessages();
