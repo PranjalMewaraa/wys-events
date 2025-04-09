@@ -42,7 +42,7 @@ const ChatBox = () => {
   return (
     <div className="w-full h-screen flex flex-col">
       {/* Chat Navigation */}
-      <ChatNav setIsModalOpen={setIsModalOpen} eventId={eventId} />
+      <ChatNav setIsModalOpen={setIsModalOpen} eventId={eventId} groupId={groupId} />
 
       {/* Scrollable Chat Messages */}
       <div

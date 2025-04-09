@@ -10,10 +10,10 @@ import { acceptFriendRequest } from '../../utils/api';
 const ChatOuter = () => {
   const [activeTab, setActiveTab] = useState('people');
   const { pendingRequests } = useDirectChat();
-  const [visibleCount, setVisibleCount] = useState(5); // Default for large screen
+  const [visibleCount, setVisibleCount] = useState(5);
 
   const token = localStorage.getItem("accessToken");
-  const { groups, people, loading, error ,groupId } = useChatList(activeTab, token);
+  const { groups, people, loading, error, groupId } = useChatList(activeTab, token);
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,14 +22,13 @@ const ChatOuter = () => {
       else if (width < 1024) setVisibleCount(5);
       else setVisibleCount(8);
     };
-    handleResize(); // Set initially
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleAccept = async (id) => {
     await acceptFriendRequest(id);
-     // API call to accept
   };
 
   return (
@@ -40,7 +39,7 @@ const ChatOuter = () => {
           <p className='text-base abeezee-regular leading-6 md:text-4xl px-5'>Requests</p>
           {Array.isArray(pendingRequests) && pendingRequests.length > 0 ? (
             <>
-              <div className='grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4 p-5'>
+              <div className='flex flex-wrap gap-4 p-5'>
                 {pendingRequests.slice(0, visibleCount).map((req) => (
                   <div key={req._id} className='p-3 bg-white rounded-xl shadow-md text-center'>
                     <img
@@ -70,7 +69,7 @@ const ChatOuter = () => {
               )}
             </>
           ) : (
-            <p className="text-center text-gray-400 mt-4">No pending requests.</p>
+            <p className="text-left text-gray-400 px-5 py-4">No pending requests.</p>
           )}
         </div>
 
@@ -94,7 +93,7 @@ const ChatOuter = () => {
         <div className='w-full h-screen border border-transparent rounded-t-3xl bg-white drop-shadow-[0_-4px_6px_rgba(0,0,0,0.1)]'>
           <div className="w-9/10 m-auto mt-3 flex items-center gap-2 border-2 border-gray-400 rounded-lg px-3 py-2 focus-within:ring-2">
             <span className="text-gray-400">
-              <img src={lens} />
+              <img src={lens} alt="Search Icon" />
             </span>
             <input
               type="text"
@@ -105,28 +104,36 @@ const ChatOuter = () => {
 
           <div className='h-full mb-40'>
             {activeTab === "group" ? (
-              groups.map(group => (
-                <ChatList
-                  key={group._id}
-                  image={group.image}
-                  name={group.groupName}
-                  groupId={group._id}
-                  eventId={group.eventId._id}
-                  activeTab="group"
-                  token={token}
-                />
-              ))
+              groups.length > 0 ? (
+                groups.map(group => (
+                  <ChatList
+                    key={group._id}
+                    image={group.image}
+                    name={group.groupName}
+                    groupId={group._id}
+                    eventId={group.eventId._id}
+                    activeTab="group"
+                    token={token}
+                  />
+                ))
+              ) : (
+                <p className="text-center text-gray-400 mt-4">No groups to chat in.</p>
+              )
             ) : (
-              people.map(user => (
-                <ChatList
-                  key={user._id}
-                  image={user.avatar}
-                  name={user.name}
-                  userId={user._id}
-                  activeTab="people"
-                  token={token}
-                />
-              ))
+              people.length > 0 ? (
+                people.map(user => (
+                  <ChatList
+                    key={user._id}
+                    image={user.avatar}
+                    name={user.name}
+                    userId={user._id}
+                    activeTab="people"
+                    token={token}
+                  />
+                ))
+              ) : (
+                <p className="text-center text-gray-400 mt-4">No people to chat with.</p>
+              )
             )}
           </div>
         </div>

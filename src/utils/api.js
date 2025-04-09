@@ -26,7 +26,6 @@ export const getMatchedUsers = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -59,7 +58,6 @@ export const fetchUserByIdForMatching = async (id) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data.data);
     return res.data.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -288,7 +286,6 @@ export const pendingRequest = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data.pendingRequests);
     return res.data.pendingRequests;
   } catch (error) {
     console.error("Failed to pending request", error);
@@ -390,8 +387,6 @@ export const fetchDirectMessages = async (userId) => {
 
 export const sendDirectMessage = async (userId, message) => {
   try {
-    console.log("Sending direct message to:", userId);
-
     const response = await api.post(
       `/message/send/${userId}`,
       { content: message },

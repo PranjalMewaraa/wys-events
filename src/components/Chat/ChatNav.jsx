@@ -5,7 +5,7 @@ import Modal from "./Modal";
 import Popup from "./Popup";
 import { useLocation } from "react-router-dom";
 
-const ChatNav = ({ eventId }) => {
+const ChatNav = ({ eventId,groupId }) => {
   const location = useLocation();
   const { chatDetails } = location.state || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,6 +56,8 @@ const ChatNav = ({ eventId }) => {
             setIsPopupOpen(true);
           }}
           eventId={eventId}
+          groupId={groupId}
+
         />
       )}
 

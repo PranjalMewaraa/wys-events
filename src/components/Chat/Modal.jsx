@@ -1,12 +1,13 @@
+// Modal.js
 import React, { useEffect, useState } from "react";
 import useEventDetails from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
 
-const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
+const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
   const { userRole, isEventOver, event } = useEventDetails(eventId);
-  const { triggerPollMessage } = useGroupChat(eventId);
+  const { triggerPollMessage } = useGroupChat(eventId, groupId);
   const [rsvpStatus, setRsvpStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,7 +45,7 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
 
     if (userRole === "host") {
       if (!isEventOver) {
-        triggerPollMessage("Have you made up your mind about attending?");
+        triggerPollMessage(getRSVPMessageHTML(event, userRole));
       } else {
         onShowPopup();
       }
@@ -123,3 +124,29 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
 };
 
 export default Modal;
+
+function getRSVPMessageHTML(event, role) {
+  const attendeesHTML = event.participants
+    .map(
+      (p) => `
+        <div style="display: inline-block; text-align: center; margin: 0 8px;">
+          <img src="${p.user.avatar}" alt="${p.user.name}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />
+          <p style="color: white; font-size: 12px; margin-top: 4px;">${p.user.name}</p>
+        </div>
+      `
+    )
+    .join("");
+
+  const buttonHTML =
+    role !== "host"
+      ? `<button style="margin-top: 10px; padding: 8px 16px; border: 2px solid #F38E1C; border-radius: 20px; color: #F38E1C; background: transparent; cursor: pointer;" onclick="window.dispatchEvent(new CustomEvent('rsvp-button-click'))">Are you attending?</button>`
+      : "";
+
+  return `
+    <div style="background-color: #333; padding: 16px; border-radius: 12px; max-width: 300px;">
+      <p style="color: white; margin: 4px 0 12px;">Have you made up your mind?</p>
+      <div style="display: flex; justify-content: center;">${attendeesHTML}</div>
+      <div style="text-align: right;">${buttonHTML}</div>
+    </div>
+  `;
+}
