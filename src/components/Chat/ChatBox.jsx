@@ -11,11 +11,11 @@ import { useDirectChat } from "../../utils/hooks/DirectMessage";
 const ChatBox = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const { eventId, userId } = useParams();
+  const { eventId, userId,groupId } = useParams();
   const isGroupChat = !!eventId;
 
   const { messages, message, setMessage, handleSendMessage } = isGroupChat
-    ? useGroupChat(eventId)
+    ? useGroupChat(eventId,groupId)
     : useDirectChat(userId);
 
   const token = localStorage.getItem("accessToken");

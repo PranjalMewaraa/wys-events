@@ -137,7 +137,7 @@ const App = () => {
           }
         />
         <Route
-          path="/chats/group/:eventId"
+          path="/chats/group/:groupId/:eventId"
           element={
             <AuthWrapper>
               <ChatBox />

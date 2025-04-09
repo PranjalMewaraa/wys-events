@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { fetchMessages, sendMessage } from "../api";
 
-export const useGroupChat = (eventId) => {
+export const useGroupChat = (eventId, groupId) => {
   const [messages, setMessages] = useState([]);
-  const [groupId, setGroupId] = useState(null);
   const [message, setMessage] = useState("");
 
   // Fetch messages when eventId changes
   useEffect(() => {
     const loadMessages = async () => {
-      const { messages, groupId } = await fetchMessages(eventId);
+      const { messages } = await fetchMessages(eventId);
       setMessages(messages);
-      setGroupId(groupId || eventId);
     };
 
     loadMessages();

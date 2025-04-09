@@ -29,7 +29,8 @@ const useEventDetails = (eventId) => {
 
         const currentDate = new Date();
         const eventEndDate = new Date(eventData.toDate);
-        setIsEventOver(currentDate > eventEndDate);
+        const status = eventData.eventStatus;
+        setIsEventOver(currentDate > eventEndDate || status === "completed");
       } catch (error) {
         console.error("Error fetching event details:", error);
         setError(error);

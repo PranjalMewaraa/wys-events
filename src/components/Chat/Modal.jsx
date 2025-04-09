@@ -1,12 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useEventDetails from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
-import { cancelEvent, leaveEvent } from "../../utils/api"; // Import the APIs
+import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
 
 const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
-  const { userRole, isEventOver } = useEventDetails(eventId);
+  const { userRole, isEventOver, event } = useEventDetails(eventId);
   const { triggerPollMessage } = useGroupChat(eventId);
+  const [rsvpStatus, setRsvpStatus] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loggedInUserId = localStorage.getItem("userID");
+
+    if (event && loggedInUserId) {
+      const matched = event?.participants?.find(
+        (p) => p?.user?._id === loggedInUserId
+      );
+      setRsvpStatus(matched?.rsvpStatus || null);
+      setIsLoading(false);
+    }
+  }, [event]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -18,29 +32,29 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   const handlePrimaryAction = () => {
-    onClose(); // Close modal
+    if (isLoading) return;
+    onClose();
 
     if (userRole === "host") {
       if (!isEventOver) {
-        // Host before event: Send RSVP poll in chat
         triggerPollMessage("Have you made up your mind about attending?");
       } else {
-        // Host after event: First open review popup
         onShowPopup();
       }
     } else {
-      // Seeker: Just open popup, no poll in chat
       onShowPopup();
     }
   };
 
   const handleSecondaryAction = async () => {
+    if (isLoading) return;
     try {
       if (userRole === "host") {
         await cancelEvent(eventId);
@@ -56,22 +70,52 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId }) => {
     }
   };
 
+  const primaryActionText = isLoading
+    ? "Loading..."
+    : isEventOver
+    ? userRole === "host"
+      ? "Ask for Review"
+      : "Share Your Experience"
+    : userRole === "host"
+    ? "Send RSVP"
+    : rsvpStatus === "yes"
+    ? "You are going"
+    : "Are you attending?";
+
   return (
-    <div className="fixed top-[510px] right-0 left-0 flex">
+    <div className="fixed top-[470px] right-0 left-0 flex">
       <div
         className="modal-content w-full bg-white rounded-t-2xl shadow-lg border border-transparent drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4"
         onClick={(e) => e.stopPropagation()}
       >
-       <Link to={`/event/${eventId}`}>
-       <button className="w-full py-3 text-center text-black hover:bg-gray-100 border-b border-gray-200">
-          View Experience
-        </button>
-       </Link> 
+        <div
+          className={`text-center text-lg font-medium border-b border-gray-200 pb-2 cursor-pointer ${
+            isLoading ? "text-gray-400 cursor-not-allowed" : ""
+          }`}
+          onClick={!isLoading ? handlePrimaryAction : null}
+        >
+          {primaryActionText}
+        </div>
+
+        <Link to={`/event/${eventId}`}>
+          <button
+            className="w-full py-3 text-center text-black hover:bg-gray-100 border-b border-gray-200"
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "View Experience"}
+          </button>
+        </Link>
+
         <button
           className="w-full py-3 text-center text-black hover:bg-gray-100"
-          onClick={handleSecondaryAction}
+          onClick={!isLoading ? handleSecondaryAction : null}
+          disabled={isLoading}
         >
-          {userRole === "host" ? "Close Listing" : "Leave Experience"}
+          {isLoading
+            ? "Loading..."
+            : userRole === "host"
+            ? "Close Listing"
+            : "Leave Experience"}
         </button>
       </div>
     </div>

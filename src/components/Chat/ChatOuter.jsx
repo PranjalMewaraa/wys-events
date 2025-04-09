@@ -13,7 +13,7 @@ const ChatOuter = () => {
   const [visibleCount, setVisibleCount] = useState(5); // Default for large screen
 
   const token = localStorage.getItem("accessToken");
-  const { groups, people, loading, error } = useChatList(activeTab, token);
+  const { groups, people, loading, error ,groupId } = useChatList(activeTab, token);
 
   useEffect(() => {
     const handleResize = () => {
@@ -110,6 +110,7 @@ const ChatOuter = () => {
                   key={group._id}
                   image={group.image}
                   name={group.groupName}
+                  groupId={group._id}
                   eventId={group.eventId._id}
                   activeTab="group"
                   token={token}

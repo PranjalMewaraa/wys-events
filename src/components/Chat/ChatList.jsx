@@ -3,7 +3,7 @@ import { useChatList } from '../../utils/hooks/group';
 import { useDirectChat } from '../../utils/hooks/DirectMessage';
 import { useGroupChat } from '../../utils/hooks/Groupmessage';
 
-const ChatList = ({ image, name, activeTab,token ,userId,eventId}) => {
+const ChatList = ({ image, name, activeTab,token ,userId,eventId,groupId}) => {
     const isGroupChat = !!eventId 
   
    
@@ -13,7 +13,7 @@ const ChatList = ({ image, name, activeTab,token ,userId,eventId}) => {
   const navigate = useNavigate();
   const handleNavigation = () => {
     if (activeTab === 'group') {
-      navigate(`/chats/group/${eventId}`, {
+      navigate(`/chats/group/${groupId}/${eventId}`, {
         state: {
           chatDetails: {
             name,

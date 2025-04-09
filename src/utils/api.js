@@ -202,6 +202,47 @@ export const fetchGroups = async (token) => {
     throw error;
   }
 };
+export const updateRSVPStatus = async (eventId, rsvpStatus) => {
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    const response = await api.patch(
+      `/events/${eventId}/rsvp`,
+      { rsvpStatus },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Failed to update RSVP status", err);
+    throw err;
+  }
+};
+export const rateEvent = async (eventId, { stars, reviewText }) => {
+  try {
+    const response = await api.post(
+      `/events/rate/${eventId}`,
+      {
+        stars,
+        reviewText,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error rating event:", error);
+    throw error;
+  }
+};
 export const sendFriendRequest = async (userId, content) => {
   try {
     const response = await api.post(

@@ -1,19 +1,33 @@
 import React, { useState } from 'react';
+import { rateEvent } from '../../utils/api';
 
-const ReviewPopUp = ({ onClose, onSubmit }) => {
+const ReviewPopUp = ({ onClose, eventId }) => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [hoveredRating, setHoveredRating] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    onSubmit({ rating, reviewText });
-    onClose();
+  const handleSubmit = async () => {
+    if (!rating || !reviewText.trim()) {
+      alert("Please give a rating and write a review.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await rateEvent(eventId, { stars: rating, reviewText });
+      alert("Thank you for your feedback!");
+      onClose();
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-<div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
-      <div className=" bg-white rounded-lg w-full max-w-md mx-4 ">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
+      <div className="bg-white rounded-lg w-full max-w-md mx-4">
         {/* Header */}
         <div className="flex justify-center items-center p-4 relative">
           <h2 className="text-xl poppins-semibold">
@@ -30,7 +44,7 @@ const ReviewPopUp = ({ onClose, onSubmit }) => {
         </div>
         
         {/* Review Text Area */}
-        <div className=" bg-gray-100 rounded-2xl m-2">
+        <div className="bg-gray-100 rounded-2xl m-2">
           <textarea
             className="w-full h-40 p-3 rounded bg-[#F0F0F0] text-[#333333] resize-none outline-none abeezee-regular"
             placeholder="Let us know how was your experience"
@@ -72,15 +86,15 @@ const ReviewPopUp = ({ onClose, onSubmit }) => {
           {/* Submit Button */}
           <button
             onClick={handleSubmit}
-            className="w-full bg-gray-800 text-white py-3 rounded font-medium hover:bg-gray-700 transition duration-200"
+            disabled={loading}
+            className="w-full bg-gray-800 text-white py-3 rounded font-medium hover:bg-gray-700 transition duration-200 disabled:opacity-50"
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </div>
       </div>
     </div>
-    </div>
-    
   );
 };
+
 export default ReviewPopUp;
