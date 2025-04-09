@@ -72,7 +72,7 @@ const App = () => {
             </AuthWrapper>
           }
         />
-       <Route
+        <Route
           path="/people/detail/:userId"
           element={
             <AuthWrapper>
@@ -105,7 +105,7 @@ const App = () => {
           }
         />
         <Route
-          path="/listing/upcoming/detail"
+          path="/listing/upcoming/detail/:id"
           element={
             <AuthWrapper>
               <EventListing7 />
@@ -176,7 +176,7 @@ const App = () => {
             </AuthWrapper>
           }
         />
-       
+
         <Route
           path="/profile/detail/preference"
           element={

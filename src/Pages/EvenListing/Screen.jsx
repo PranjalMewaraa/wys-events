@@ -1,98 +1,101 @@
 import * as React from "react";
 import Layout from "../../Layout/Layout";
 import LayoutInnerMain from "../../Layout/LayoutInner";
-import { Link, Links } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { apiGet } from "../../utils/call";
+import { formatDate, formatDatewithoutTime } from "../../utils/formatDate";
+
 const EventsView = () => {
   const [activeTab, setActiveTab] = React.useState("upcoming");
   const [myevents, setEvents] = React.useState([]);
+  const [upevents, setUpEvents] = React.useState([]);
+  const CallCreatedEvents = async () => {
+    try {
+      const res = await apiGet("/events/created");
+      setEvents(res);
+    } catch (error) {
+      console.error("Failed to fetch events", error);
+    }
+  };
   const CallUpcomingEvents = async () => {
-    const res = await apiGet("/events/created");
-    console.log(res);
-    setEvents(res);
+    try {
+      const res = await apiGet("/events/upcoming");
+      setUpEvents(res);
+    } catch (error) {
+      console.error("Failed to fetch events", error);
+    }
   };
 
   React.useEffect(() => {
     CallUpcomingEvents();
+    CallCreatedEvents();
   }, []);
+
   return (
     <Layout>
       <LayoutInnerMain>
-        <link
-          href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Bakbak+One&display=swap"
-          rel="stylesheet"
-        />
         <div
-          className="relative mx-auto h-fit mb-40 my-0 w-full min-h-screen bg-white max-w-[390px] max-sm:w-full overflow-hidden"
+          className="relative mx-auto mb-40 w-full min-h-screen  bg-white px-5 py-5"
           role="main"
         >
           {/* Tabs */}
-          <nav
-            className="px-12 py-0 mt-5 max-sm:px-5 max-sm:py-0"
-            role="navigation"
-          >
-            <div className="flex p-2 rounded-3xl bg-zinc-800">
-              <button
-                onClick={() => setActiveTab("upcoming")}
-                className={`px-8 py-3 text-xs w-1/2 rounded-2xl focus:outline-none ${
-                  activeTab === "upcoming"
-                    ? "bg-white text-zinc-800"
-                    : "text-white"
-                }`}
-                aria-current={activeTab === "upcoming" ? "page" : undefined}
-              >
-                Upcoming
-              </button>
-              <button
-                onClick={() => setActiveTab("yourEvents")}
-                className={`px-8 py-3 text-xs w-1/2 rounded-2xl focus:outline-none ${
-                  activeTab === "yourEvents"
-                    ? "bg-white text-zinc-800"
-                    : "text-white"
-                }`}
-                aria-current={activeTab === "yourEvents" ? "page" : undefined}
-              >
-                Your Events
-              </button>
+          <nav className="mb-6">
+            <div className="flex bg-zinc-200 p-1 rounded-full shadow-inner">
+              {["upcoming", "yourEvents"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`w-1/2 px-6 py-2 text-sm rounded-full transition-all duration-200 ${
+                    activeTab === tab
+                      ? "bg-zinc-800 text-white shadow"
+                      : "text-zinc-800 hover:bg-zinc-100"
+                  }`}
+                >
+                  {tab === "upcoming" ? "Upcoming" : "Your Events"}
+                </button>
+              ))}
             </div>
           </nav>
 
           {/* Tab Content */}
           {activeTab === "upcoming" && (
-            <section aria-labelledby="upcoming-section">
-              <h2
-                id="upcoming-section"
-                className="px-16 py-5 text-xs text-black"
-              >
-                Upcoming
-              </h2>
-              <UpcomingEventCard />
+            <section>
+              <h2 className="text-xs text-zinc-600 mb-3">Upcoming</h2>
+              <div className="flex w-full md:flex-row flex-wrap flex-col gap-4">
+                {upevents.length === 0 ? (
+                  <p className="text-center text-zinc-500 py-8">
+                    No upcoming events right now.
+                  </p>
+                ) : (
+                  upevents.map((item) => (
+                    <UpcomingEventCard key={item._id} item={item} />
+                  ))
+                )}
+              </div>
             </section>
           )}
 
           {activeTab === "yourEvents" && (
-            <section
-              aria-labelledby="your-events-section"
-              className="relative h-full"
-            >
-              <h2
-                id="your-events-section"
-                className="px-16 py-5 text-xs text-black"
-              >
-                Your Events
-              </h2>
-              <div className="flex flex-col min-h-fit h-full gap-4">
-                {myevents.map((item) => {
-                  return <MyEventCard item={item} />;
-                })}
+            <section className="w-full">
+              <h2 className="text-xs text-zinc-600 mb-3">Your Events</h2>
+              <div className="flex w-full md:flex-row flex-wrap flex-col gap-4">
+                {myevents.length === 0 ? (
+                  <p className="text-center text-zinc-500 py-8">
+                    No events created yet.
+                  </p>
+                ) : (
+                  myevents.map((item) => (
+                    <MyEventCard key={item._id} item={item} />
+                  ))
+                )}
               </div>
 
-              {/* FAB Button */}
+              {/* Floating Action Button */}
               <Link
                 to="/listing/input"
-                className="fixed bottom-28 left-28 z-50 bg-zinc-800 text-white text-sm px-5 py-3 rounded-xl shadow-md hover:bg-zinc-700 transition-all"
+                className="fixed bottom-24 md:bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-zinc-800 text-white text-sm px-6 py-3 rounded-full shadow-lg hover:bg-zinc-700 transition-all duration-200"
               >
-                Create an Experience
+                + Create Experience
               </Link>
             </section>
           )}
@@ -102,7 +105,7 @@ const EventsView = () => {
   );
 };
 
-function UpcomingEventCard() {
+function UpcomingEventCard({ item }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const companions = [
@@ -110,60 +113,56 @@ function UpcomingEventCard() {
     "https://randomuser.me/api/portraits/men/2.jpg",
     "https://randomuser.me/api/portraits/women/3.jpg",
     "https://randomuser.me/api/portraits/men/4.jpg",
-    "https://randomuser.me/api/portraits/men/5.jpg",
-    "https://randomuser.me/api/portraits/women/6.jpg",
   ];
 
   return (
     <article
       onClick={() => setIsExpanded(!isExpanded)}
-      className="cursor-pointer overflow-hidden mx-16 my-0 bg-white rounded-2xl shadow-sm max-sm:mx-5 max-sm:my-0 transition-all duration-300"
+      className="cursor-pointer transition-all duration-300 bg-white shadow-md md:max-w-sm hover:shadow-lg rounded-2xl overflow-hidden"
     >
-      <div className="overflow-hidden w-full h-[159px]">
+      <div className="h-[180px] overflow-hidden">
         <img
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/b6dbce15700a6ccf0e14fe621cd63df7b6a845d7"
-          alt="Mountain landscape with hiker"
-          className="object-cover size-full"
+          alt="Event"
+          className="object-cover w-full h-full"
         />
       </div>
-      <div className="px-4 py-5">
-        <h3 className="mb-3.5 text-xl">Himalayas Trek</h3>
-        <div className="flex flex-col gap-3 text-xs">
-          <div className="flex gap-2 items-center">
-            <i className="ti ti-calendar" aria-hidden="true" />
-            <span>26 Jun 2025</span>
-            <div
-              className="w-0.5 h-0.5 rounded-full bg-zinc-800"
-              aria-hidden="true"
-            />
-            <span>8:00 AM</span>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold mb-2 text-zinc-800">
+          {item.name}
+        </h3>
+        <div className="text-sm text-zinc-600 space-y-1">
+          <div className="flex items-center gap-2">
+            <i className="ti ti-calendar" />
+            <span>{formatDatewithoutTime(item.fromDate)}</span>
+            <span className="text-xs text-zinc-400">•</span>
+            <span>{item.time}</span>
           </div>
-          <div className="flex gap-2 items-center">
-            <i className="ti ti-map-pin" aria-hidden="true" />
-            <span>Praygraj, Uttarakhand</span>
+          <div className="flex items-center gap-2">
+            <i className="ti ti-map-pin" />
+            <span>{item.location}</span>
           </div>
-          <div className="flex gap-2 items-center">
-            <i className="ti ti-users" aria-hidden="true" />
-            <span>6 Seekers</span>
+          <div className="flex items-center gap-2">
+            <i className="ti ti-users" />
+            <span>{item.participants.length} Seekers</span>
           </div>
         </div>
 
-        {/* Expanded Section */}
         {isExpanded && (
           <div className="mt-4">
             <div className="flex gap-3 flex-wrap mb-4">
-              {companions.map((img, idx) => (
+              {item.participants.map((img, idx) => (
                 <img
                   key={idx}
-                  src={img}
-                  alt={`Companion ${idx + 1}`}
+                  src={img?.user?.avatar}
+                  alt={`Companion ${img?.user?.name}`}
                   className="w-10 h-10 rounded-full object-cover border border-gray-300"
                 />
               ))}
             </div>
             <div className="flex gap-4">
               <Link
-                to={"/listing/upcoming/detail"}
+                to={`/listing/upcoming/detail/${item._id}`}
                 className="px-4 py-2 bg-black text-white rounded-xl text-sm"
               >
                 View
@@ -178,59 +177,51 @@ function UpcomingEventCard() {
     </article>
   );
 }
+
 function MyEventCard({ item }) {
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  console.log(item);
-  const companions = [
-    "https://randomuser.me/api/portraits/women/1.jpg",
-    "https://randomuser.me/api/portraits/men/2.jpg",
-    "https://randomuser.me/api/portraits/women/3.jpg",
-    "https://randomuser.me/api/portraits/men/4.jpg",
-    "https://randomuser.me/api/portraits/men/5.jpg",
-    "https://randomuser.me/api/portraits/women/6.jpg",
-  ];
-  function formatDate(isoString) {
+  const formatDate = (isoString) => {
     const date = new Date(isoString);
     return date.toLocaleDateString("en-US", {
       day: "numeric",
       month: "short",
       year: "numeric",
     });
-  }
+  };
 
   return (
     <Link
       to={`/listing/myevent/detail/${item._id}`}
-      onClick={() => setIsExpanded(!isExpanded)}
-      className="cursor-pointer overflow-hidden mx-16 my-0 bg-white rounded-2xl shadow-sm max-sm:mx-5 max-sm:my-0 transition-all duration-300"
+      className="transition-all duration-300 bg-white max-w-sm w-full shadow-md hover:shadow-lg rounded-2xl overflow-hidden"
     >
-      <div className="overflow-hidden w-full h-[159px]">
+      <div className="h-[180px] overflow-hidden">
         <img
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/b6dbce15700a6ccf0e14fe621cd63df7b6a845d7"
-          alt="Mountain landscape with hiker"
-          className="object-cover size-full"
+          src={
+            item.image ||
+            "https://cdn.builder.io/api/v1/image/assets/TEMP/b6dbce15700a6ccf0e14fe621cd63df7b6a845d7"
+          }
+          alt={item.name}
+          className="object-cover w-full h-full"
         />
       </div>
-      <div className="px-4 py-5">
-        <h3 className="mb-3.5 text-xl">{item?.name}</h3>
-        <div className="flex flex-col gap-3 text-xs">
-          <div className="flex gap-2 items-center">
-            <i className="ti ti-calendar" aria-hidden="true" />
+      <div className="p-4">
+        <h3 className="text-lg font-semibold mb-2 text-zinc-800">
+          {item?.name}
+        </h3>
+        <div className="text-sm text-zinc-600 space-y-1">
+          <div className="flex items-center gap-2">
+            <i className="ti ti-calendar" />
             <span>{formatDate(item?.fromDate)}</span>
-            <div
-              className="w-0.5 h-0.5 rounded-full bg-zinc-800"
-              aria-hidden="true"
-            />
-            <span>{item?.time}</span>
+            <span className="text-xs text-zinc-400">•</span>
+            <span>{item?.time || "TBD"}</span>
           </div>
-          <div className="flex gap-2 items-center">
-            <i className="ti ti-map-pin" aria-hidden="true" />
-            <span>{item.location}</span>
+          <div className="flex items-center gap-2">
+            <i className="ti ti-map-pin" />
+            <span>{item.location || "Unknown"}</span>
           </div>
-          <div className="flex gap-2 items-center">
-            <i className="ti ti-users" aria-hidden="true" />
-            <span className="text-red-300">
-              Slots Left : {item.availableSlots}
+          <div className="flex items-center gap-2">
+            <i className="ti ti-users" />
+            <span className="text-red-400 font-medium">
+              Slots Left: {item.availableSlots ?? 0} / {item.totalSlots ?? 0}
             </span>
           </div>
         </div>
@@ -238,4 +229,5 @@ function MyEventCard({ item }) {
     </Link>
   );
 }
+
 export default EventsView;

@@ -12,3 +12,12 @@ export const formatDate = (isoString) => {
     hour12: true,
   });
 };
+export const formatDatewithoutTime = (isoString) => {
+  const date = new Date(isoString);
+
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short", // change to 'long' for full month name
+    day: "2-digit",
+  });
+};

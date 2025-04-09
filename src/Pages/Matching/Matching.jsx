@@ -12,212 +12,218 @@ const Matching = () => {
   const matchPercentage = compatibility?.compatibilityScore ?? "…";
 
   return (
-    <div>
-      {loading && <div className="p-4">Loading...</div>}
-      {error && <div className="p-4 text-red-500">Something went wrong</div>}
-      {user && (
-        <div className="w-full pb-20 h-full bg-white mx-auto p-4 overflow-y-scroll">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <button>&larr;</button>
-            <span className="font-semibold">@{user.username || user.name}</span>
-            <button>⋮</button>
-          </div>
-
-          <div className="flex mt-4 max-w-sm w-full max-h-64 gap-4 items-center">
-            <div className="w-1/2 h-full aspect-square object-fill overflow-hidden rounded-xl">
-              <img
-                src={user.avatar || "https://via.placeholder.com/150"}
-                className="h-full origin-top object-top object-cover w-full"
-                alt={user.name}
-              />
+    <Layout>
+      <div className="max-w-md mx-auto bg-white px-4 pb-28 pt-4 min-h-screen">
+        {loading && <p className="text-center text-sm">Loading...</p>}
+        {error && (
+          <p className="text-center text-red-500 text-sm">
+            Something went wrong
+          </p>
+        )}
+        {user && (
+          <>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <button className="text-xl">&larr;</button>
+              <span className="font-semibold text-base">
+                @{user.username || user.name}
+              </span>
+              <button className="text-xl">⋮</button>
             </div>
-            <div className="flex flex-col gap-2">
-              <h2 className="text-lg font-bold">{user.name}</h2>
-              <div className="flex flex-wrap items-center text-sm">
-                <p className="text-gray-500">{user.gender}</p>
-                <p className="flex items-center text-gray-500">
-                  <GrLocationPin /> {user.currentLocation}
-                </p>
-              </div>
-              <div className="flex gap-2 py-2">
-                <FaInstagram />
-                <FaLinkedin />
-              </div>
-              <div className="flex gap-2">
-                <div className="flex justify-center items-center bg-green-500 p-2 text-white poppins-semibold rounded-lg">
-                  {loading ? "..." : `${matchPercentage}%`}
-                </div>
-                <div className="flex flex-col gap-1 text-xs justify-center items-center bg-[#2D6F2C] p-2 text-white poppins-semibold rounded-lg">
-                  <p>Host Rating</p>
-                  <p className="flex items-center text-yellow-300 gap-2 text-sm">
-                    <FaStar /> 4.3
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Image Grid */}
-          <div className="grid grid-cols-3 gap-2 mt-4">
-            {user.profileImages.map((image, i) => (
-              <div key={i} className="w-full h-24 bg-gray-200 rounded-lg">
-                <img src={image} />
-              </div>
-            ))}
-          </div>
-
-          {/* Travel Style */}
-          <div className="mt-4">
-            <h2 className="font-semibold">My travel style</h2>
-            <div className="flex flex-wrap gap-2 p-2 border rounded-lg">
-              {user.travelPreferences?.map((preference, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-orange-300 text-white rounded-full text-sm"
-                >
-                  {preference}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Questions & Answers */}
-          <div className="mt-4 space-y-4">
-            {[
-              {
-                icon: "🎒",
-                question: "What's one thing you always pack?",
-                answer: user.profileDetails?.alwaysPack || "N/A",
-              },
-              {
-                icon: "🎶",
-                question: "What's your travel soundtrack?",
-                answer: user.profileDetails?.travelSoundtrack || "N/A",
-              },
-              {
-                icon: "🎬",
-                question: "One movie that makes you want to travel?",
-                answer: user.profileDetails?.favoriteTravelMovie || "N/A",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-orange-400 text-white p-4 rounded-lg"
-              >
-                <p className="font-semibold italic">
-                  {item.icon} {item.question}
-                </p>
-                <p className="mt-1">{item.answer}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Ideal Trips */}
-          <div className="mt-4">
-            <h2 className="font-semibold">My ideal trips</h2>
-            <div className="flex flex-wrap gap-2 p-2 border rounded-lg">
-              {user.idealTrip?.map((style, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-orange-300 text-white rounded-full text-sm"
-                >
-                  {style}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Events Hosted Section */}
-          <h2 className="mt-6 font-semibold text-lg">Events hosted</h2>
-          {user.eventsHosted?.length === 0 ? (
-            <p className="text-gray-500 text-sm mt-2">No events hosted yet.</p>
-          ) : (
-            user.eventsHosted.map((event, index) => (
-              <div
-                key={index}
-                className="mt-2 bg-white shadow-lg rounded-lg overflow-hidden"
-              >
+            {/* Profile Section */}
+            <div className="flex gap-4">
+              <div className="w-1/2 aspect-square overflow-hidden rounded-xl">
                 <img
-                  src={event.image || "/images/screenshot.png"}
-                  alt={event.title || "Event"}
-                  className="w-full h-[160px] object-cover"
+                  src={user.avatar || "https://via.placeholder.com/150"}
+                  className="object-cover w-full h-full"
+                  alt={user.name}
                 />
-                <div className="p-3">
-                  <h3 className="font-semibold text-lg">{event.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    📅{" "}
-                    {new Date(event.fromDate).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
+              </div>
+              <div className="flex flex-col justify-between">
+                <h2 className="text-lg font-bold">{user.name}</h2>
+                <div className="text-sm text-gray-500">
+                  <p>{user.gender}</p>
+                  <p className="flex items-center gap-1">
+                    <GrLocationPin /> {user.currentLocation}
                   </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    📍 {event.location}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    👥 {event.participants?.length || 0} Seekers
-                  </p>
-                  <div className="mt-2">
-                    <span className="bg-green-500 text-white px-2 py-1 text-xs rounded-md">
-                      Rating {event.rating || "4.2"} ★
+                </div>
+                <div className="flex gap-3 mt-2 text-xl text-gray-600">
+                  <FaInstagram />
+                  <FaLinkedin />
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <div
+                    className="text-right text-sm font-semibold text-white rounded-xl py-4 px-2"
+                    style={{
+                      backgroundImage: "url('/wae.png')",
+                      backgroundSize: "cover",
+                      backgroundOrigin: "center",
+                      backgroundRepeat: "no-repeat",
+                    }}
+                  >
+                    {matchPercentage}%
+                  </div>
+                  <div className="bg-[#2D6F2C] text-white px-3 py-1 rounded-lg text-sm flex flex-col items-center font-semibold">
+                    <span>Host Rating</span>
+                    <span className="flex items-center text-yellow-300 text-base gap-1">
+                      <FaStar /> 4.3
                     </span>
                   </div>
                 </div>
               </div>
-            ))
-          )}
+            </div>
 
-          {/* Events Attended Section */}
-          <h2 className="mt-6 font-semibold text-lg">Events attended</h2>
-          {user.eventsAttended?.length === 0 ? (
-            <p className="text-gray-500 text-sm mt-2">
-              No events attended yet.
-            </p>
-          ) : (
-            user.eventsAttended.map((event, index) => (
-              <div
-                key={index}
-                className="mt-2 bg-white shadow-lg rounded-lg overflow-hidden"
-              >
-                <img
-                  src={event.image || "/images/screenshot.png"}
-                  alt={event.title || "Event"}
-                  className="w-full h-[160px] object-cover"
-                />
-                <div className="p-3">
-                  <h3 className="font-semibold text-lg">{event.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    📅{" "}
-                    {new Date(event.fromDate).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    📍 {event.location}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    👥 {event.participants?.length || 0} Seekers
-                  </p>
-                  <div className="mt-2">
-                    <span className="bg-green-500 text-white px-2 py-1 text-xs rounded-md">
-                      Rating {event.rating || "4.2"} ★
-                    </span>
+            {/* Profile Images Grid */}
+            {user.profileImages?.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 mt-6">
+                {user.profileImages.map((image, i) => (
+                  <div
+                    key={i}
+                    className="w-full h-24 bg-gray-200 rounded-lg overflow-hidden"
+                  >
+                    <img
+                      src={image}
+                      alt={`Profile ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
+                ))}
+              </div>
+            )}
+
+            {/* Travel Preferences */}
+            {user.travelPreferences?.length > 0 && (
+              <div className="mt-6">
+                <h3 className="font-semibold mb-1">My travel style</h3>
+                <div className="flex flex-wrap gap-2 p-2 border rounded-lg">
+                  {user.travelPreferences.map((item, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 text-sm bg-orange-300 text-white rounded-full"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
               </div>
-            ))
-          )}
+            )}
 
-          {/* Say Hello Button */}
-          <button className="fixed bottom-4 left-4 right-4 bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium z-50">
-            👋 Say Hello
-          </button>
+            {/* Q&A Section */}
+            <div className="mt-6 space-y-4">
+              {[
+                {
+                  icon: "🎒",
+                  question: "What's one thing you always pack?",
+                  answer: user.profileDetails?.alwaysPack || "N/A",
+                },
+                {
+                  icon: "🎶",
+                  question: "What's your travel soundtrack?",
+                  answer: user.profileDetails?.travelSoundtrack || "N/A",
+                },
+                {
+                  icon: "🎬",
+                  question: "One movie that makes you want to travel?",
+                  answer: user.profileDetails?.favoriteTravelMovie || "N/A",
+                },
+              ].map((qna, i) => (
+                <div
+                  key={i}
+                  className="bg-orange-400 text-white p-4 rounded-lg"
+                >
+                  <p className="font-semibold italic">
+                    {qna.icon} {qna.question}
+                  </p>
+                  <p className="mt-1 text-sm">{qna.answer}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Ideal Trips */}
+            {user.idealTrip?.length > 0 && (
+              <div className="mt-6">
+                <h3 className="font-semibold mb-1">My ideal trips</h3>
+                <div className="flex flex-wrap gap-2 p-2 border rounded-lg">
+                  {user.idealTrip.map((trip, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 text-sm bg-orange-300 text-white rounded-full"
+                    >
+                      {trip}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Events Hosted */}
+            <div className="mt-8">
+              <h2 className="font-semibold text-lg">Events Hosted</h2>
+              {user.eventsHosted?.length === 0 ? (
+                <p className="text-gray-500 text-sm mt-2">
+                  No events hosted yet.
+                </p>
+              ) : (
+                user.eventsHosted.map((event, index) => (
+                  <EventCard key={index} event={event} />
+                ))
+              )}
+            </div>
+
+            {/* Events Attended */}
+            <div className="mt-8">
+              <h2 className="font-semibold text-lg">Events Attended</h2>
+              {user.eventsAttended?.length === 0 ? (
+                <p className="text-gray-500 text-sm mt-2">
+                  No events attended yet.
+                </p>
+              ) : (
+                user.eventsAttended.map((event, index) => (
+                  <EventCard key={index} event={event} />
+                ))
+              )}
+            </div>
+
+            {/* Say Hello CTA */}
+            <button className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-lg py-3 px-6 rounded-full shadow-lg z-50">
+              👋 Say Hello
+            </button>
+          </>
+        )}
+      </div>
+    </Layout>
+  );
+};
+
+const EventCard = ({ event }) => {
+  return (
+    <div className="mt-4 bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src={event.image || "/event/hikinh.webp"}
+        alt={event.name}
+        className="w-full h-[160px] object-cover"
+      />
+      <div className="p-3">
+        <h3 className="font-semibold text-base">{event.name}</h3>
+        <p className="text-sm text-gray-600 mt-1">
+          📅{" "}
+          {new Date(event.fromDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
+        <p className="text-sm text-gray-600 mt-1">📍 {event.location}</p>
+        <p className="text-sm text-gray-600 mt-1">
+          👥 {event.participants?.length || 0} Seekers
+        </p>
+        <div className="mt-2">
+          <span className="bg-green-500 text-white px-2 py-1 text-xs rounded-md">
+            Rating {event.rating || "4.2"} ★
+          </span>
         </div>
-      )}
+      </div>
     </div>
   );
 };

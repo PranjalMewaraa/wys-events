@@ -3,7 +3,8 @@ import * as React from "react";
 import Layout from "../../Layout/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import SelectGroup from "../../components/SelectGroup";
-import { apiPost } from "../../utils/call";
+import { apiGet, apiPost } from "../../utils/call";
+import getCategoryImage from "../../utils/getImage";
 
 const Categories = [
   { label: "Music & Concerts", value: "Music & Concerts" },
@@ -29,12 +30,16 @@ function InputDesign() {
   const [selectedOption, setSelectedOption] = React.useState("");
   const [descriptionCount, setDescriptionCount] = React.useState(0);
   const nav = useNavigate();
+
+  const [locations, setLocations] = React.useState([]); // all state-city pairs
+  const [availableCities, setAvailableCities] = React.useState([]); // filtered cities
+
   const [experience, setExperience] = React.useState({
     name: "",
     description: "",
     state: "",
     city: "",
-
+    image: "",
     category: "",
     fromDate: "",
     toDate: "",
@@ -66,6 +71,13 @@ function InputDesign() {
     handleChange("paymentType", value);
   };
 
+  const handleStateChange = (value) => {
+    handleChange("state", value);
+    const selected = locations.find((loc) => loc.state === value);
+    setAvailableCities(selected?.cities || []);
+    handleChange("city", "");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -76,16 +88,37 @@ function InputDesign() {
       paymentType: isCostInvolved ? experience.paymentType : null,
     };
 
-    console.log("Experience Created:", finalData);
+    let image = "";
+    let payloadData = {};
+    if (finalData.category) {
+      image = getCategoryImage(finalData.category);
+      payloadData = {
+        ...finalData,
+        image: image,
+      };
+    }
+
     try {
-      const res = await apiPost("/events", finalData);
+      const res = await apiPost("/events", payloadData);
       console.log(res);
       nav("/events");
     } catch (error) {
-      console.log(error);
+      console.error("Error creating experience:", error);
     }
-    // Send finalData to backend here
   };
+
+  const getLocations = async () => {
+    try {
+      const res = await apiGet("/location");
+      setLocations(res); // expected array of { state: "", cities: [] }
+    } catch (err) {
+      console.error("Error fetching locations", err);
+    }
+  };
+
+  React.useEffect(() => {
+    getLocations();
+  }, []);
 
   return (
     <Layout>
@@ -118,7 +151,7 @@ function InputDesign() {
           <input
             type="text"
             placeholder="Name your experience"
-            className="px-12 py-0 text-lg rounded-xl border border-solid border-zinc-800 h-[60px] text-neutral-400 w-full"
+            className="px-12 py-0 text-lg rounded-xl border border-zinc-800 h-[60px] text-neutral-400 w-full"
             value={experience.name}
             onChange={(e) => handleChange("name", e.target.value)}
           />
@@ -131,23 +164,19 @@ function InputDesign() {
             onChange={(val) => handleChange("category", val)}
           />
 
-          <p className="mt-5">How many people can join you?</p>
-          <div className="flex gap-2 px-4 py-2">
-            {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-              <button
-                key={num}
-                type="button"
-                onClick={() => handleChange("totalSlots", num)}
-                className={`text-xl rounded-xl border border-solid border-zinc-800 h-[35px] w-[35px] ${
-                  experience.totalSlots === num
-                    ? "bg-zinc-800 text-white"
-                    : "text-black"
-                }`}
-              >
-                {num}
-              </button>
-            ))}
-          </div>
+          <label className="text-base text-black block mt-5">
+            How many people can join you?
+          </label>
+          <input
+            type="number"
+            min={1}
+            placeholder="Enter number of slots"
+            className="w-full rounded-xl border border-zinc-800 px-4 py-2 text-sm"
+            value={experience.totalSlots || ""}
+            onChange={(e) =>
+              handleChange("totalSlots", parseInt(e.target.value) || "")
+            }
+          />
 
           <label className="text-base text-black block">From Date</label>
           <input
@@ -174,21 +203,34 @@ function InputDesign() {
             className="w-full rounded-xl border border-zinc-800 px-4 py-2 text-sm"
           />
 
-          <input
-            type="text"
-            placeholder="City"
+          <label className="text-base text-black block">State</label>
+          <select
+            value={experience.state}
+            onChange={(e) => handleStateChange(e.target.value)}
+            className="text-sm rounded-xl border border-zinc-800 px-4 py-2 w-full"
+          >
+            <option value="">Select State</option>
+            {locations.map((loc) => (
+              <option key={loc._id} value={loc.state}>
+                {loc.state}
+              </option>
+            ))}
+          </select>
+
+          <label className="text-base text-black block mt-4">City</label>
+          <select
             value={experience.city}
             onChange={(e) => handleChange("city", e.target.value)}
             className="text-sm rounded-xl border border-zinc-800 px-4 py-2 w-full"
-          />
-
-          <input
-            type="text"
-            placeholder="State"
-            value={experience.state}
-            onChange={(e) => handleChange("state", e.target.value)}
-            className="text-sm rounded-xl border border-zinc-800 px-4 py-2 w-full"
-          />
+            disabled={!experience.state}
+          >
+            <option value="">Select City</option>
+            {availableCities.map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
 
           <textarea
             placeholder="Give a description about your event"

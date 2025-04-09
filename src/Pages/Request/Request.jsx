@@ -76,36 +76,39 @@ const Request = () => {
     },
   ];
 
-  const renderEvents = (events) =>
-    events.map((event, i) => (
-      <div
-        key={i}
-        className="mt-2 bg-white shadow-lg rounded-lg overflow-hidden"
-      >
-        <img
-          src={event.image || "/images/screenshot.png"}
-          alt={event.name}
-          className="w-full h-[160px] object-cover"
-        />
-        <div className="p-3">
-          <h3 className="font-semibold text-lg">{event.name}</h3>
-          <p className="text-sm text-gray-600 flex items-center mt-1">
-            📅 {new Date(event.fromDate).toLocaleDateString()} · {event.time}
-          </p>
-          <p className="text-sm text-gray-600 flex items-center mt-1">
-            📍 {event.location}, {event.state}
-          </p>
-          <p className="text-sm text-gray-600 flex items-center mt-1">
-            👥 {event.totalSlots || 0} Seekers
-          </p>
-          <div className="mt-2 flex items-center">
-            <span className="bg-green-500 text-white px-2 py-1 text-xs rounded-md">
-              Rating {event.rating || 4.0} ★
-            </span>
+  const renderEvents = (events) => (
+    <div className="flex gap-2 flex-wrap">
+      {events.map((event, i) => (
+        <div
+          key={i}
+          className="mt-2 bg-white min-w-xs shadow-lg rounded-lg overflow-hidden"
+        >
+          <img
+            src={event.image || "/event/hikinh.webp"}
+            alt={event.name}
+            className="w-full h-[160px] object-cover"
+          />
+          <div className="p-3">
+            <h3 className="font-semibold text-lg">{event.name}</h3>
+            <p className="text-sm text-gray-600 flex items-center mt-1">
+              📅 {new Date(event.fromDate).toLocaleDateString()} · {event.time}
+            </p>
+            <p className="text-sm text-gray-600 flex items-center mt-1">
+              📍 {event.location}, {event.state}
+            </p>
+            <p className="text-sm text-gray-600 flex items-center mt-1">
+              👥 {event.totalSlots || 0} Seekers
+            </p>
+            <div className="mt-2 flex items-center">
+              <span className="bg-green-500 text-white px-2 py-1 text-xs rounded-md">
+                Rating {event.rating || 4.0} ★
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    ));
+      ))}
+    </div>
+  );
 
   return (
     <Layout>
@@ -118,7 +121,7 @@ const Request = () => {
         </div>
 
         {/* User Info */}
-        <div className="flex mt-4 max-w-sm w-full max-h-64 gap-4 items-center">
+        <div className="flex mt-4 max-w-sm md:max-w-lg w-full max-h-64 gap-4 items-center">
           <div className="w-1/2 h-full aspect-square overflow-hidden rounded-xl">
             <img
               src={avatar}
@@ -135,8 +138,12 @@ const Request = () => {
               </p>
             </div>
             <div className="flex gap-2 py-2 text-xl text-gray-600">
-              {socialLinks?.instagram && <FaInstagram />}
-              {socialLinks?.linkedin && <FaLinkedin />}
+              {socialLinks?.instagram && (
+                <FaInstagram onClick={window.open(socialLinks.instagram)} />
+              )}
+              {socialLinks?.linkedin && (
+                <FaLinkedin onClick={window.open(socialLinks.linkedin)} />
+              )}
             </div>
             <div className="flex gap-2">
               <div className="flex justify-center items-center bg-green-500 p-2 text-white rounded-lg text-xs">
@@ -224,20 +231,22 @@ const Request = () => {
         ) : (
           <p>No events attended.</p>
         )}
-
-        {/* Action Buttons */}
-        <button
-          className="mt-6 w-full bg-green-600 text-white text-lg py-3 rounded-lg"
-          onClick={handleAccept}
-        >
-          ✅ Accept
-        </button>
-        <button
-          className="mt-3 w-full mb-20 bg-red-500 text-white text-lg py-3 rounded-lg"
-          onClick={handleReject}
-        >
-          ❌ Reject
-        </button>
+        <div className="w-full justify-center flex">
+          <div className="flex gap-2 max-w-lg w-full flex-col">
+            <button
+              className="mt-3  bg-amber-600 cursor-pointer text-white px-4 w-full text-lg py-3 rounded-lg"
+              onClick={handleAccept}
+            >
+              ✅ Accept
+            </button>
+            <button
+              className="mt-3  mb-20 bg-slate-900 cursor-pointer  px-4 w-full text-white text-lg py-3 rounded-lg"
+              onClick={handleReject}
+            >
+              ❌ Reject
+            </button>
+          </div>
+        </div>
       </div>
     </Layout>
   );

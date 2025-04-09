@@ -41,7 +41,15 @@ const useEventDetails = (eventId) => {
     getEventDetails();
   }, [eventId, userId]);
 
-  return { event, eventsByUser, userRole, isEventOver, loading, error };
+  return {
+    event,
+    setEvent,
+    eventsByUser,
+    userRole,
+    isEventOver,
+    loading,
+    error,
+  };
 };
 
 export default useEventDetails;

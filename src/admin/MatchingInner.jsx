@@ -124,15 +124,24 @@ const MatchingInner = () => {
       {/* Common Ideal Trips */}
       <div className="mt-4">
         <h2 className="font-semibold">Common ideal trips</h2>
+
         <div className="flex flex-wrap gap-2 p-2 border rounded-lg">
-          {commons?.commonIdealTrips?.map((style) => (
-            <span
-              key={style}
-              className="px-3 py-1 bg-orange-300 text-white rounded-full text-sm"
-            >
-              {style}
-            </span>
-          ))}
+          {commons.commonIdealTrips ? (
+            commons?.commonIdealTrips?.map((style) => (
+              <span
+                key={style}
+                className="px-3 py-1 bg-orange-300 text-white rounded-full text-sm"
+              >
+                {style}
+              </span>
+            ))
+          ) : (
+            <p>
+              <span className="px-3 py-1 bg-orange-300 text-white rounded-full text-sm">
+                Nothing
+              </span>
+            </p>
+          )}
         </div>
       </div>
 
@@ -142,22 +151,26 @@ const MatchingInner = () => {
           {
             icon: "🎒",
             question: "What's one thing you always pack?",
-            answer: commons?.commonAlwaysPack,
+            answer1: commons?.user1Details?.alwaysPack,
+            answer2: commons?.user1Details?.alwaysPack,
           },
           {
             icon: "🎶",
             question: "What's your travel soundtrack?",
-            answer: commons?.commonTravelSoundtrack,
+            answer1: commons?.user1Details?.travelSoundtrack,
+            answer2: commons?.user1Details?.travelSoundtrack,
           },
           {
             icon: "🎬",
             question: "One movie that makes you want to travel?",
-            answer: commons?.commonFavoriteTravelMovie,
+            answer1: commons?.user1Details?.favoriteTravelMovie,
+            answer2: commons?.user1Details?.favoriteTravelMovie,
           },
           {
             icon: "🌆",
             question: "Your ideal way to spend a free evening in a new city?",
-            answer: commons?.commonIdealEvening,
+            answer1: commons?.user1Details?.idealEvening,
+            answer2: commons?.user1Details?.idealEvening,
           },
         ].map((item, index) => (
           <div
@@ -165,11 +178,30 @@ const MatchingInner = () => {
             className="bg-orange-400 max-w-md h-full text-white p-4 rounded-lg"
           >
             <p className="font-semibold italic">
-              {item.icon} {item.question}
+              {item?.icon} {item?.question}
             </p>
-            <p className="mt-1 poppins-light-italic">
-              You both said {item.answer}
-            </p>
+            <div className="flex gap-4 items-center py-2">
+              <div className="flex min-w-20 flex-col items-center">
+                <img
+                  src={commons.user1Details?.avatar}
+                  className="h-10 w-10 rounded-full"
+                  alt=""
+                />
+                <p>{commons?.user1Details?.name}</p>
+              </div>
+              <p className="mt-1 poppins-light-italic">"{item?.answer1}"</p>
+            </div>
+            <div className="flex gap-4 items-center py-2">
+              <div className="flex min-w-20 flex-col items-center">
+                <img
+                  src={commons?.user2Details?.avatar}
+                  className="h-10 w-10 rounded-full"
+                  alt=""
+                />
+                <p>{commons?.user2Details?.name}</p>
+              </div>
+              <p className="mt-1 poppins-light-italic">"{item?.answer2}"</p>
+            </div>
           </div>
         ))}
       </div>

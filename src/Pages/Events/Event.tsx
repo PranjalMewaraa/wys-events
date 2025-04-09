@@ -163,13 +163,14 @@ const EventCard = () => {
         <Link
           key={event._id}
           to={`/event/${event._id}`}
-          className="block bg-white max-w-sm drop-shadow-xl rounded-xl shadow"
+          className="block bg-white w-full md:max-w-sm drop-shadow-xl rounded-xl shadow"
         >
           <img
-            src="https://imgs.search.brave.com/Ah4hMz04IJ9Ncii-qAm0qbYmbCSl4MkNgTVHNBI9yF8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi9hL2E5L0hp/a2luZ190b190aGVf/SWNlX0xha2VzLl9T/YW5fSnVhbl9OYXRp/b25hbF9Gb3Jlc3Ql/MkNfQ29sb3JhZG8u/anBnLzk2MHB4LUhp/a2luZ190b190aGVf/SWNlX0xha2VzLl9T/YW5fSnVhbl9OYXRp/b25hbF9Gb3Jlc3Ql/MkNfQ29sb3JhZG8u/anBn"
-            alt="Himalayas"
-            className="w-full rounded"
+            src={event.image || "/event/hikinh.webp"}
+            alt={event.name || "Event Image"}
+            className="w-full h-48 object-cover rounded-t-xl"
           />
+
           <h2 className="text-lg font-bold mt-2 p-4">{event.name}</h2>
           <p className="px-4 flex gap-2 text-sm md:text-base items-center">
             <span>

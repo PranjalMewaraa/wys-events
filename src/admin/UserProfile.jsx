@@ -246,7 +246,7 @@ const EventCard = ({ item }) => {
       <div className="mt-2 bg-white shadow-lg max-w-sm w-full rounded-lg overflow-hidden">
         <div className="w-full h-[160px] relative">
           <img
-            src="/images/screenshot.png" // Replace with actual hosted image
+            src={item.image || "/event/hikinh.webp"} // Replace with actual hosted image
             alt="Himalayas Trek"
             className="w-full h-full object-cover"
           />
