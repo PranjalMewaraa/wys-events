@@ -19,7 +19,8 @@ const Matching = () => {
       console.log("Request response:", res);
     } catch (err) {
       console.error("Failed to send friend request:", err);
-      alert("Something went wrong!");
+
+      alert(err.message);
     }
   };
   return (
