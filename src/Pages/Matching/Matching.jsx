@@ -197,9 +197,12 @@ const Matching = () => {
             </div>
 
             {/* Say Hello Button */}
-          <button className="fixed bottom-4 left-4 right-4 bg-gray-900 text-white text-lg py-3 rounded-lg flex items-center justify-center font-medium z-50" onClick={handleSendMessageReq}>
-            👋 Say Hello
-          </button>
+            <button
+              className="fixed bottom-24 md:bottom-8 left-1/2 transform -translate-x-1/2 px-8 bg-gray-900 text-white text-lg py-3 rounded-lg flex w-fit items-center justify-center font-medium z-50"
+              onClick={handleSendMessageReq}
+            >
+              👋 Say Hello
+            </button>
           </>
         )}
       </div>
