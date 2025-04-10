@@ -138,14 +138,7 @@ const Request = () => {
                 <GrLocationPin /> {currentLocation}
               </p>
             </div>
-            <div className="flex gap-2 py-2 text-xl text-gray-600">
-              {socialLinks?.instagram && (
-                <FaInstagram onClick={window.open(socialLinks.instagram)} />
-              )}
-              {socialLinks?.linkedin && (
-                <FaLinkedin onClick={window.open(socialLinks.linkedin)} />
-              )}
-            </div>
+
             <div className="flex gap-2">
               <div className="flex justify-center items-center bg-green-500 p-2 text-white rounded-lg text-xs">
                 80%
