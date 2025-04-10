@@ -294,6 +294,7 @@ function InputDesign() {
                 {selectedOption === "fee" && (
                   <input
                     type="number"
+                    min={0}
                     placeholder="Enter cost in INR"
                     className="mt-3 w-full rounded-xl border border-zinc-800 p-2 text-sm"
                     value={experience.cost || ""}
