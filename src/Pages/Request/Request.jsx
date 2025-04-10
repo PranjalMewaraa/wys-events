@@ -9,6 +9,7 @@ const Request = () => {
   const { id, event } = useParams();
   const [user, setUser] = useState(null);
   const nav = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const getProfile = async () => {
       const res = await apiGet(`/users/${id}`);
@@ -109,7 +110,7 @@ const Request = () => {
       ))}
     </div>
   );
-  const navigate = useNavigate();
+
   return (
     <Layout>
       <div className="w-full h-full bg-white mx-auto p-4 overflow-y-scroll">

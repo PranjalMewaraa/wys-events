@@ -115,9 +115,29 @@ const Matching = () => {
                 </div>
 
                 {/* Social Icons */}
-                <div className="flex gap-4 mt-2 text-xl text-gray-500">
-                  <FaInstagram className="hover:text-pink-500 cursor-pointer" />
-                  <FaLinkedin className="hover:text-blue-600 cursor-pointer" />
+                <div className="flex gap-3 py-2 text-xl">
+                  {user?.socialLinks?.instagram && (
+                    <a
+                      href={`https://www.instagram.com/${user?.socialLinks?.instagram}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-pink-500"
+                      title="Instagram"
+                    >
+                      <FaInstagram />
+                    </a>
+                  )}
+                  {user?.socialLinks?.linkedin && (
+                    <a
+                      href={`https://www.linkedin.com/in/${user?.socialLinks?.linkedin}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-blue-600"
+                      title="LinkedIn"
+                    >
+                      <FaLinkedin />
+                    </a>
+                  )}
                 </div>
 
                 {/* Match & Rating */}

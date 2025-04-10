@@ -101,7 +101,7 @@ const DashboardAdmin = () => {
             <p className="w-full text-2xl poppins-bold">User Management</p>
             <div className="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-4">
               {filteredUsers.length > 0 ? (
-                filteredUsers.map((item) => (
+                filteredUsers.reverse().map((item) => (
                   <Link
                     key={item.id}
                     to={`/admin/user/profile/${item._id}`}

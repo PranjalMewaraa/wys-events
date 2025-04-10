@@ -78,9 +78,29 @@ const FlagUserProfile = () => {
                 <GrLocationPin /> {user?.currentLocation}
               </p>
             </div>
-            <div className="flex gap-2 py-2">
-              <FaInstagram />
-              <FaLinkedin />
+            <div className="flex gap-3 py-2 text-xl">
+              {user?.socialLinks?.instagram && (
+                <a
+                  href={`https://www.instagram.com/${user?.socialLinks?.instagram}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-pink-500"
+                  title="Instagram"
+                >
+                  <FaInstagram />
+                </a>
+              )}
+              {user?.socialLinks?.linkedin && (
+                <a
+                  href={`https://www.linkedin.com/in/${user?.socialLinks?.linkedin}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-600"
+                  title="LinkedIn"
+                >
+                  <FaLinkedin />
+                </a>
+              )}
             </div>
             <div className="flex gap-2">
               <div className="flex flex-col gap-1 text-xs justify-center items-center bg-[#2D6F2C] p-2 text-white poppins-semibold rounded-lg">
