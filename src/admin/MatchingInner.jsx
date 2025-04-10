@@ -61,12 +61,12 @@ const MatchingInner = () => {
     setReason("");
     setShowReasonModal(false);
   };
-
+  const navigate = useNavigate();
   return (
     <div className="w-full h-full bg-white mx-auto p-4 overflow-y-scroll">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button>&larr;</button>
+        <button onClick={() => navigate(-1)}>&larr;</button>
         <span className="font-semibold">@{user?.name}</span>
         <button>⋮</button>
       </div>
