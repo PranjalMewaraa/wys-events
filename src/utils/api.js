@@ -183,6 +183,19 @@ export const cancelEvent = async (eventId) => {
     throw error;
   }
 };
+export const getParticipantsData = async (eventId) => {
+  try {
+    const response = await api.get(`/events/${eventId}/participants`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch RSVP data:", error);
+  }
+};
 
 //group api
 

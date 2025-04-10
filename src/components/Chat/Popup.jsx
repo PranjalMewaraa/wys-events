@@ -4,6 +4,7 @@ import ConfirmPopup from './ConfirmPopup';
 import useEventDetails from '../../utils/hooks/event';
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { updateRSVPStatus } from '../../utils/api';
+import { sendReviewMessage } from '../../utils/structureMessages';
 
 const Popup = ({ isOpen, onClose, eventId }) => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -36,8 +37,8 @@ const Popup = ({ isOpen, onClose, eventId }) => {
 
   
   const handleExperienceYes = () => {
-    triggerPollMessage("Share your review with the button below!"); // Pass a string, not an object
-  
+
+    sendReviewMessage(triggerPollMessage,userRole)
     if (userRole !== "host") {
       setShowReviewPopup(true); // Open review modal only for attendees
     } else {

@@ -4,6 +4,7 @@ import useEventDetails from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
+import { sendRSVPMessage } from "../../utils/structureMessages";
 
 const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
   const { userRole, isEventOver, event } = useEventDetails(eventId);
@@ -38,13 +39,13 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
 
   if (!isOpen) return null;
 
-  const handlePrimaryAction = () => {
+  const handlePrimaryAction =async () => {
     if (isLoading) return;
     onClose();
 
     if (userRole === "host") {
       if (!isEventOver) {
-        triggerPollMessage(getRSVPMessageHTML(event, userRole));
+        sendRSVPMessage(triggerPollMessage,userRole,eventId);
       } else {
         onShowPopup();
       }
@@ -83,7 +84,7 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
     : "Are you attending?";
 
   return (
-    <div className="fixed top-[470px] right-0 left-0 flex">
+    <div className="fixed top-[470px] md:top-[570px] right-0 left-0 flex">
       <div
         className="modal-content w-full bg-white rounded-t-2xl shadow-lg border border-transparent drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4"
         onClick={(e) => e.stopPropagation()}
@@ -128,28 +129,3 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
 
 export default Modal;
 
-function getRSVPMessageHTML(event, role) {
-  const attendeesHTML = event.participants
-    .map(
-      (p) => `
-        <div style="display: inline-block; text-align: center; margin: 0 8px;">
-          <img src="${p.user.avatar}" alt="${p.user.name}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />
-          <p style="color: white; font-size: 12px; margin-top: 4px;">${p.user.name}</p>
-        </div>
-      `
-    )
-    .join("");
-
-  const buttonHTML =
-    role !== "host"
-      ? `<button style="margin-top: 10px; padding: 8px 16px; border: 2px solid #F38E1C; border-radius: 20px; color: #F38E1C; background: transparent; cursor: pointer;" onclick="window.dispatchEvent(new CustomEvent('rsvp-button-click'))">Are you attending?</button>`
-      : "";
-
-  return `
-    <div style="background-color: #333; padding: 16px; border-radius: 12px; max-width: 300px;">
-      <p style="color: white; margin: 4px 0 12px;">Have you made up your mind?</p>
-      <div style="display: flex; justify-content: center;">${attendeesHTML}</div>
-      <div style="text-align: right;">${buttonHTML}</div>
-    </div>
-  `;
-}
