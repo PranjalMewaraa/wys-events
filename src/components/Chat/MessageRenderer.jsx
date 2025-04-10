@@ -1,42 +1,53 @@
-import useEventDetails from "../../utils/hooks/useEventDetails"; // path as per your structure
+import React from "react";
 
-const MessageRenderer = ({ message }) => {
-  const { eventId } = useParams(); // If you're already inside a route with eventId
-  const { userRole } = useEventDetails(eventId); // Use the role here
+const MessageRenderer = ({ message}) => {
+  const { type, content } = message;
 
-  if (message.type === "rsvp") {
-    const { question, attendees, buttonText, buttonVisible } = message.content;
 
-    return (
-      <div className="space-y-2">
-        <p className="text-sm">{question}</p>
+  switch (type) {
+    case "text":
+      return <p>{content}</p>;
 
-        <div className="flex -space-x-2">
-          {attendees.map((attendee, idx) => (
-            <img
-              key={idx}
-              src={attendee.avatar}
-              alt={attendee.name}
-              className="w-6 h-6 rounded-full border-2 border-white"
-            />
-          ))}
+    case "rsvp":
+      return (
+        <div className="space-y-1">
+          <p className="font-medium text-[#FFFFFF]">{content.question}</p>
+          {content.attendees && (
+            <div className="flex -space-x-2">
+              {content.attendees.map((a, i) => (
+                <img
+                  key={i}
+                  src={a.avatar}
+                  className="w-6 h-6 rounded-full border-2 border-white"
+                  title={a.name}
+                />
+              ))}
+            </div>
+          )}
+          {content.buttonVisible && (
+            <button className="mt-1 text-xs text-white bg-orange-500 px-3 py-1 rounded">
+              {content.buttonText}
+            </button>
+          )}
         </div>
+      );
 
-        {userRole === "seeker" && buttonVisible && (
-          <button className="bg-[#F38E1C] text-white px-3 py-1 rounded-lg text-xs">
-            {buttonText}
-          </button>
-        )}
-      </div>
-    );
+    case "review":
+      return (
+        <div className="space-y-1">
+          <p className="font-medium text-orange-500">{content.question}</p>
+          <p className="text-sm text-gray-300">from {content.sender}</p>
+          {content.buttonVisible && (
+            <button className="w-[104px] h-[29px] border border-[#F38E1C]  text-[#F38E1C] rounded-3xl bg-transparents">
+              {content.buttonText}
+            </button>
+          )}
+        </div>
+      );
+
+    default:
+      return <p>Unsupported message type</p>;
   }
-
-  // fallback for other types
-  return typeof message.content === "string" ? (
-    <p>{message.content}</p>
-  ) : (
-    <pre>{JSON.stringify(message.content, null, 2)}</pre>
-  );
 };
 
 export default MessageRenderer;
