@@ -114,13 +114,13 @@ const EventDetailAdmin = () => {
                     {event.availableSlots} slots available
                   </span>
                 </p>
-                {item.paymentType !== "fee" ? (
-                  <p>Go {item.paymentType}</p>
+                {event.paymentType !== "fee" ? (
+                  <p>Go {event.paymentType}</p>
                 ) : (
                   <p className="flex gap-2  items-center">
                     {" "}
                     <BsCashStack />
-                    Rs. {item.cost} per person
+                    Rs. {event.cost} per person
                   </p>
                 )}
               </div>
