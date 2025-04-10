@@ -49,7 +49,7 @@ const ChatList = ({ image, name, activeTab, token, userId, eventId, groupId }) =
           <img className="w-[50px] h-[50px] rounded-4xl object-cover" src={image} alt={name} />
           <div className="w-full border-b border-black flex flex-col overflow-hidden">
             <p className="abeezee-regular text-base leading-6 font-black">{name}</p>
-            <div className="abeezee-regular text-[12px] leading-6 text-[#333333] truncate max-w-[200px]">
+            <div className="abeezee-regular text-[12px] leading-6 text-[#333333]  max-w-[200px]">
               {messages.length > 0 ? (
                 <MessageRenderer message={parseMessage(messages[messages.length - 1].content)} />
               ) : (
