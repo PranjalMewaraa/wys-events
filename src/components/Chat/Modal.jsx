@@ -48,8 +48,8 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
 
     if (userRole === "host") {
       if (!isEventOver) {
-        if (participants.length === 0) return; // 🔒 No participants, don't send message
-        sendRSVPMessage(triggerPollMessage, userRole, eventId);
+        if (participants.length === 0) return;
+        sendRSVPMessage(triggerPollMessage, eventId);
       } else {
         onShowPopup();
       }

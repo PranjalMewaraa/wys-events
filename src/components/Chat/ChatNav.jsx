@@ -4,13 +4,14 @@ import dots from "../../assets/images/dots.svg";
 import Modal from "./Modal";
 import Popup from "./Popup";
 import { useLocation } from "react-router-dom";
+import useEventDetails from "../../utils/hooks/event";
 
 const ChatNav = ({ eventId,groupId }) => {
   const location = useLocation();
   const { chatDetails } = location.state || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
+  const {event}=useEventDetails(eventId)
   return (
     <div className="border border-transparent bg-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4">
       <div className="w-full flex items-center justify-between px-4">

@@ -15,7 +15,7 @@ const ConfirmPopup = ({onClose}) => {
               >
                 Yes
               </button>
-              <button className="px-6 py-2 border border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition-colors">
+              <button className="px-6 py-2 border border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition-colors" onClick={onClose}>
                 No
               </button>
             </div>

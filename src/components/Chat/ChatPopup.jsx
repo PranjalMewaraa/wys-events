@@ -6,14 +6,13 @@ import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { updateRSVPStatus } from '../../utils/api';
 import { sendReviewMessage } from '../../utils/structureMessages';
 
-const Popup = ({ isOpen, onClose, eventId}) => {
+const ChatPopup = ({ isOpen, onClose, eventId}) => {
   
 
-  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
 
   // Mock user role and event status (Replace with hook when needed)
-  const { userRole, isEventOver,event } = useEventDetails(eventId);
+  const { userRole, isEventOver} = useEventDetails(eventId);
   const { triggerPollMessage } = useGroupChat(eventId); // Hook to send messages in chat
   const handleRSVP = async (status) => {
     try {
@@ -27,14 +26,7 @@ const Popup = ({ isOpen, onClose, eventId}) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".popup-content")) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+   
   }, [isOpen, onClose]);
 
   
@@ -81,10 +73,10 @@ const Popup = ({ isOpen, onClose, eventId}) => {
             </div>
           </div>
         </div>
-      ) : !showConfirmPopup ? (
+      ):(
         <div className="fixed inset-0 flex items-center justify-center p-4 min-h-screen">
         <div className="bg-white rounded-lg shadow-lg w-full px-6 py-5">
-          <p className="poppins-semibold text-center text-lg font-medium mb-5">  
+          <p className="poppins-semibold text-center text-lg font-medium mb-5 text-black">  
             Are you <span className="text-orange-400 font-semibold">attending</span>?
           </p>
           <div className="flex justify-center gap-4">
@@ -97,7 +89,8 @@ const Popup = ({ isOpen, onClose, eventId}) => {
             <button
               className="px-6 py-2 border border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition-colors"
               onClick={() => {
-                setShowConfirmPopup(true);
+                onClose()
+                handleRSVP("no")
               }}
             >
               No
@@ -105,15 +98,9 @@ const Popup = ({ isOpen, onClose, eventId}) => {
           </div>
         </div>
       </div>
-      ) : (
-        <ConfirmPopup onClose={onClose} 
-        onConfirm={async () => {
-          await handleRSVP("no"); // 👈 only RSVP "no" if confirmed
-        }}
-        />
       )}
     </div>
   );
 };
 
-export default Popup;
+export default ChatPopup;
