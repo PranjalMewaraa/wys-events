@@ -1,8 +1,15 @@
 import React from "react";
 
-const MessageRenderer = ({ message}) => {
+const MessageRenderer = ({ message }) => {
   const { type, content } = message;
-
+  const u_id = localStorage.getItem("userID");
+  const isButtonVisible = () => {
+    if (content.buttonVisible === u_id) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   switch (type) {
     case "text":
@@ -24,7 +31,7 @@ const MessageRenderer = ({ message}) => {
               ))}
             </div>
           )}
-          {content.buttonVisible && (
+          {isButtonVisible() && (
             <button className="mt-1 text-xs text-white bg-orange-500 px-3 py-1 rounded">
               {content.buttonText}
             </button>
