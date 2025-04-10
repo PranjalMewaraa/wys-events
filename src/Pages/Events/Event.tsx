@@ -210,7 +210,7 @@ const Home = () => {
   return (
     <Layout>
       <LayoutInnerMain>
-        <div className="pb-28">
+        <div className="pb-28 w-full">
           <motion.h2
             initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: hideHeader ? 0 : 1, y: hideHeader ? -20 : 0 }}

@@ -104,6 +104,7 @@ function InputDesign() {
     try {
       const res = await apiPost("/events", payloadData);
       console.log(res);
+      alert("Event Created , Sent for Approval");
       nav("/events");
     } catch (error) {
       console.error("Error creating experience:", error);

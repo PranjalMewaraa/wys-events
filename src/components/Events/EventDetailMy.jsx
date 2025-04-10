@@ -153,24 +153,24 @@ const EventDetailMY = () => {
                         .filter((p) => p.rsvpStatus === "yes")
                         .map((item) => (
                           <Link
-                            to={`/people/detail/${item.user._id}`}
-                            key={item.user._id}
+                            to={`/people/detail/${item?.user?._id}`}
+                            key={item.user?._id}
                             className="w-full flex items-center gap-4"
                           >
                             <img
-                              src={item.user.avatar}
-                              alt={item.user.name}
+                              src={item?.user?.avatar}
+                              alt={item?.user?.name}
                               className="w-12 h-12 rounded-full object-cover"
                             />
                             <div>
                               <p className="text-sm font-medium">
-                                {item.user.name}
+                                {item?.user?.name}
                               </p>
                               <p className="text-sm text-gray-600">
-                                Location: {item.user.currentLocation || "N/A"}
+                                Location: {item.user?.currentLocation || "N/A"}
                               </p>
                               <p className="text-sm text-gray-600">
-                                Status: {item.requestStatus}
+                                Status: {item?.requestStatus}
                               </p>
                             </div>
                           </Link>
@@ -197,23 +197,23 @@ const EventDetailMY = () => {
                           <Link
                             to={
                               item.requestStatus === "requested"
-                                ? `/request/${event._id}/${item.user._id}`
-                                : `/people/detail/${item.user._id}`
+                                ? `/request/${event._id}/${item.user?._id}`
+                                : `/people/detail/${item.user?._id}`
                             }
-                            key={item.user._id}
+                            key={item.user?._id}
                             className="w-full flex items-center gap-4"
                           >
                             <img
-                              src={item.user.avatar}
-                              alt={item.user.name}
+                              src={item.user?.avatar}
+                              alt={item.user?.name}
                               className="w-12 h-12 rounded-full object-cover"
                             />
                             <div>
                               <p className="text-sm font-medium">
-                                {item.user.name}
+                                {item.user?.name}
                               </p>
                               <p className="text-sm text-gray-600">
-                                Location: {item.user.currentLocation || "N/A"}
+                                Location: {item.user?.currentLocation || "N/A"}
                               </p>
                               <p className="text-sm text-gray-600">
                                 Status: {item.requestStatus}
