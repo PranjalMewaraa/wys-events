@@ -311,7 +311,11 @@ const EventCard = ({ event }) => {
           </span>{" "}
           {event.availableSlots || 0} slots available
         </p>
-        <p>Rs. {event.cost} per person</p>
+        {event.paymentType !== "fee" ? (
+          <p>Go {event.paymentType}</p>
+        ) : (
+          <p>Rs. {event.cost} per person</p>
+        )}
       </div>
     </Link>
   );

@@ -101,9 +101,16 @@ const EventCard = ({ item }) => {
         <div className="p-3">
           <div className="w-full flex justify-between items-center">
             <h3 className="font-semibold max-w-60 text-lg">{item.name}</h3>
-            <p className="flex gap-2  items-center">
-              <BsCashStack /> Rs. {item.cost} /<FaUser size={14} />
-            </p>
+
+            {item.paymentType !== "fee" ? (
+              <p>Go {item.paymentType}</p>
+            ) : (
+              <p className="flex gap-2  items-center">
+                {" "}
+                <BsCashStack />
+                Rs. {item.cost} per person
+              </p>
+            )}
           </div>
           <p className="text-sm text-gray-600 flex items-center mt-1">
             📅 {formatDate(item.fromDate)}

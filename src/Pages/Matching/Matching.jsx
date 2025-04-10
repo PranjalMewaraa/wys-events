@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaInstagram, FaLinkedin, FaStar } from "react-icons/fa";
 import { GrLocationPin } from "react-icons/gr";
 import Layout from "../../Layout/Layout";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCompatibility, useUserById } from "../../utils/hooks/user";
 import { sendFriendRequest } from "../../utils/api";
+import { FaFlag } from "react-icons/fa6";
+import { apiGet, apiPost } from "../../utils/call";
 
 const Matching = () => {
   const { userId } = useParams();
   const { user, loading, error } = useUserById(userId);
   const { compatibility } = useCompatibility(userId);
   const matchPercentage = compatibility?.compatibilityScore ?? "…";
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showFlagModal, setShowFlagModal] = useState(false);
+  const [flagStep, setFlagStep] = useState(1); // 1: confirm, 2: reason input
+  const [flagReason, setFlagReason] = useState("");
+
   const handleSendMessageReq = async () => {
     try {
       const message = "Hey Happy to connect with you! ";
@@ -23,9 +30,23 @@ const Matching = () => {
       alert(err.message);
     }
   };
+  const navigate = useNavigate();
+
+  const handleFlag = async () => {
+    console.log("Flagged userId:", userId);
+    console.log("Reason:", flagReason);
+    setShowFlagModal(false);
+    setFlagStep(1);
+    setFlagReason("");
+    const res = await apiPost(`/users/flag/${userId}`, {
+      reason: flagReason,
+    });
+    console.log("Flag response:", res);
+    alert(res.message);
+  };
   return (
     <Layout>
-      <div className="max-w-md mx-auto bg-white px-4 pb-28 pt-4 min-h-screen">
+      <div className="w-full max-w-xl mx-auto bg-white px-4 pb-28 pt-4 min-h-screen">
         {loading && <p className="text-center text-sm">Loading...</p>}
         {error && (
           <p className="text-center text-red-500 text-sm">
@@ -36,50 +57,89 @@ const Matching = () => {
           <>
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-              <button className="text-xl">&larr;</button>
+              <button onClick={() => navigate(-1)} className="text-xl">
+                &larr;
+              </button>
               <span className="font-semibold text-base">
                 @{user.username || user.name}
               </span>
-              <button className="text-xl">⋮</button>
+              <div className="relative">
+                <button
+                  className="text-xl"
+                  onClick={() => setShowDropdown((prev) => !prev)}
+                >
+                  ⋮
+                </button>
+
+                {showDropdown && (
+                  <div className="absolute min-w-36 w-fit right-0 mt-2 bg-slate-900 text-white shadow-md rounded-md z-10">
+                    <button
+                      onClick={() => {
+                        setShowFlagModal(true);
+                        setShowDropdown(false);
+                      }}
+                      className="flex gap-4 items-center w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                    >
+                      <FaFlag color="orange" size={16} /> Flag User
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Profile Section */}
-            <div className="flex gap-4">
-              <div className="w-1/2 aspect-square overflow-hidden rounded-xl">
+            <div className="flex gap-6 p-4 bg-white rounded-xl shadow-md max-w-3xl">
+              {/* Avatar */}
+              <div className="w-56 h-48 rounded-xl overflow-hidden">
                 <img
                   src={user.avatar || "https://via.placeholder.com/150"}
-                  className="object-cover w-full h-full"
                   alt={user.name}
+                  className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex flex-col justify-between">
-                <h2 className="text-lg font-bold">{user.name}</h2>
-                <div className="text-sm text-gray-500">
+
+              {/* Info Section */}
+              <div className="flex flex-col justify-between flex-1">
+                {/* Name */}
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {user.name}
+                </h2>
+
+                {/* Gender & Location */}
+                <div className="text-sm text-gray-600 space-y-1">
                   <p>{user.gender}</p>
                   <p className="flex items-center gap-1">
-                    <GrLocationPin /> {user.currentLocation}
+                    <GrLocationPin className="text-lg" />
+                    {user.currentLocation}
                   </p>
                 </div>
-                <div className="flex gap-3 mt-2 text-xl text-gray-600">
-                  <FaInstagram />
-                  <FaLinkedin />
+
+                {/* Social Icons */}
+                <div className="flex gap-4 mt-2 text-xl text-gray-500">
+                  <FaInstagram className="hover:text-pink-500 cursor-pointer" />
+                  <FaLinkedin className="hover:text-blue-600 cursor-pointer" />
                 </div>
-                <div className="flex gap-2 mt-3">
+
+                {/* Match & Rating */}
+                <div className="flex gap-3 mt-4">
+                  {/* Match Percentage */}
                   <div
-                    className="text-right text-sm font-semibold text-white rounded-xl py-4 px-2"
+                    className="text-white text-sm font-semibold rounded-xl px-4 py-2 flex items-center justify-center"
                     style={{
                       backgroundImage: "url('/wae.png')",
                       backgroundSize: "cover",
-                      backgroundOrigin: "center",
-                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
                     }}
                   >
                     {matchPercentage}%
                   </div>
-                  <div className="bg-[#2D6F2C] text-white px-3 py-1 rounded-lg text-sm flex flex-col items-center font-semibold">
+
+                  {/* Host Rating */}
+                  <div className="bg-green-700 text-white px-4 py-2 rounded-xl text-sm flex flex-col items-center font-semibold">
                     <span>Host Rating</span>
-                    <span className="flex items-center text-yellow-300 text-base gap-1">
-                      <FaStar /> 4.3
+                    <span className="flex items-center text-yellow-300 gap-1 text-base">
+                      <FaStar />
+                      4.3
                     </span>
                   </div>
                 </div>
@@ -204,6 +264,70 @@ const Matching = () => {
             >
               👋 Say Hello
             </button>
+            {/* Flag Modal */}
+            {showFlagModal && (
+              <div className="fixed inset-0 z-50 backdrop-blur-md bg-white/30 flex items-center justify-center px-4">
+                <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                  {/* Step 1: Confirmation */}
+                  {flagStep === 1 && (
+                    <>
+                      <h3 className="text-lg font-semibold mb-4">
+                        Do you want to flag this user?
+                      </h3>
+
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => setFlagStep(2)}
+                          className="px-8 py-2 bg-amber-600 text-white text-sm rounded"
+                        >
+                          Yes
+                        </button>
+                        <button
+                          onClick={() => setShowFlagModal(false)}
+                          className="px-8 py-2 bg-gray-300 text-sm rounded"
+                        >
+                          No
+                        </button>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 2: Input Reason */}
+                  {flagStep === 2 && (
+                    <>
+                      <h3 className="text-lg font-semibold mb-2">
+                        Reason for flagging
+                      </h3>
+                      <textarea
+                        className="w-full border p-2 rounded mb-4"
+                        rows={4}
+                        value={flagReason}
+                        onChange={(e) => setFlagReason(e.target.value)}
+                        placeholder="Enter reason here..."
+                      />
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={handleFlag}
+                          className="px-8 py-4 bg-amber-600 text-white  rounded-full"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowFlagModal(f7alse);
+                            setFlagStep(1);
+                            setFlagReason("");
+                          }}
+                          className="px-8 py-4 bg-gray-300 text-slate-800  rounded-full"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>

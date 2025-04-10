@@ -4,7 +4,7 @@ import LayoutInnerAdmin from "../Layout/AdminLayouts/AdminInner";
 import { FaSearch } from "react-icons/fa";
 import { FiFlag } from "react-icons/fi";
 import { FaLocationPin } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 import { apiGet } from "../utils/call";
 
 const DashboardAdmin = () => {
@@ -52,6 +52,15 @@ const DashboardAdmin = () => {
     );
   });
 
+  const [flag, setFlag] = useState([]);
+  const getFlag = async () => {
+    const res = await apiGet(`/admin/flagged-users`);
+    console.log(res.data);
+    setFlag(res.data);
+  };
+  useEffect(() => {
+    getFlag();
+  }, []);
   return (
     <AdminLayout>
       <LayoutInnerAdmin>
@@ -75,11 +84,14 @@ const DashboardAdmin = () => {
               <FiFlag color="orange" size={32} />
               <div className="flex-1 h-full flex-col gap-2 flex">
                 <p className="text-xs">
-                  Found 2 flagged users and 1 flagged message
+                  Found {flag.length || 0} flagged Profiles
                 </p>
-                <button className="p-1 w-fit text-white px-3 text-xs font-light bg-black rounded-full">
+                <Link
+                  to={"/admin/flag"}
+                  className="p-1 w-fit text-white px-3 text-xs font-light bg-black rounded-full"
+                >
                   See more
-                </button>
+                </Link>
               </div>
             </div>
           </div>

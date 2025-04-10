@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../Layout/AdminLayouts/AdminLayout";
 import { apiGet } from "../utils/call";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
 
 const MatchingDash = () => {
@@ -11,6 +11,8 @@ const MatchingDash = () => {
   const [opposites, setOpposites] = useState([]);
   const [scores, setScores] = useState({});
   const [scoresOpp, setScoresOpp] = useState({});
+  const [searchMatch, setSearchMatch] = useState("");
+  const [searchOpposite, setSearchOpposite] = useState("");
 
   useEffect(() => {
     getProfile();
@@ -32,7 +34,6 @@ const MatchingDash = () => {
       setMatches(res.data.matches);
       setOpposites(res.data.opposites);
 
-      // Fetch compatibility scores for all matches
       const scoresObj = {};
       const scoresObjOpp = {};
       await Promise.all(
@@ -66,12 +67,25 @@ const MatchingDash = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  // Full-text search helper
+  const filterBySearch = (list, searchTerm) => {
+    if (!searchTerm) return list;
+    return list.filter((item) =>
+      JSON.stringify(item).toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
+  const filteredMatches = filterBySearch(matches, searchMatch);
+  const filteredOpposites = filterBySearch(opposites, searchOpposite);
+
   return (
     <AdminLayout>
       <div className="w-full h-full bg-white mx-auto p-4 overflow-y-scroll">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <button>&larr;</button>
+          <button onClick={() => navigate(-1)}>&larr;</button>
           <div className="font-semibold flex flex-col">
             <span>@{user?.name}</span>
             <span className="poppins-light text-xs">
@@ -98,12 +112,21 @@ const MatchingDash = () => {
               Possible Matches
             </p>
 
-            {matches.length === 0 ? (
+            {/* Search Matches */}
+            <input
+              type="text"
+              placeholder="Search Matches..."
+              className="w-full px-4 py-2 rounded-lg bg-white border focus:outline-none"
+              value={searchMatch}
+              onChange={(e) => setSearchMatch(e.target.value)}
+            />
+
+            {filteredMatches.length === 0 ? (
               <p className="text-center text-white text-sm">
                 No matches found.
               </p>
             ) : (
-              matches.map((item) => (
+              filteredMatches.map((item) => (
                 <Link
                   to={`/admin/match/${id}/${item._id}`}
                   key={item._id}
@@ -148,12 +171,21 @@ const MatchingDash = () => {
               Possible Opposites
             </p>
 
-            {opposites.length === 0 ? (
+            {/* Search Opposites */}
+            <input
+              type="text"
+              placeholder="Search Opposites..."
+              className="w-full px-4 py-2 bg-white rounded-lg border focus:outline-none"
+              value={searchOpposite}
+              onChange={(e) => setSearchOpposite(e.target.value)}
+            />
+
+            {filteredOpposites.length === 0 ? (
               <p className="text-center text-white text-sm">
                 No opposites found.
               </p>
             ) : (
-              opposites.map((item) => (
+              filteredOpposites.map((item) => (
                 <Link
                   to={`/admin/match/${id}/${item._id}`}
                   key={item._id}

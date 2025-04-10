@@ -109,13 +109,13 @@ const Request = () => {
       ))}
     </div>
   );
-
+  const navigate = useNavigate();
   return (
     <Layout>
       <div className="w-full h-full bg-white mx-auto p-4 overflow-y-scroll">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <button>&larr;</button>
+          <button onClick={() => navigate(-1)}>&larr;</button>
           <span className="font-semibold">@{name?.split(" ")[0]}</span>
           <button>⋮</button>
         </div>

@@ -26,13 +26,13 @@ const Categories = [
 ];
 
 function InputDesign() {
-  const [isCostInvolved, setIsCostInvolved] = React.useState(false);
+  const [isCostInvolved, setIsCostInvolved] = React.useState(true);
   const [selectedOption, setSelectedOption] = React.useState("");
   const [descriptionCount, setDescriptionCount] = React.useState(0);
   const nav = useNavigate();
 
-  const [locations, setLocations] = React.useState([]); // all state-city pairs
-  const [availableCities, setAvailableCities] = React.useState([]); // filtered cities
+  const [locations, setLocations] = React.useState([]);
+  const [availableCities, setAvailableCities] = React.useState([]);
 
   const [experience, setExperience] = React.useState({
     name: "",
@@ -69,6 +69,9 @@ function InputDesign() {
   const handleOptionSelect = (value) => {
     setSelectedOption(value);
     handleChange("paymentType", value);
+    if (value !== "fee") {
+      handleChange("cost", 0);
+    }
   };
 
   const handleStateChange = (value) => {
@@ -84,7 +87,7 @@ function InputDesign() {
     const finalData = {
       ...experience,
       availableSlots: experience.totalSlots,
-      cost: isCostInvolved ? experience.cost : 0,
+      cost: isCostInvolved && selectedOption === "fee" ? experience.cost : 0,
       paymentType: isCostInvolved ? experience.paymentType : null,
     };
 
@@ -110,7 +113,7 @@ function InputDesign() {
   const getLocations = async () => {
     try {
       const res = await apiGet("/location");
-      setLocations(res); // expected array of { state: "", cities: [] }
+      setLocations(res);
     } catch (err) {
       console.error("Error fetching locations", err);
     }
@@ -181,6 +184,7 @@ function InputDesign() {
           <label className="text-base text-black block">From Date</label>
           <input
             type="date"
+            min={new Date().toISOString().split("T")[0]}
             value={experience.fromDate}
             onChange={(e) => handleChange("fromDate", e.target.value)}
             className="w-full rounded-xl border border-zinc-800 px-2 h-[42px]"
@@ -189,6 +193,7 @@ function InputDesign() {
           <label className="text-base text-black block">To Date</label>
           <input
             type="date"
+            min={new Date().toISOString().split("T")[0]}
             value={experience.toDate}
             onChange={(e) => handleChange("toDate", e.target.value)}
             className="w-full rounded-xl border border-zinc-800 px-2 h-[42px]"
@@ -196,7 +201,7 @@ function InputDesign() {
 
           <label className="text-base text-black block">Time</label>
           <input
-            type="text"
+            type="time"
             placeholder="e.g. 5:00 PM"
             value={experience.time}
             onChange={(e) => handleChange("time", e.target.value)}
@@ -285,15 +290,18 @@ function InputDesign() {
                     </button>
                   ))}
                 </div>
-                <input
-                  type="number"
-                  placeholder="Enter cost in INR"
-                  className="mt-3 w-full rounded-xl border border-zinc-800 p-2 text-sm"
-                  value={experience.cost || ""}
-                  onChange={(e) =>
-                    handleChange("cost", parseFloat(e.target.value))
-                  }
-                />
+
+                {selectedOption === "fee" && (
+                  <input
+                    type="number"
+                    placeholder="Enter cost in INR"
+                    className="mt-3 w-full rounded-xl border border-zinc-800 p-2 text-sm"
+                    value={experience.cost || ""}
+                    onChange={(e) =>
+                      handleChange("cost", parseFloat(e.target.value))
+                    }
+                  />
+                )}
               </>
             )}
           </div>

@@ -114,10 +114,15 @@ const EventDetailAdmin = () => {
                     {event.availableSlots} slots available
                   </span>
                 </p>
-                <p className="flex text-base gap-2 items-center">
-                  <FaMoneyBill1Wave size={18} />
-                  Rs {event.cost} per person
-                </p>
+                {item.paymentType !== "fee" ? (
+                  <p>Go {item.paymentType}</p>
+                ) : (
+                  <p className="flex gap-2  items-center">
+                    {" "}
+                    <BsCashStack />
+                    Rs. {item.cost} per person
+                  </p>
+                )}
               </div>
               <div className="w-full md:w-1/2 border-t border-b flex justify-between py-2">
                 <div className="flex gap-4 items-center">

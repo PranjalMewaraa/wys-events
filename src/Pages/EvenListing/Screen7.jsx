@@ -1,9 +1,10 @@
 import * as React from "react";
 import Layout from "../../Layout/Layout";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { data, useParams } from "react-router-dom";
 import { formatDatewithoutTime } from "../../utils/formatDate";
-import { apiGet } from "../../utils/call";
+import { apiGet, apiPost } from "../../utils/call";
+import { BsCashStack } from "react-icons/bs";
 
 function EventListing7() {
   const [showFullDescription, setShowFullDescription] = React.useState(false);
@@ -14,9 +15,10 @@ function EventListing7() {
   const [creator, setCreator] = useState({});
 
   const fetchHost = async () => {
-    const res = await apiGet(`/users/${event.createdBy}`);
-    console.log(res);
-    setCreator(res.data);
+    if (event?.createdBy) {
+      const res = await apiGet(`/users/${event.createdBy}`);
+      setCreator(res.data);
+    }
   };
 
   const fetchEvent = async () => {
@@ -27,13 +29,19 @@ function EventListing7() {
   useEffect(() => {
     fetchEvent();
   }, []);
+
   useEffect(() => {
     fetchHost();
   }, [event]);
 
+  const postFeedBack = async (data) => {
+    const res = await apiPost(`/review/${id}/post`, data);
+    alert(res.message);
+  };
   const handleFeedbackSubmit = (data) => {
     console.log("Parent received feedback:", data);
     setLastFeedback(data);
+    postFeedBack(data);
   };
 
   return (
@@ -97,9 +105,17 @@ function EventListing7() {
                 <span>{event?.availableSlots}</span>
               </div>
             </div>
-            <div className="flex gap-2 text-xs text-black">
-              💸 <span>Rs. {event?.cost} per person</span>
-            </div>
+            {event?.paymentType !== "fee" ? (
+              <p className="flex items-center gap-4">
+                <BsCashStack />
+                Go {event?.paymentType}
+              </p>
+            ) : (
+              <p className="flex gap-2 items-center">
+                <BsCashStack />
+                Rs. {event?.cost} per person
+              </p>
+            )}
           </section>
 
           {/* Organizer */}
@@ -112,7 +128,7 @@ function EventListing7() {
               <div className="flex flex-col">
                 <div className="text-xs">{creator.name}</div>
                 <div className="mt-2.5 text-xs">
-                  active since {creator.currentLocation}
+                  From {creator.currentLocation}
                 </div>
               </div>
             </div>
@@ -149,7 +165,7 @@ function EventListing7() {
             </button>
           </section>
 
-          {/* Rejected Message OR Attendees */}
+          {/* Rejected or Attendees */}
           {event?.status === "rejected" ? (
             <section className="mt-10 bg-red-100 border border-red-400 rounded-lg mx-4 px-4 py-5">
               <h3 className="text-red-700 font-semibold text-lg mb-2">
@@ -271,7 +287,11 @@ const EventFeedbackModal = ({ isOpen, onClose, onSubmit }) => {
   }, [isOpen]);
 
   const handleSubmit = () => {
-    const response = { eventHappened, rating, feedback };
+    const response = {
+      eventOccured: eventHappened,
+      rating: parseFloat(rating),
+      review: feedback,
+    };
     onSubmit(response);
     onClose();
   };

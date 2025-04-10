@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Outlet,
+} from "react-router-dom";
 
 import UnifiedAuth from "./Pages/AuthPages/Signin";
 import AuthWrapper from "../src/utils/AuthWrapper";
@@ -33,6 +38,8 @@ import EventDetailMY from "./components/Events/EventDetailMy";
 import Request from "./Pages/Request/Request";
 import Userdetailed from "./Pages/Profile/Userdetailed";
 import Trust from "./Pages/Profile/trust";
+import DashboardAdminFlag from "./admin/FlagDashboard";
+import FlagUserProfile from "./admin/FlagProfile";
 
 const App = () => {
   return (
@@ -41,7 +48,7 @@ const App = () => {
         {/* Public Route */}
         <Route path="/signin" element={<UnifiedAuth />} />
 
-        {/* Protected Routes */}
+        {/* Protected User Routes */}
         <Route
           path="/"
           element={
@@ -178,7 +185,6 @@ const App = () => {
             </AuthWrapper>
           }
         />
-
         <Route
           path="/profile/detail/preference"
           element={
@@ -203,7 +209,7 @@ const App = () => {
             </AuthWrapper>
           }
         />
-         <Route
+        <Route
           path="/profile/detail/trust"
           element={
             <AuthWrapper>
@@ -227,16 +233,42 @@ const App = () => {
             </AuthWrapper>
           }
         />
-        <Route path="/listing/myevent/detail/:id" element={<EventDetailMY />} />
-        <Route path="/request/:event/:id" element={<Request />} />
+        <Route
+          path="/listing/myevent/detail/:id"
+          element={
+            <AuthWrapper>
+              <EventDetailMY />
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/request/:event/:id"
+          element={
+            <AuthWrapper>
+              <Request />
+            </AuthWrapper>
+          }
+        />
 
-        <Route path="/admin" element={<DashboardAdmin />} />
-        <Route path="/admin/people" element={<DashboardAdminMatchmaking />} />
-        <Route path="/admin/user/profile/:id" element={<UserProfile />} />
-        <Route path="/admin/people/match/:id" element={<MatchingDash />} />
-        <Route path="/admin/match/:id1/:id2" element={<MatchingInner />} />
-        <Route path="/admin/event" element={<EventAdmin />} />
-        <Route path="/admin/event/:id" element={<EventDetailAdmin />} />
+        {/* Admin Routes - All Wrapped in AuthWrapper */}
+        <Route
+          path="/admin"
+          element={
+            <AuthWrapper>
+              <Outlet />
+            </AuthWrapper>
+          }
+        >
+          <Route index element={<DashboardAdmin />} />
+          <Route path="people" element={<DashboardAdminMatchmaking />} />
+          <Route path="user/profile/:id" element={<UserProfile />} />
+          <Route path="people/match/:id" element={<MatchingDash />} />
+          <Route path="match/:id1/:id2" element={<MatchingInner />} />
+          <Route path="event" element={<EventAdmin />} />
+          <Route path="event/:id" element={<EventDetailAdmin />} />
+          <Route path="flag" element={<DashboardAdminFlag />} />
+          <Route path="flag/:id" element={<FlagUserProfile />} />
+        </Route>
       </Routes>
     </Router>
   );
