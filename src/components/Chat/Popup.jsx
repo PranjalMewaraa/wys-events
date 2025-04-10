@@ -38,7 +38,7 @@ const Popup = ({ isOpen, onClose, eventId }) => {
   
   const handleExperienceYes = () => {
 
-    sendReviewMessage(triggerPollMessage,true)
+    sendReviewMessage(triggerPollMessage,userRole)
     if (userRole !== "host") {
       setShowReviewPopup(true); // Open review modal only for attendees
     } else {

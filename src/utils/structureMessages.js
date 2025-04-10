@@ -1,12 +1,12 @@
 import { getParticipantsData } from "./api";
 
-export const sendRSVPMessage = (sendFn, userRole, eventId) => {
+export const sendRSVPMessage = async (sendFn, userRole, eventId) => {
   const isSeeker = userRole !== "host";
-  const data = getParticipantsData(eventId);
-  const thinkingUsers = data.thinking.user || [];
-  const attendees = thinkingUsers.map((user) => ({
-    name: user.name,
-    avatar: user.avatar,
+  const data = await getParticipantsData(eventId);
+  const thinkingUsers = data?.thinking || [];
+  const attendees = thinkingUsers.map((entry) => ({
+    avatar: entry.user?.avatar || "unkonown",
+    name: entry.user?.name || " ",
   }));
   const message = {
     type: "rsvp",
@@ -21,7 +21,9 @@ export const sendRSVPMessage = (sendFn, userRole, eventId) => {
   sendFn(JSON.stringify(message));
 };
 
-export const sendReviewMessage = (sendFn, isSeeker) => {
+export const sendReviewMessage = (sendFn, userRole) => {
+  const isSeeker = userRole !== "host";
+
   const message = {
     type: "review",
     content: {

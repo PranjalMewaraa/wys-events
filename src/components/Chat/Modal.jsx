@@ -39,7 +39,7 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
 
   if (!isOpen) return null;
 
-  const handlePrimaryAction = () => {
+  const handlePrimaryAction =async () => {
     if (isLoading) return;
     onClose();
 
