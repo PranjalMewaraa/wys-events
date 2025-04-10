@@ -52,3 +52,55 @@ export const useDirectChat = (userId) => {
     userId, // optionally return this
   };
 };
+
+export const useDirectChatRefresh = (userId) => {
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [pendingRequests, setPendingRequests] = useState([]);
+
+  const fetchPending = async () => {
+    try {
+      const requests = await pendingRequest();
+      setPendingRequests(requests);
+    } catch (err) {
+      console.error("Could not fetch pending requests", err);
+    }
+  };
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const loadMessages = async () => {
+      const { messages } = await fetchDirectMessages(userId);
+      setMessages(messages);
+    };
+
+    loadMessages();
+    const interval = setInterval(loadMessages, 3000);
+    return () => clearInterval(interval);
+  }, [userId]);
+
+  // Initial fetch of pending requests
+  useEffect(() => {
+    fetchPending();
+  }, []);
+
+  const handleSendMessage = async () => {
+    if (!message.trim()) return;
+    const newMsg = await sendDirectMessage(userId, message);
+    if (newMsg) {
+      setMessages((prev) => [...prev, newMsg]);
+      setMessage("");
+    }
+  };
+
+  return {
+    messages,
+    message,
+    setMessage,
+    handleSendMessage,
+    pendingRequests,
+    refetchPendingRequests: fetchPending, // <-- expose this!
+    userId,
+  };
+};
