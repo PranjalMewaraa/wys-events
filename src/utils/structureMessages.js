@@ -1,7 +1,8 @@
 import { getParticipantsData } from "./api";
 
 export const sendRSVPMessage = async (sendFn, userRole, eventId) => {
-  const isSeeker = userRole === "seeker";
+  const userID = localStorage.getItem("userID");
+
   const data = await getParticipantsData(eventId);
   const thinkingUsers = data?.thinking || [];
   const attendees = thinkingUsers.map((entry) => ({
@@ -14,7 +15,7 @@ export const sendRSVPMessage = async (sendFn, userRole, eventId) => {
       question: "Have you made up your mind?",
       attendees,
       buttonText: "are you attending",
-      buttonVisible: isSeeker,
+      buttonVisible: userID,
     },
   };
 
