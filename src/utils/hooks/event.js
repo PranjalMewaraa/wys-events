@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { fetchEventById, fetchEvents, getEventsCreatedByUser } from "../api";
+import {
+  fetchEventById,
+  fetchEvents,
+  getEventsCreatedByUser,
+  getParticipantsData,
+} from "../api";
 import { decodeToken } from "../helper";
 
 const useEventDetails = (eventId) => {
@@ -69,4 +74,31 @@ export const useEvents = () => {
     getEventsData();
   }, []);
   return { events };
+};
+
+export const useParticipants = (eventId) => {
+  const [participants, setParticipants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!eventId) return;
+
+    const fetchParticipants = async () => {
+      try {
+        setLoading(true);
+        const data = await getParticipantsData(eventId);
+        setParticipants(data.thinking || []);
+      } catch (err) {
+        console.error("Error fetching participants:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchParticipants();
+  }, [eventId]);
+
+  return { participants, loading, error };
 };

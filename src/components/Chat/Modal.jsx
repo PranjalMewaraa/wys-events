@@ -1,16 +1,18 @@
 // Modal.js
 import React, { useEffect, useState } from "react";
-import useEventDetails from "../../utils/hooks/event";
+import useEventDetails, { useParticipants } from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
 import { sendRSVPMessage } from "../../utils/structureMessages";
 
 const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
+  
   const { userRole, isEventOver, event } = useEventDetails(eventId);
   const { triggerPollMessage } = useGroupChat(eventId, groupId);
   const [rsvpStatus, setRsvpStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { participants, loading } = useParticipants(eventId);
 
   useEffect(() => {
     const loggedInUserId = localStorage.getItem("userID");
@@ -39,13 +41,15 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
 
   if (!isOpen) return null;
 
-  const handlePrimaryAction =async () => {
-    if (isLoading) return;
+
+  const handlePrimaryAction = async () => {
+    if (loading) return;
     onClose();
 
     if (userRole === "host") {
       if (!isEventOver) {
-        sendRSVPMessage(triggerPollMessage,userRole,eventId);
+        if (participants.length === 0) return; // 🔒 No participants, don't send message
+        sendRSVPMessage(triggerPollMessage, userRole, eventId);
       } else {
         onShowPopup();
       }

@@ -90,7 +90,7 @@ const ChatOuter = () => {
           </div>
         </div>
 
-        <div className='w-full h-screen border border-transparent rounded-t-3xl bg-white drop-shadow-[0_-4px_6px_rgba(0,0,0,0.1)]'>
+        <div className='w-full  border border-transparent rounded-t-3xl bg-white drop-shadow-[0_-4px_6px_rgba(0,0,0,0.1)]'>
           <div className="w-9/10 m-auto mt-3 flex items-center gap-2 border-2 border-gray-400 rounded-lg px-3 py-2 focus-within:ring-2">
             <span className="text-gray-400">
               <img src={lens} alt="Search Icon" />
