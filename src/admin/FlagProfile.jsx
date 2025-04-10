@@ -4,11 +4,12 @@ import { GrLocationPin } from "react-icons/gr";
 
 import AdminLayout from "../Layout/AdminLayouts/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
-import { apiGet } from "../utils/call";
+import { apiGet, apiPatch } from "../utils/call";
 import { formatDate } from "../utils/formatDate";
 import { FaFlag } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
 
-const UserProfile = () => {
+const FlagUserProfile = () => {
   const { id } = useParams();
   const [matches, setMatches] = useState([]);
 
@@ -31,6 +32,26 @@ const UserProfile = () => {
     getMatches();
   }, []);
   const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    const res = await apiPatch(`/admin/unflag/${id}`);
+    console.log(res);
+    getProfile();
+  };
+  const handleBan = async () => {
+    const res = await apiPatch(`/admin/users/${id}/ban`);
+    console.log(res);
+    alert(res.message);
+    window.location.reload();
+    getProfile();
+  };
+  const handleUnBan = async () => {
+    const res = await apiPatch(`/admin/users/${id}/unban`);
+    console.log(res);
+    alert(res.message);
+    window.location.reload();
+    getProfile();
+  };
   return (
     <AdminLayout>
       <div className="w-full h-full bg-white mx-auto p-4 overflow-y-scroll">
@@ -81,7 +102,6 @@ const UserProfile = () => {
                 </a>
               )}
             </div>
-
             <div className="flex gap-2">
               <div className="flex flex-col gap-1 text-xs justify-center items-center bg-[#2D6F2C] p-2 text-white poppins-semibold rounded-lg">
                 <p>Host Rating</p>
@@ -92,6 +112,68 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
+
+        {/* Flag */}
+
+        <div className="w-full my-4 bg-gray-100 rounded-lg p-4 h-fit flex items-center space-x-4">
+          {/* Left Column: Flag Icon */}
+
+          {/* Right Column: Text and Button */}
+          <div className="flex space-y-4 w-full flex-col gap-2">
+            <span className="flex items-center gap-4">
+              <FaFlag color="orange" size={20} />
+              {user?.flags?.length === 0
+                ? "There are no flags on this user"
+                : `There are ${user?.flags?.length} flags on this user`}
+            </span>
+
+            {user?.flags?.map((item) => {
+              return (
+                <div className="w-full h-fit flex gap-4 items-center">
+                  <div className="w-fit h-full">
+                    <img
+                      src={item?.reportedBy?.avatar}
+                      className="w-16 h-16 rounded-full"
+                      alt=""
+                    />
+                  </div>
+                  <div className="w-fit flex max-w-48 md:max-w-96 flex-col gap-2">
+                    <p>Flagged by: {item.reportedBy.name}</p>
+                    <p className="text-lg poppins-semibold">
+                      Reason: {item.reason}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+            {user?.flags?.length > 0 && (
+              <>
+                <button
+                  className="bg-orange-400 text-white rounded-xl w-full py-3 px-4"
+                  onClick={handleDelete}
+                >
+                  Remove Flags
+                </button>
+              </>
+            )}
+            {user?.isBanned ? (
+              <button
+                className="bg-red-500 text-white rounded-xl w-full py-3 px-4"
+                onClick={handleUnBan}
+              >
+                Unban User
+              </button>
+            ) : (
+              <button
+                className="bg-red-500 text-white rounded-xl w-full py-3 px-4"
+                onClick={handleBan}
+              >
+                Ban User
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Image Grid */}
         <div className="grid grid-cols-3 md:grid-cols-8 gap-2 mt-4">
           {user?.profileImages?.map((item, i) => (
@@ -218,39 +300,22 @@ const UserProfile = () => {
         {/* Matches  */}
         <h2 className="mt-6 font-semibold text-lg">Matches</h2>
         <div className="w-full py-2 flex gap-4 flex-wrap">
-          {matches?.map((item) => {
-            return (
-              <div className="h-fit w-fit flex flex-col items-center gap-2">
-                <img
-                  src={item?.avatar}
-                  className="w-20 h-20 rounded-full"
-                  alt=""
-                />
-                <p>{item.name}</p>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="w-full bg-gray-50 rounded-lg p-4 flex items-center space-x-4">
-          {/* Left Column: Flag Icon */}
-          <div className="text-red-500">
-            <FaFlag color="orange" />
-          </div>
-
-          {/* Right Column: Text and Button */}
-          <div className="flex space-y-4 flex-col gap-2">
-            <span>
-              {user?.flags?.length === 0
-                ? "There are no flags on this user"
-                : `There are ${user?.flags?.length} flags on this user`}
-            </span>
-            {user?.flags?.length > 0 && (
-              <button className="w-fit px-3 py-1 bg-black text-white rounded-full text-sm">
-                See More
-              </button>
-            )}
-          </div>
+          {matches.length > 0 ? (
+            matches?.map((item) => {
+              return (
+                <div className="h-fit w-fit flex flex-col items-center gap-2">
+                  <img
+                    src={item?.avatar}
+                    className="w-20 h-20 rounded-full"
+                    alt=""
+                  />
+                  <p>{item.name}</p>
+                </div>
+              );
+            })
+          ) : (
+            <p>Nothing to show right now</p>
+          )}
         </div>
 
         <div className="w-full h-36"></div>
@@ -259,7 +324,7 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default FlagUserProfile;
 
 const EventCard = ({ item }) => {
   return (

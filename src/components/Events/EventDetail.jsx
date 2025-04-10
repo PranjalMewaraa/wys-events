@@ -10,6 +10,7 @@ import useEventDetails from "../../utils/hooks/event";
 import { eventRequest } from "../../utils/api";
 import { useCompatibility } from "../../utils/hooks/user";
 import { apiGet } from "../../utils/call";
+import { BsCashStack } from "react-icons/bs";
 
 const EventDetail = () => {
   const { eventId } = useParams();
@@ -152,10 +153,18 @@ const EventDetail = () => {
                       {event.availableSlots} slots available
                     </span>
                   </p>
-                  <p className="flex text-base gap-2 items-center">
-                    <FaMoneyBill1Wave size={18} />
-                    Rs {event.cost} per person
-                  </p>
+                  {event.paymentType !== "fee" ? (
+                    <p className="flex items-center gap-4">
+                      {" "}
+                      <BsCashStack />
+                      Go {event.paymentType}
+                    </p>
+                  ) : (
+                    <p className="flex gap-2  items-center">
+                      <BsCashStack />
+                      Rs. {event.cost} per person
+                    </p>
+                  )}
                 </div>
                 <div className="w-full md:w-1/2 border-t border-b flex justify-between py-2">
                   <div className="flex gap-4 items-center">

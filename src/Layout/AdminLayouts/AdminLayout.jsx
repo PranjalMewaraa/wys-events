@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { MdChatBubbleOutline, MdEventNote, MdPeopleAlt } from "react-icons/md";
 import { RiHome9Line } from "react-icons/ri";
+import { apiGet } from "../../utils/call";
 
 const AdminLayout = ({ children }) => {
   const location = useLocation();
@@ -13,6 +14,25 @@ const AdminLayout = ({ children }) => {
     { id: "events", icon: <MdEventNote size={28} />, to: "/admin/event" },
     { id: "people", icon: <MdPeopleAlt size={28} />, to: "/admin/people" },
   ];
+  const userId = localStorage.getItem("userID");
+  const [profile, setProfile] = useState(null);
+  const getMyProfile = async () => {
+    const res = await apiGet(`/users/${userId}`);
+    console.log(res.data);
+    setProfile(res.data);
+  };
+
+  useEffect(() => {
+    getMyProfile();
+  }, []);
+
+  const nav = useNavigate();
+  useEffect(() => {
+    if (profile && profile.role !== "admin") {
+      console.log(profile);
+      nav("/");
+    }
+  }, [profile]);
 
   useEffect(() => {
     const stored = localStorage.getItem("activeTab");

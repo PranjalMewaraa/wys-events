@@ -9,6 +9,7 @@ const Request = () => {
   const { id, event } = useParams();
   const [user, setUser] = useState(null);
   const nav = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const getProfile = async () => {
       const res = await apiGet(`/users/${id}`);
@@ -115,7 +116,7 @@ const Request = () => {
       <div className="w-full h-full bg-white mx-auto p-4 overflow-y-scroll">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <button>&larr;</button>
+          <button onClick={() => navigate(-1)}>&larr;</button>
           <span className="font-semibold">@{name?.split(" ")[0]}</span>
           <button>⋮</button>
         </div>
