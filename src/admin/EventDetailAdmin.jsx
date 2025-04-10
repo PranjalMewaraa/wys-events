@@ -9,6 +9,7 @@ import LayoutInnerMain from "../Layout/LayoutInner";
 import { apiGet, apiPut } from "../utils/call";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
+import { BsCashStack } from "react-icons/bs";
 
 const EventDetailAdmin = () => {
   const { id } = useParams();
