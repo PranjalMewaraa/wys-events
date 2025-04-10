@@ -15,6 +15,7 @@ const UnifiedAuth = () => {
   const [page, setPage] = useState(-1);
   const [formData, setFormData] = useState({});
   const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
   const genderOption = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -231,6 +232,7 @@ const UnifiedAuth = () => {
     //   payload.append("firebaseToken", firebaseToken);
     // }
     // console.log(firebaseToken);
+    setLoading(true);
     if (firebaseToken)
       try {
         await axios.post(
@@ -252,6 +254,8 @@ const UnifiedAuth = () => {
         window.location.href = "/";
       } catch (err) {
         console.error("Final submission failed", err);
+      } finally {
+        setLoading(false);
       }
   };
 
@@ -501,12 +505,11 @@ const UnifiedAuth = () => {
               }
             />
 
-            {/* Social Links */}
             <InputBox
-              label="Instagram Username or Link"
+              label="Instagram Username "
               name="instagram"
               value={formData.socialLinks?.instagram || ""}
-              placeholder="e.g., @you or https://instagram.com/you"
+              placeholder="e.g., johdoe123 "
               onChange={(name, value) =>
                 setFormData((prev) => ({
                   ...prev,
@@ -519,10 +522,10 @@ const UnifiedAuth = () => {
             />
 
             <InputBox
-              label="LinkedIn URL"
+              label="LinkedIn Username"
               name="linkedin"
               value={formData.socialLinks?.linkedin || ""}
-              placeholder="e.g., https://linkedin.com/in/you"
+              placeholder="e.g., https://linkedin.com/in/<this-username>"
               onChange={(name, value) =>
                 setFormData((prev) => ({
                   ...prev,
@@ -701,9 +704,14 @@ const UnifiedAuth = () => {
           {renderStep()}
           <button
             type="submit"
-            className="bg-black text-white rounded-xl py-3 w-full"
+            disabled={loading}
+            className="bg-black disabled:bg-slate-700 text-white rounded-xl py-3 w-full"
           >
-            {page === 9 ? "Finish & Start Exploring" : "Continue"}
+            {page === 9
+              ? loading
+                ? "Please Wait"
+                : "Finish & Start Exploring"
+              : "Continue"}
           </button>
         </form>
       </div>
