@@ -183,6 +183,16 @@ export const cancelEvent = async (eventId) => {
     throw error;
   }
 };
+export const getParticipantsData = async (eventId) => {
+  try {
+    const response = await axios.get(
+      `https://wysbackend.onrender.com/api/events/${eventId}/participants`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch RSVP data:", error);
+  }
+};
 
 //group api
 

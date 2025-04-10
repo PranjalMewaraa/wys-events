@@ -3,6 +3,7 @@ import messageArrow from "../../assets/images/rectangle_246.svg";
 import ChatNav from "./ChatNav";
 import Modal from "./Modal";
 import Popup from "./Popup";
+import MessageRenderer from "./MessageRenderer";
 import { useParams } from "react-router-dom";
 import { decodeToken } from "../../utils/helper";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
@@ -11,16 +12,21 @@ import { useDirectChat } from "../../utils/hooks/DirectMessage";
 const ChatBox = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const { eventId, userId,groupId } = useParams();
+  const { eventId, userId, groupId } = useParams();
   const isGroupChat = !!eventId;
 
-  const { messages, message, setMessage, handleSendMessage } = isGroupChat
-    ? useGroupChat(eventId,groupId)
+  const {
+    messages,
+    message,
+    setMessage,
+    handleSendMessage,
+    loading,
+  } = isGroupChat
+    ? useGroupChat(eventId, groupId)
     : useDirectChat(userId);
 
   const token = localStorage.getItem("accessToken");
   const Id = decodeToken(token)?._id;
-
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
@@ -39,50 +45,64 @@ const ChatBox = () => {
     }
   };
 
+  const parseMessage = (msg) => {
+    try {
+      return JSON.parse(msg);
+    } catch {
+      return { type: "text", content: msg };
+    }
+  };
+
   return (
     <div className="w-full h-screen flex flex-col">
-      {/* Chat Navigation */}
       <ChatNav setIsModalOpen={setIsModalOpen} eventId={eventId} groupId={groupId} />
 
-      {/* Scrollable Chat Messages */}
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto px-4 py-2 space-y-3"
         style={{ scrollBehavior: "smooth" }}
       >
-        {messages.map((item, index) => {
-          const isSentByCurrentUser = isGroupChat
-            ? item.senderId._id === Id
-            : item.senderId === Id;
+        {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <div className="w-8 h-8 border-4 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          messages.map((item, index) => {
+            const parsedMessage = parseMessage(item.content);
+            const isSentByCurrentUser = isGroupChat
+              ? item.senderId._id === Id
+              : item.senderId === Id;
 
-          return isSentByCurrentUser ? (
-            <div key={item._id || index} className="flex justify-end">
-              <div className="bg-[#F38E1C] text-white p-3 rounded-xl rounded-br-none w-max max-w-xs">
-                {item.content}
+            return isSentByCurrentUser ? (
+              <div key={item._id || index} className="flex justify-end">
+                <div className="bg-[#F38E1C] text-white p-3 rounded-xl rounded-br-none w-max max-w-xs">
+                  <MessageRenderer message={parsedMessage} 
+                  />
+                </div>
               </div>
-            </div>
-          ) : (
-            <div key={item._id || index} className="flex items-end gap-2">
-              {isGroupChat && (
-                <img
-                  className="w-5 h-5 rounded-full object-cover"
-                  src={item.senderId.avatar}
-                  alt={item.senderId.name}
-                />
-              )}
-              <div className="bg-[#333333] p-3 rounded-xl rounded-bl-none text-white w-max max-w-xs">
+            ) : (
+              <div key={item._id || index} className="flex items-end gap-2">
                 {isGroupChat && (
-                  <p className="text-[#F38E1C] text-sm">{item.senderId.name}</p>
+                  <img
+                    className="w-5 h-5 rounded-full object-cover"
+                    src={item.senderId.avatar}
+                    alt={item.senderId.name}
+                  />
                 )}
-                <p className="text-xs">{item.content}</p>
+                <div className="bg-[#333333] p-3 rounded-xl rounded-bl-none text-white w-max max-w-xs">
+                  {isGroupChat && (
+                    <p className="text-[#F38E1C] text-sm">{item.senderId.name}</p>
+                  )}
+                  <MessageRenderer message={parsedMessage}
+                   />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
-      {/* Message Input */}
-      {!(isModalOpen || isPopupOpen) && (
+      {!(isModalOpen || isPopupOpen) && !loading && (
         <div className="w-full bg-white px-4 py-2 border-t border-gray-300">
           <div className="flex items-center">
             <input
