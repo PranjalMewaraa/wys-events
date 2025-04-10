@@ -152,25 +152,25 @@ const MatchingInner = () => {
             icon: "🎒",
             question: "What's one thing you always pack?",
             answer1: commons?.user1Details?.alwaysPack,
-            answer2: commons?.user1Details?.alwaysPack,
+            answer2: commons?.user2Details?.alwaysPack,
           },
           {
             icon: "🎶",
             question: "What's your travel soundtrack?",
             answer1: commons?.user1Details?.travelSoundtrack,
-            answer2: commons?.user1Details?.travelSoundtrack,
+            answer2: commons?.user2Details?.travelSoundtrack,
           },
           {
             icon: "🎬",
             question: "One movie that makes you want to travel?",
             answer1: commons?.user1Details?.favoriteTravelMovie,
-            answer2: commons?.user1Details?.favoriteTravelMovie,
+            answer2: commons?.user2Details?.favoriteTravelMovie,
           },
           {
             icon: "🌆",
             question: "Your ideal way to spend a free evening in a new city?",
             answer1: commons?.user1Details?.idealEvening,
-            answer2: commons?.user1Details?.idealEvening,
+            answer2: commons?.user2Details?.idealEvening,
           },
         ].map((item, index) => (
           <div
