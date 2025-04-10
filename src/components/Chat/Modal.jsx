@@ -84,7 +84,7 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
     : "Are you attending?";
 
   return (
-    <div className="fixed top-[470px] right-0 left-0 flex">
+    <div className="fixed top-[470px] md:top-[570px] right-0 left-0 flex">
       <div
         className="modal-content w-full bg-white rounded-t-2xl shadow-lg border border-transparent drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] p-4"
         onClick={(e) => e.stopPropagation()}
