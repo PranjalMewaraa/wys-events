@@ -1,7 +1,7 @@
 import { getParticipantsData } from "./api";
 
 export const sendRSVPMessage = async (sendFn, userRole, eventId) => {
-  const isSeeker = userRole !== "host";
+  const isSeeker = userRole === "seeker";
   const data = await getParticipantsData(eventId);
   const thinkingUsers = data?.thinking || [];
   const attendees = thinkingUsers.map((entry) => ({
