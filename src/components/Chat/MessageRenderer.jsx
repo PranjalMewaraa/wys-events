@@ -2,6 +2,8 @@ import React from "react";
 
 const MessageRenderer = ({ message}) => {
   const { type, content } = message;
+  console.log("Rendering message:", message);
+
 
   switch (type) {
     case "text":
