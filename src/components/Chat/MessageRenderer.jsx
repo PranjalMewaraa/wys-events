@@ -38,7 +38,7 @@ const MessageRenderer = ({ message}) => {
           <p className="font-medium text-orange-500">{content.question}</p>
           <p className="text-sm text-gray-300">from {content.sender}</p>
           {content.buttonVisible && (
-            <button className="w-[104px] h-[29px] border border-[#F38E1C]  text-[#F38E1C] rounded-3xl bg-transparents">
+            <button className="w-fit h-[29px] border border-[#F38E1C]  text-[#F38E1C] rounded-3xl bg-transparents">
               {content.buttonText}
             </button>
           )}
