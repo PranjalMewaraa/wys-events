@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ChatPopup from "./ChatPopup";
 import useEventDetails from "../../utils/hooks/event";
+import ReviewPopUp from "./ReviewPopup";
 
 const MessageRenderer = ({ message,eventId }) => {
   const { type, content } = message;
@@ -40,7 +41,7 @@ const MessageRenderer = ({ message,eventId }) => {
           )
           }
           {isPopupOpen &&(
-            <ChatPopup
+            <ReviewPopUp
            isOpen={isPopupOpen}
            onClose={()=>setIsPopupOpen(false)}
            eventId={eventId}
@@ -59,7 +60,7 @@ const MessageRenderer = ({ message,eventId }) => {
             userRole ==="seeker"?<button className="mt-1 text-xs border border-[#F38E1C]  text-[#F38E1C] rounded-3xl  px-3 py-2  bg-transparent" >
               {content.buttonText}
             </button>:
-            <button className="mt-1 text-xs border border-white  text-white rounded-3xl  px-3 py-2  bg-transparent" >
+            <button className="mt-1 text-xs border border-white  text-white rounded-3xl px-3 py-2 bg-transparent" >
             {content.buttonText}
           </button>
           )}
