@@ -108,7 +108,7 @@ const Popup = ({ isOpen, onClose, eventId}) => {
       ) : (
         <ConfirmPopup onClose={onClose} 
         onConfirm={async () => {
-          await handleRSVP("no"); // 👈 only RSVP "no" if confirmed
+          await handleRSVP("no"); 
         }}
         />
       )}

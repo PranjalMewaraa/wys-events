@@ -19,7 +19,7 @@ const ReviewPopUp = ({ onClose, eventId }) => {
       alert("Thank you for your feedback!");
       onClose();
     } catch (error) {
-      alert("You have shared your review already");
+      alert(error);
     } finally {
       setLoading(false);
     }

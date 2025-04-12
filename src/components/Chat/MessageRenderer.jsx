@@ -58,7 +58,9 @@ const MessageRenderer = ({ message,eventId }) => {
         <div className="space-y-1">
           <p className="abeezee-regular text-[14px] text-white">{content.question}</p>
           {content.buttonVisible && (
-            userRole ==="seeker"?<button className="mt-1 text-xs border border-[#F38E1C]  text-[#F38E1C] rounded-3xl  px-3 py-2  bg-transparent" >
+            userRole ==="seeker"?<button className="mt-1 text-xs border border-[#F38E1C]  text-[#F38E1C] rounded-3xl  px-3 py-2  bg-transparent" onClick={()=>{
+              setIsPopupOpen(true)
+            }} >
               {content.buttonText}
             </button>:
             <button className="mt-1 text-xs border border-white  text-white rounded-3xl px-3 py-2 bg-transparent"  onClick={()=>{
