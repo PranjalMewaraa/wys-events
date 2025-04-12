@@ -22,12 +22,12 @@ export const sendRSVPMessage = async (sendFn, eventId) => {
 };
 
 export const sendReviewMessage = (sendFn, userRole) => {
+  const isSeeker = userRole !== "host";
   const message = {
     type: "review",
     content: {
       question: "How was your experience?",
-      buttonText:
-        userRole === "seeker" ? "Leave a Review" : "Share Your Experience",
+      buttonText: isSeeker ? "Leave a Review" : "Share Your Experience",
       buttonVisible: true,
     },
   };

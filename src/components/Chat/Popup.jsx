@@ -38,9 +38,9 @@ const Popup = ({ isOpen, onClose, eventId}) => {
   }, [isOpen, onClose]);
 
   
-  const handleExperienceYes = () => {
-
-    sendReviewMessage(triggerPollMessage,userRole)
+  const handleExperienceYes = async () => {
+    
+    // sendReviewMessage(triggerPollMessage,userRole)
     if (userRole !== "host") {
       setShowReviewPopup(true); // Open review modal only for attendees
     } else {
@@ -68,7 +68,7 @@ const Popup = ({ isOpen, onClose, eventId}) => {
             <div className="flex justify-center gap-4">
               <button
                 className="px-6 py-2 border border-orange-400 text-orange-500 rounded-full font-medium hover:bg-orange-50 transition-colors"
-                onClick={handleExperienceYes} // Call function to send message and open modal (if needed)
+                onClick={handleExperienceYes} 
               >
                 Yes
               </button>
