@@ -51,7 +51,7 @@ export const fetchUserByIdForMatching = async (id) => {
 // Event APIs
 export const getEventsCreatedByUser = async () => {
   const res = await api.get(`/events/created`);
-  return res.data;
+  return res;
 };
 
 export const fetchEvents = async () => {

@@ -1,10 +1,12 @@
 import * as React from "react";
 import Layout from "../../Layout/Layout";
 import { useState, useEffect } from "react";
-import { data, useParams } from "react-router-dom";
+import { data, useNavigate, useParams } from "react-router-dom";
 import { formatDatewithoutTime } from "../../utils/formatDate";
 import { apiGet, apiPost } from "../../utils/call";
 import { BsCashStack } from "react-icons/bs";
+import { SiTicktick } from "react-icons/si";
+import { leaveEvent } from "../../utils/api";
 
 function EventListing7() {
   const [showFullDescription, setShowFullDescription] = React.useState(false);
@@ -21,6 +23,17 @@ function EventListing7() {
     }
   };
 
+  const handleModal = () => {
+    const currentDate = new Date().toISOString();
+
+    console.log(currentDate);
+    const eventEndData = event.toDate;
+    if (currentDate < eventEndData) {
+      alert("You can share your experience only once the event ends");
+    } else {
+      setShowFeedbackModal(true);
+    }
+  };
   const fetchEvent = async () => {
     const res = await apiGet(`/events/${id}`);
     setEvent(res);
@@ -43,6 +56,12 @@ function EventListing7() {
     setLastFeedback(data);
     postFeedBack(data);
   };
+  const navigate = useNavigate();
+  const handleLeaveEvent = async () => {
+    await leaveEvent(event._id);
+    alert("You have successfully left the event");
+    navigate("/listing");
+  };
 
   return (
     <Layout>
@@ -50,15 +69,18 @@ function EventListing7() {
         className="flex flex-col mb-28 mx-auto py-4 w-full max-w-[480px]"
         role="article"
       >
-        <div className="flex overflow-hidden flex-col items-start px-2 w-full bg-white">
+        <div className="flex overflow-hidden flex-col items-start justify-between px-2 w-full bg-white">
           {/* Title + Icon */}
-          <div className="flex gap-5 justify-between mt-2 ml-8 max-w-full text-xs tracking-tight leading-8 text-black w-[199px]">
+          <div className="flex gap-5 w-full justify-between mt-2  max-w-full text-xs tracking-tight leading-8 text-black ">
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/964fce9e1c634c03ead4985407efc211a748b06a"
               alt="Trek icon"
               className="object-contain shrink-0 my-auto aspect-[1.21] w-[17px]"
             />
             <h1 className="text-xs">{event?.name}</h1>
+            <p className="text-sm text-red-600" onClick={handleLeaveEvent}>
+              Leave Event
+            </p>
           </div>
 
           {/* Main Image */}
@@ -74,7 +96,7 @@ function EventListing7() {
               {event?.name}
             </h2>
             <button
-              onClick={() => setShowFeedbackModal(true)}
+              onClick={handleModal}
               className="self-start px-2.5 py-2.5 text-xs tracking-tight text-center text-amber-500 rounded-3xl border border-amber-500 border-solid"
               disabled={event?.status === "rejected"}
             >
@@ -178,83 +200,138 @@ function EventListing7() {
             </section>
           ) : (
             <>
-              {/* Going List */}
-              <section className="mt-10" aria-label="Going List">
-                <h3 className="ml-6 text-base tracking-tight text-black">
-                  ✅ Going
-                </h3>
-                <div className="px-4">
-                  {event?.participants.filter((p) => p.rsvpStatus === "yes")
-                    .length === 0 ? (
-                    <p className="text-sm text-gray-500">
-                      No one confirmed yet.
-                    </p>
-                  ) : (
+              <div className="mt-6">
+                <p className="flex gap-2 items-center text-lg font-semibold">
+                  🧑‍💼 Seekers
+                </p>
+                <div className="flex flex-col w-full gap-2 mt-2">
+                  {event?.participants?.filter(
+                    (p) => p.requestStatus === "requested"
+                  ).length > 0 ? (
                     event?.participants
-                      .filter((p) => p.rsvpStatus === "yes")
-                      .map((attendee, idx) => (
+                      .filter((p) => p.requestStatus === "requested")
+                      .map((item) => (
                         <div
-                          key={idx}
-                          className="flex gap-2.5 items-center mt-3 bg-white rounded-lg px-2 py-1"
+                          key={item.user?._id}
+                          className="w-full flex items-center gap-4"
                         >
                           <img
-                            src={attendee.user?.avatar || "/avatar.png"}
-                            alt={attendee.user?.name}
-                            className="w-10 h-10 rounded-full object-cover"
+                            src={item.user?.avatar}
+                            alt={item.user?.name}
+                            className="w-12 h-12 rounded-full object-cover"
                           />
                           <div>
-                            <p className="text-sm font-medium text-black">
-                              {attendee.user?.name || "Anonymous"}
+                            <p className="text-sm font-medium">
+                              {item.user?.name}
                             </p>
-                            <p className="text-xs text-zinc-600">
-                              Joined on{" "}
-                              {formatDatewithoutTime(attendee.user?.createdAt)}
+                            <p className="text-sm text-gray-600">
+                              Location: {item.user?.currentLocation || "N/A"}
                             </p>
                           </div>
                         </div>
                       ))
+                  ) : (
+                    <p className="text-gray-500 text-sm">No seekers yet.</p>
                   )}
                 </div>
-              </section>
+              </div>
+              {event?.participants?.length > 0 ? (
+                <>
+                  {/* ✅ GOING */}
+                  <div className="mt-6">
+                    <p className="flex gap-2 items-center text-lg font-semibold">
+                      ✅ Going <SiTicktick color="orange" />
+                    </p>
+                    <div className="flex flex-col w-full gap-2 mt-2">
+                      {event.participants.filter((p) => p.rsvpStatus === "yes")
+                        .length > 0 ? (
+                        event.participants
+                          .filter((p) => p.rsvpStatus === "yes")
+                          .map((item) => (
+                            <Link
+                              to={`/people/detail/${item?.user?._id}`}
+                              key={item.user?._id}
+                              className="w-full flex items-center gap-4"
+                            >
+                              <img
+                                src={item?.user?.avatar}
+                                alt={item?.user?.name}
+                                className="w-12 h-12 rounded-full object-cover"
+                              />
+                              <div>
+                                <p className="text-sm font-medium">
+                                  {item?.user?.name}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  Location:{" "}
+                                  {item.user?.currentLocation || "N/A"}
+                                </p>
+                              </div>
+                            </Link>
+                          ))
+                      ) : (
+                        <p className="text-gray-500 text-sm">
+                          No one confirmed yet.
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-              {/* Thinking List */}
-              <section className="mt-6" aria-label="Thinking List">
-                <h3 className="ml-6 text-base tracking-tight text-black">
-                  🤔 Thinking About It
-                </h3>
-                <div className="px-4">
-                  {event?.participants.filter((p) => p.rsvpStatus !== "yes")
-                    .length === 0 ? (
-                    <p className="text-sm text-gray-500">
-                      No one is unsure yet.
+                  {/* 🤔 THINKING */}
+                  {/* 🧑‍💼 Seekers */}
+
+                  {/* 🤔 Thinking About It */}
+                  <div className="mt-6">
+                    <p className="flex gap-2 items-center text-lg font-semibold">
+                      🤔 Thinking About It
                     </p>
-                  ) : (
-                    event?.participants
-                      .filter((p) => p.rsvpStatus !== "yes")
-                      .map((attendee, idx) => (
-                        <div
-                          key={idx}
-                          className="flex gap-2.5 items-center mt-3 bg-white rounded-lg px-2 py-1"
-                        >
-                          <img
-                            src={attendee.user?.avatar || "/avatar.png"}
-                            alt={attendee.user?.name}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                          <div>
-                            <p className="text-sm font-medium text-black">
-                              {attendee.user?.name || "Anonymous"}
-                            </p>
-                            <p className="text-xs text-zinc-600">
-                              Joined on{" "}
-                              {formatDatewithoutTime(attendee.user?.createdAt)}
-                            </p>
-                          </div>
-                        </div>
-                      ))
-                  )}
-                </div>
-              </section>
+                    <div className="flex flex-col w-full gap-2 mt-2">
+                      {event?.participants?.filter(
+                        (p) =>
+                          p.rsvpStatus !== "yes" &&
+                          p.requestStatus !== "requested"
+                      ).length > 0 ? (
+                        event?.participants
+                          ?.filter(
+                            (p) =>
+                              p.rsvpStatus !== "yes" &&
+                              p.requestStatus !== "requested"
+                          )
+                          .map((item) => (
+                            <Link
+                              to={`/people/detail/${item.user?._id}`}
+                              key={item.user?._id}
+                              className="w-full flex items-center gap-4"
+                            >
+                              <img
+                                src={item.user?.avatar}
+                                alt={item.user?.name}
+                                className="w-12 h-12 rounded-full object-cover"
+                              />
+                              <div>
+                                <p className="text-sm font-medium">
+                                  {item.user?.name}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  Location:{" "}
+                                  {item.user?.currentLocation || "N/A"}
+                                </p>
+                              </div>
+                            </Link>
+                          ))
+                      ) : (
+                        <p className="text-gray-500 text-sm">
+                          No one thinking about it yet.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <p className="text-gray-500 text-sm mt-4">
+                  No participants till now.
+                </p>
+              )}
             </>
           )}
         </div>

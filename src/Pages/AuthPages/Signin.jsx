@@ -432,15 +432,71 @@ const UnifiedAuth = () => {
             />
           </>
         );
-      case 9:
+      case 9: // Social Media Page
+        return (
+          <>
+            <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
+              Share your <br />
+              <span className="text-amber-500">Social Media Handle</span>
+            </h1>
+            <p className="text-sm text-gray-500 text-center">
+              Share at least one social media account for trust verification
+            </p>
+            <InputBox
+              label="Instagram Username"
+              name="instagram"
+              value={formData.socialLinks?.instagram || ""}
+              placeholder="e.g., @johntravel"
+              onChange={(name, value) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  socialLinks: {
+                    ...prev.socialLinks,
+                    [name]: value,
+                  },
+                }))
+              }
+            />
+            <InputBox
+              label="LinkedIn Username"
+              name="linkedin"
+              value={formData.socialLinks?.linkedin || ""}
+              placeholder="e.g., linkedin.com/in/you"
+              onChange={(name, value) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  socialLinks: {
+                    ...prev.socialLinks,
+                    [name]: value,
+                  },
+                }))
+              }
+            />
+            <InputBox
+              label="X (Twitter) Username"
+              name="x"
+              value={formData.socialLinks?.x || ""}
+              placeholder="e.g., @johnX"
+              onChange={(name, value) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  socialLinks: {
+                    ...prev.socialLinks,
+                    [name]: value,
+                  },
+                }))
+              }
+            />
+          </>
+        );
+
+      case 10: // Profile Questionnaire Page
         return (
           <>
             <h1 className="poppins-medium-italic flex flex-col items-center leading-6 text-2xl">
               Let's make your <br />
               <span className="text-amber-500">profile interesting</span>
             </h1>
-
-            {/* ✅ New Fields */}
             <InputBox
               label="What’s something you always pack?"
               name="alwaysPack"
@@ -456,7 +512,6 @@ const UnifiedAuth = () => {
                 }))
               }
             />
-
             <InputBox
               label="Your travel soundtrack?"
               name="travelSoundtrack"
@@ -472,7 +527,6 @@ const UnifiedAuth = () => {
                 }))
               }
             />
-
             <InputBox
               label="What's your ideal evening during travel?"
               name="idealEvening"
@@ -488,7 +542,6 @@ const UnifiedAuth = () => {
                 }))
               }
             />
-
             <InputBox
               label="Your favorite travel movie?"
               name="favoriteTravelMovie"
@@ -504,39 +557,6 @@ const UnifiedAuth = () => {
                 }))
               }
             />
-
-            <InputBox
-              label="Instagram Username "
-              name="instagram"
-              value={formData.socialLinks?.instagram || ""}
-              placeholder="e.g., johdoe123 "
-              onChange={(name, value) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  socialLinks: {
-                    ...prev.socialLinks,
-                    [name]: value,
-                  },
-                }))
-              }
-            />
-
-            <InputBox
-              label="LinkedIn Username"
-              name="linkedin"
-              value={formData.socialLinks?.linkedin || ""}
-              placeholder="e.g., https://linkedin.com/in/<this-username>"
-              onChange={(name, value) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  socialLinks: {
-                    ...prev.socialLinks,
-                    [name]: value,
-                  },
-                }))
-              }
-            />
-
             <PhotoPicker
               label="Upload Gallery Images (Max 6)"
               isMulti
@@ -629,13 +649,31 @@ const UnifiedAuth = () => {
           formData.trustVerification[0] !== "true" &&
           formData.trustVerification[0] !== "false"
         ) {
-          console.log(formData.trustVerification);
+          console.log(formData.trustVerification[0]);
           alert("trust verification choice is needed");
         } else {
-          setPage(page + 1);
+          if (formData.trustVerification[0] === "true") {
+            setPage(9);
+          } else {
+            setPage(10);
+          }
         }
         break;
       case 9:
+        const socialss = formData.socialLinks || {};
+        if (
+          !socialss.instagram?.trim() &&
+          !socialss.linkedin?.trim() &&
+          !socialss.x?.trim()
+        ) {
+          alert("Please provide at least one social media account.");
+        } else {
+          setPage(10);
+        }
+        break;
+
+        break;
+      case 10:
         if (!formData.profileDetails.alwaysPack) {
           alert("This field is required");
         } else if (!formData.profileDetails.travelSoundtrack) {
@@ -644,19 +682,16 @@ const UnifiedAuth = () => {
           alert("All field is required");
         } else if (!formData.profileDetails.favoriteTravelMovie) {
           alert("All field is required");
-        } else if (!formData.socialLinks.instagram) {
-          alert("All field is required");
-        } else if (!formData.socialLinks.linkedin) {
-          alert("All field is required");
         } else if (
           !formData.profileImages ||
           formData.profileImages.length === 0
         ) {
           alert("Select at least one profile image");
         } else {
-          setPage(page + 1);
+          handleFinalSubmit();
         }
         break;
+
       default:
         setPage(page + 1);
         break;
@@ -693,21 +728,32 @@ const UnifiedAuth = () => {
           className="w-full px-6 py-4 flex flex-col gap-6"
           onSubmit={(e) => {
             e.preventDefault();
-            page === 9 ? handleFinalSubmit() : validateStepAndContinue(page);
+            page === 10 ? handleFinalSubmit() : validateStepAndContinue(page);
           }}
         >
-          {page >= 1 && (
-            <div>
-              <FaArrowLeft onClick={() => setPage(page - 1)} />
-            </div>
-          )}
+          {page >= 1 &&
+            (page === 10 ? (
+              formData.trustVerification[0] === "true" ? (
+                <div>
+                  <FaArrowLeft onClick={() => setPage(page - 1)} />
+                </div>
+              ) : (
+                <div>
+                  <FaArrowLeft onClick={() => setPage(page - 2)} />
+                </div>
+              )
+            ) : (
+              <div>
+                <FaArrowLeft onClick={() => setPage(page - 1)} />
+              </div>
+            ))}
           {renderStep()}
           <button
             type="submit"
             disabled={loading}
             className="bg-black disabled:bg-slate-700 text-white rounded-xl py-3 w-full"
           >
-            {page === 9
+            {page === 10
               ? loading
                 ? "Please Wait"
                 : "Finish & Start Exploring"

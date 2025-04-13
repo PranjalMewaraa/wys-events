@@ -1,6 +1,6 @@
 // Modal.js
 import React, { useEffect, useState } from "react";
-import useEventDetails from "../../utils/hooks/event";
+import useEventDetails, { useParticipants } from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
