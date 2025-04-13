@@ -76,7 +76,8 @@ const ChatBox = () => {
             return isSentByCurrentUser ? (
               <div key={item._id || index} className="flex justify-end">
                 <div className="bg-[#F38E1C] text-white p-3 rounded-xl rounded-br-none w-max max-w-xs">
-                  <MessageRenderer message={parsedMessage} 
+                  <MessageRenderer message={parsedMessage}
+                  eventId={eventId} 
                   />
                 </div>
               </div>
@@ -94,6 +95,7 @@ const ChatBox = () => {
                     <p className="text-[#F38E1C] text-sm">{item.senderId.name}</p>
                   )}
                   <MessageRenderer message={parsedMessage}
+                  eventId={eventId}
                    />
                 </div>
               </div>

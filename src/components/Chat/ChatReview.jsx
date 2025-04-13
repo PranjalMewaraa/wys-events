@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { rateEvent } from '../../utils/api';
 
-const ReviewPopUp = ({ onClose, eventId }) => {
+const ChatReview = ({ onClose, eventId }) => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -19,18 +19,18 @@ const ReviewPopUp = ({ onClose, eventId }) => {
       alert("Thank you for your feedback!");
       onClose();
     } catch (error) {
-      alert(error);
+      alert("You have shared your review already");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-100 p-4 top-[350px]">
+    <div className="fixed inset-0 flex items-center justify-center bg-transparent p-4 top-[150px]">
       <div className="bg-white rounded-lg w-full max-w-md mx-4">
         {/* Header */}
         <div className="flex justify-center items-center p-4 relative">
-          <h2 className="text-xl poppins-semibold">
+          <h2 className="text-xl poppins-semibold text-black">
             Write a <span className="text-orange-400">review</span>
           </h2>
           <button 
@@ -97,4 +97,4 @@ const ReviewPopUp = ({ onClose, eventId }) => {
   );
 };
 
-export default ReviewPopUp;
+export default ChatReview;

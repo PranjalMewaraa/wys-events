@@ -4,7 +4,7 @@ import useEventDetails from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
-import { sendRSVPMessage } from "../../utils/structureMessages";
+import { sendReviewMessage, sendRSVPMessage } from "../../utils/structureMessages";
 
 const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
   
@@ -48,10 +48,10 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
 
     if (userRole === "host") {
       if (!isEventOver) {
-        if (participants.length === 0) return; // 🔒 No participants, don't send message
-        sendRSVPMessage(triggerPollMessage, userRole, eventId);
+        if (participants.length === 0) return;
+        sendRSVPMessage(triggerPollMessage, eventId);
       } else {
-        onShowPopup();
+        sendReviewMessage(triggerPollMessage,userRole)
       }
     } else {
       onShowPopup();
