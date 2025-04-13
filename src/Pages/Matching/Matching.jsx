@@ -25,7 +25,7 @@ const Matching = () => {
       const res = await apiPost(`/message/send/${userId}`, {
         content: "Hey Happy to connect with you! ",
       });
-
+      alert("Message Sent , Check Chatbox");
       console.log("Request response:", res);
     } catch (err) {
       console.error("Failed to send friend request:", err);
