@@ -127,7 +127,7 @@ const ChatOuter = () => {
                 groups.map((group) => (
                   <ChatList
                     key={group._id}
-                    image={group.image}
+                    image={group.eventId.image}
                     name={group.groupName}
                     groupId={group._id}
                     eventId={group.eventId._id}
