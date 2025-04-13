@@ -155,9 +155,9 @@ const Matching = () => {
                 {/* Host Rating */}
                 <div className="bg-green-700 text-white px-4 py-2 rounded-xl text-sm flex flex-col items-center font-semibold">
                   <span>Host Rating</span>
-                  <span className="flex items-center text-yellow-300 gap-1 text-base">
+                  <span className="flex items-center text-xs text-yellow-300 gap-1 ">
                     <FaStar />
-                    4.3
+                    {user.hostRating || "N/A"}
                   </span>
                 </div>
               </div>
