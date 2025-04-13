@@ -10,6 +10,7 @@ import { apiGet, apiPost } from "../../utils/call";
 
 const Matching = () => {
   const { userId } = useParams();
+  const nav = useNavigate();
   const { user, loading, error } = useUserById(userId);
   const { compatibility } = useCompatibility(userId);
   const matchPercentage = compatibility?.compatibilityScore ?? "…";
@@ -21,8 +22,10 @@ const Matching = () => {
   const handleSendMessageReq = async () => {
     try {
       const message = "Hey Happy to connect with you! ";
-      const res = await sendFriendRequest(userId, message);
-      alert("Friend request sent!");
+      const res = await apiPost(`/message/send/${userId}`, {
+        content: "Hey Happy to connect with you! ",
+      });
+
       console.log("Request response:", res);
     } catch (err) {
       console.error("Failed to send friend request:", err);
