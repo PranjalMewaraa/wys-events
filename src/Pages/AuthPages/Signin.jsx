@@ -128,11 +128,11 @@ const UnifiedAuth = () => {
   const trustVerification = [
     {
       label: "✅ Yes, I feel safer that way",
-      value: "true",
+      value: true,
     },
     {
       label: "🚀 Not necessary, I trust good vibes",
-      value: "false",
+      value: false,
     },
   ];
 
@@ -646,13 +646,13 @@ const UnifiedAuth = () => {
         break;
       case 8:
         if (
-          formData.trustVerification[0] !== "true" &&
-          formData.trustVerification[0] !== "false"
+          formData.trustVerification[0] !== true &&
+          formData.trustVerification[0] !== false
         ) {
           console.log(formData.trustVerification[0]);
           alert("trust verification choice is needed");
         } else {
-          if (formData.trustVerification[0] === "true") {
+          if (formData.trustVerification[0] === true) {
             setPage(9);
           } else {
             setPage(10);

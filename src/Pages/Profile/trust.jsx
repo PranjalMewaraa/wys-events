@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import { FaLinkedinIn, FaInstagram} from "react-icons/fa";
+import { FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { MdErrorOutline } from "react-icons/md";
 import { FaLongArrowAltLeft } from "react-icons/fa";
@@ -52,19 +52,24 @@ const Trust = () => {
       <div className="w-full min-h-screen flex flex-col items-center justify-start p-4 bg-white">
         <div className="max-w-lg w-full flex flex-col items-center">
           {/* Profile Info */}
-           <div className="flex justify-between items-center w-full m-4">
-                      <FaLongArrowAltLeft
-                        className="text-xl cursor-pointer"
-                        onClick={() => navigate(-1)}
-                      />
-                      <p className="text-sm font-medium">Account details</p>
-                      <HiDotsHorizontal className="text-xl" />
-                    </div>
+          <div className="flex justify-between items-center w-full m-4">
+            <FaLongArrowAltLeft
+              className="text-xl cursor-pointer"
+              onClick={() => navigate(-1)}
+            />
+            <p className="text-sm font-medium">Account details</p>
+            <HiDotsHorizontal className="text-xl" />
+          </div>
 
           {/* My verification status */}
           <div className="w-full mt-8">
             <p className="font-semibold text-lg flex items-center gap-1">
-              My verification status <MdErrorOutline className="text-orange-500" />
+              My verification status{" "}
+              {user.trustVerification ? (
+                <CiCircleCheck className="text-green-500" />
+              ) : (
+                <MdErrorOutline className="text-orange-500" />
+              )}
             </p>
             <div className="bg-orange-100 border border-orange-300 rounded-2xl mt-2 p-4 flex flex-col gap-2">
               <div className="text-sm font-medium text-orange-800">
@@ -125,7 +130,6 @@ const Trust = () => {
           </div>
 
           {/* Tagline */}
-         
         </div>
       </div>
     </Layout>
