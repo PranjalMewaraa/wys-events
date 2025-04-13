@@ -425,7 +425,6 @@ const UnifiedAuth = () => {
               key={`step-${page}`}
               options={trustVerification}
               isMulti
-              maxSelections={1}
               onChange={(val) =>
                 handleSelectionChange(val, "trustVerification")
               }
@@ -646,13 +645,13 @@ const UnifiedAuth = () => {
         break;
       case 8:
         if (
-          formData.trustVerification[0] !== true &&
-          formData.trustVerification[0] !== false
+          formData.trustVerification !== true &&
+          formData.trustVerification !== false
         ) {
-          console.log(formData.trustVerification[0]);
+          console.log(formData.trustVerification);
           alert("trust verification choice is needed");
         } else {
-          if (formData.trustVerification[0] === true) {
+          if (formData.trustVerification === true) {
             setPage(9);
           } else {
             setPage(10);
