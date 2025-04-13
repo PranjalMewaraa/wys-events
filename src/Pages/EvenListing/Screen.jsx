@@ -194,13 +194,20 @@ function MyEventCard({ item }) {
       className="transition-all duration-300 bg-white max-w-sm w-full shadow-md hover:shadow-lg rounded-2xl overflow-hidden"
     >
       <div className="h-[180px] relative overflow-hidden">
-        <p className="absolute right-4 text-sm italic top-4 bg-white px-4 py-1 rounded">
-          {item.status === "pending"
-            ? "Pending Approval"
-            : item.status === "approved"
-            ? "Listed"
-            : "Rejected"}
-        </p>
+        {item.eventStatus !== "cancelled" ? (
+          <p className="absolute right-4 text-sm italic top-4 bg-white px-4 py-1 rounded">
+            {item.status === "pending"
+              ? "Pending Approval"
+              : item.status === "approved"
+              ? "Listed"
+              : "Rejected"}
+          </p>
+        ) : (
+          <p className="absolute right-4 text-sm italic top-4 bg-red-500 text-white px-4 py-1 rounded">
+            Cancelled by you
+          </p>
+        )}
+
         <img
           src={
             item.image ||

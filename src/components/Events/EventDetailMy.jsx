@@ -7,9 +7,10 @@ import { FaRegUserCircle } from "react-icons/fa";
 import Layout from "../../Layout/Layout";
 import LayoutInnerMain from "../../Layout/LayoutInner";
 import { apiGet, apiPut } from "../../utils/call";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate";
 import { BsCashStack } from "react-icons/bs";
+import { cancelEvent } from "../../utils/api";
 
 const EventDetailMY = () => {
   const { id } = useParams();
@@ -73,6 +74,13 @@ const EventDetailMY = () => {
       console.error("Rejection failed", error);
     }
   };
+  const nav = useNavigate();
+  const handleCloseListing = async () => {
+    console.log("Close Listing logic here");
+    await cancelEvent(event._id);
+    alert("Event has been cancelled successfully.");
+    nav("/listing");
+  };
 
   return (
     <Layout>
@@ -84,8 +92,14 @@ const EventDetailMY = () => {
             className="h-1/2 max-h-72 rounded-xl object-cover"
           />
           <div className="w-full flex-col gap-4 py-4">
-            <div className="flex text-2xl mb-4 items-center justify-between w-full">
-              <p>{event.name}</p>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4 w-full">
+              <p className="text-2xl">{event.name}</p>
+              <button
+                onClick={handleCloseListing}
+                className="px-4 py-2 text-sm bg-red-600 text-white rounded-full hover:bg-red-700"
+              >
+                Close Listing
+              </button>
             </div>
 
             <div className="flex flex-col gap-4 py-4">
