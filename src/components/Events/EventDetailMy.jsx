@@ -7,9 +7,10 @@ import { FaRegUserCircle } from "react-icons/fa";
 import Layout from "../../Layout/Layout";
 import LayoutInnerMain from "../../Layout/LayoutInner";
 import { apiGet, apiPut } from "../../utils/call";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate";
 import { BsCashStack } from "react-icons/bs";
+import { cancelEvent } from "../../utils/api";
 
 const EventDetailMY = () => {
   const { id } = useParams();
@@ -73,6 +74,13 @@ const EventDetailMY = () => {
       console.error("Rejection failed", error);
     }
   };
+  const nav = useNavigate();
+  const handleCloseListing = async () => {
+    console.log("Close Listing logic here");
+    await cancelEvent(event._id);
+    alert("Event has been cancelled successfully.");
+    nav("/listing");
+  };
 
   return (
     <Layout>
@@ -84,8 +92,14 @@ const EventDetailMY = () => {
             className="h-1/2 max-h-72 rounded-xl object-cover"
           />
           <div className="w-full flex-col gap-4 py-4">
-            <div className="flex text-2xl mb-4 items-center justify-between w-full">
-              <p>{event.name}</p>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4 w-full">
+              <p className="text-2xl">{event.name}</p>
+              <button
+                onClick={handleCloseListing}
+                className="px-4 py-2 text-sm bg-red-600 text-white rounded-full hover:bg-red-700"
+              >
+                Close Listing
+              </button>
             </div>
 
             <div className="flex flex-col gap-4 py-4">
@@ -137,7 +151,45 @@ const EventDetailMY = () => {
                 </div>
               </div>
             </div>
-
+            <div className="mt-6">
+              <p className="flex gap-2 items-center text-lg font-semibold">
+                🧑‍💼 Seekers
+              </p>
+              <div className="flex flex-col w-full gap-2 mt-2">
+                {event?.participants?.filter(
+                  (p) => p.requestStatus === "requested"
+                ).length > 0 ? (
+                  event?.participants
+                    .filter((p) => p.requestStatus === "requested")
+                    .map((item) => (
+                      <Link
+                        to={`/request/${event._id}/${item.user?._id}`}
+                        key={item.user?._id}
+                        className="w-full flex items-center gap-4"
+                      >
+                        <img
+                          src={item.user?.avatar}
+                          alt={item.user?.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div>
+                          <p className="text-sm font-medium">
+                            {item.user?.name}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Location: {item.user?.currentLocation || "N/A"}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Status: {item?.requestStatus}
+                          </p>
+                        </div>
+                      </Link>
+                    ))
+                ) : (
+                  <p className="text-gray-500 text-sm">No seekers yet.</p>
+                )}
+              </div>
+            </div>
             {/* Participants by RSVP Status */}
             {event.participants?.length > 0 ? (
               <>
@@ -184,22 +236,28 @@ const EventDetailMY = () => {
                 </div>
 
                 {/* 🤔 THINKING */}
+                {/* 🧑‍💼 Seekers */}
+
+                {/* 🤔 Thinking About It */}
                 <div className="mt-6">
                   <p className="flex gap-2 items-center text-lg font-semibold">
                     🤔 Thinking About It
                   </p>
                   <div className="flex flex-col w-full gap-2 mt-2">
-                    {event.participants.filter((p) => p.rsvpStatus !== "yes")
-                      .length > 0 ? (
-                      event.participants
-                        .filter((p) => p.rsvpStatus !== "yes")
+                    {event?.participants?.filter(
+                      (p) =>
+                        p.rsvpStatus !== "yes" &&
+                        p.requestStatus !== "requested"
+                    ).length > 0 ? (
+                      event?.participants
+                        ?.filter(
+                          (p) =>
+                            p.rsvpStatus !== "yes" &&
+                            p.requestStatus !== "requested"
+                        )
                         .map((item) => (
                           <Link
-                            to={
-                              item.requestStatus === "requested"
-                                ? `/request/${event._id}/${item.user?._id}`
-                                : `/people/detail/${item.user?._id}`
-                            }
+                            to={`/people/detail/${item.user?._id}`}
                             key={item.user?._id}
                             className="w-full flex items-center gap-4"
                           >
@@ -216,14 +274,14 @@ const EventDetailMY = () => {
                                 Location: {item.user?.currentLocation || "N/A"}
                               </p>
                               <p className="text-sm text-gray-600">
-                                Status: {item.requestStatus}
+                                Status: {item?.requestStatus}
                               </p>
                             </div>
                           </Link>
                         ))
                     ) : (
                       <p className="text-gray-500 text-sm">
-                        No participants are unsure yet.
+                        No one thinking about it yet.
                       </p>
                     )}
                   </div>

@@ -1,13 +1,12 @@
 // Modal.js
 import React, { useEffect, useState } from "react";
-import useEventDetails from "../../utils/hooks/event";
+import useEventDetails, { useParticipants } from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
 import { sendReviewMessage, sendRSVPMessage } from "../../utils/structureMessages";
 
 const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
-  
   const { userRole, isEventOver, event } = useEventDetails(eventId);
   const { triggerPollMessage } = useGroupChat(eventId, groupId);
   const [rsvpStatus, setRsvpStatus] = useState(null);
@@ -40,7 +39,6 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-
 
   const handlePrimaryAction = async () => {
     if (loading) return;
@@ -106,7 +104,13 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
           {primaryActionText}
         </div>
 
-        <Link to={`/event/${eventId}`}>
+        <Link
+          to={
+            userRole === "host"
+              ? `/listing/myevent/detail/${eventId}`
+              : `/event/${eventId}`
+          }
+        >
           <button
             className="w-full py-3 text-center text-black hover:bg-gray-100 border-b border-gray-200"
             disabled={isLoading}
@@ -132,4 +136,3 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
 };
 
 export default Modal;
-

@@ -1,418 +1,149 @@
 import axios from "axios";
+
 const api = axios.create({
   baseURL: "https://wysbackend.onrender.com/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
-const token = localStorage.getItem("accessToken");
 
-// Automatically add token to Authorization header
-// api.interceptors.request.use(async (config) => {
-//   const token = await getToken({ template: "default" }); // Optional template
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+// Attach token on each request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-// export default api;
+// Global error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
 
-//event
-//auth login & signup
+    if (message.toLowerCase().includes("jwt expired")) {
+      localStorage.removeItem("accessToken");
+      window.location.href = "/signin";
+    }
 
+    return Promise.reject(error);
+  }
+);
+
+// Matching APIs
 export const getMatchedUsers = async () => {
-  try {
-    const res = await api.get(`/matching/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response.data);
-    }
-    throw error;
-  }
+  const res = await api.get(`/matching/`);
+  return res.data;
 };
-export const getCompatibility = async (id) => {
-  try {
-    const res = await api.get(`/matching/compatibility/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response.data);
-    }
-    throw error;
-  }
-};
-export const fetchUserByIdForMatching = async (id) => {
-  try {
-    const res = await api.get(`/matching/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response.data);
-    }
-    throw error;
-  }
-};
-export const getEventsCreatedByUser = async () => {
-  try {
-    const response = await api.get(`/events/created`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response.data);
-    }
-    throw error;
-  }
-};
-export const fetchEvents = async () => {
-  try {
-    const response = await api.get(`/events`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response.data);
-    }
-    throw error;
-  }
-};
-export const fetchEventById = async (eventId) => {
-  try {
-    const response = await api.get(`/events/${eventId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response.data);
-    }
-    throw error;
-  }
+export const getCompatibility = async (id) => {
+  const res = await api.get(`/matching/compatibility/${id}`);
+  return res.data.data;
+};
+
+export const fetchUserByIdForMatching = async (id) => {
+  const res = await api.get(`/matching/${id}`);
+  return res.data.data;
+};
+
+// Event APIs
+export const getEventsCreatedByUser = async () => {
+  const res = await api.get(`/events/created`);
+  return res;
+};
+
+export const fetchEvents = async () => {
+  const res = await api.get(`/events`);
+  return res.data;
+};
+
+export const fetchEventById = async (eventId) => {
+  const res = await api.get(`/events/${eventId}`);
+  return res.data;
 };
 
 export const eventRequest = async (eventId) => {
-  try {
-    const res = api.post(
-      `/events/${eventId}/join`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response.data);
-    }
-    throw error;
-  }
+  const res = await api.post(`/events/${eventId}/join`, {});
+  return res.data;
 };
 
 export const leaveEvent = async (eventId) => {
-  try {
-    const res = await api.post(
-      `/events/${eventId}/leave`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error(
-        "Axios error (leave event):",
-        error.response?.data || error.message
-      );
-    }
-    throw error;
-  }
+  const res = await api.post(`/events/${eventId}/leave`, {});
+  return res.data;
 };
+
 export const cancelEvent = async (eventId) => {
-  try {
-    const res = await api.patch(
-      `/events/${eventId}/cancel`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error(
-        "Axios error (cancel event):",
-        error.response?.data || error.message
-      );
-    }
-    throw error;
-  }
+  const res = await api.patch(`/events/${eventId}/cancel`, {});
+  return res.data;
 };
+
 export const getParticipantsData = async (eventId) => {
-  try {
-    const response = await api.get(`/events/${eventId}/participants`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch RSVP data:", error);
-  }
+  const res = await api.get(`/events/${eventId}/participants`);
+  return res.data;
 };
 
-//group api
-
-export const fetchGroups = async (token) => {
-  try {
-    const res = await api.get("/group/my-groups", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data; // Axios automatically parses JSON
-  } catch (error) {
-    console.error("Failed to fetch groups", error);
-    throw error;
-  }
-};
 export const updateRSVPStatus = async (eventId, rsvpStatus) => {
-  const token = localStorage.getItem("accessToken");
-
-  try {
-    const response = await api.patch(
-      `/events/${eventId}/rsvp`,
-      { rsvpStatus },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (err) {
-    console.error("Failed to update RSVP status", err);
-    throw err;
-  }
+  const res = await api.patch(`/events/${eventId}/rsvp`, { rsvpStatus });
+  return res.data;
 };
+
 export const rateEvent = async (eventId, { stars, reviewText }) => {
-  try {
-    const response = await api.post(
-      `/events/rate/${eventId}`,
-      {
-        stars,
-        reviewText,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error rating event:", error);
-    throw error;
-  }
+  const res = await api.post(`/events/rate/${eventId}`, { stars, reviewText });
+  return res.data;
 };
+
+// Group APIs
+export const fetchGroups = async () => {
+  const res = await api.get("/group/my-groups");
+  return res.data;
+};
+
+// Friend Request APIs
 export const sendFriendRequest = async (userId, content) => {
-  try {
-    const response = await api.post(
-      `/message/request/${userId}`,
-      { content }, // body
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return response.data; // optionally return the request result
-  } catch (error) {
-    console.error("Failed to send friend request", error);
-    throw error;
-  }
+  const res = await api.post(`/message/request/${userId}`, { content });
+  return res.data;
 };
+
 export const acceptFriendRequest = async (userId) => {
-  try {
-    const response = await api.post(
-      `/message/accept/${userId}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Failed to accept friend request", error);
-    throw error;
-  }
+  const res = await api.post(`/message/accept/${userId}`);
+  return res.data;
 };
+
 export const pendingRequest = async () => {
-  try {
-    const res = await api.get("/message/pending", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data.pendingRequests;
-  } catch (error) {
-    console.error("Failed to pending request", error);
-    throw error;
-  }
+  const res = await api.get("/message/pending");
+  return res.data.pendingRequests;
 };
 
-export const fetchFriends = async (token) => {
-  try {
-    const res = await api.get("/message/getAllFriends", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Failed to fetch friends", error);
-    throw error;
-  }
+export const fetchFriends = async () => {
+  const res = await api.get("/message/getAllFriends");
+  return res.data;
 };
 
-//message api
+// Group Message APIs
 export const fetchMessages = async (eventId) => {
-  try {
-    const response = await api.get(`/group/messages/${eventId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (
-      response.data.messages &&
-      Array.isArray(response.data.messages) &&
-      response.data.messages.length > 0
-    ) {
-      return {
-        messages: response.data.messages,
-        groupId: response.data.messages[0].groupId, // Extract groupId
-      };
-    } else {
-      console.warn("No messages found.");
-      return { messages: [], groupId: eventId };
-    }
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response?.data || error.message);
-    } else {
-      console.error("Error fetching messages:", error);
-    }
-    return { messages: [], groupId: eventId };
-  }
+  const res = await api.get(`/group/messages/${eventId}`);
+  const messages = res.data.messages || [];
+  const groupId = messages.length > 0 ? messages[0].groupId : eventId;
+  return { messages, groupId };
 };
 
 export const sendMessage = async (groupId, message) => {
-  if (!message.trim() || !groupId) return null;
-
-  try {
-    const response = await api.post(
-      `/group/messages/send/${groupId}`,
-      { content: message },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return response.data.message; // Return the newly sent message
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response?.data || error.message);
-    } else {
-      console.error("Error sending message:", error);
-    }
-    return null;
-  }
+  if (!message.trim()) return null;
+  const res = await api.post(`/group/messages/send/${groupId}`, {
+    content: message,
+  });
+  return res.data.message;
 };
 
+// Direct Message APIs
 export const fetchDirectMessages = async (userId) => {
-  try {
-    const response = await api.get(`/message/conversation/${userId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return {
-      messages: response.data.messages || [],
-    };
-  } catch (error) {
-    console.error("Error fetching direct messages:", error);
-    return { messages: [] };
-  }
+  const res = await api.get(`/message/conversation/${userId}`);
+  return { messages: res.data.messages || [] };
 };
 
 export const sendDirectMessage = async (userId, message) => {
-  try {
-    const response = await api.post(
-      `/message/send/${userId}`,
-      { content: message },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data.message;
-  } catch (error) {
-    console.error("Error sending direct message:", error);
-    return null;
-  }
+  const res = await api.post(`/message/send/${userId}`, { content: message });
+  return res.data.message;
 };
