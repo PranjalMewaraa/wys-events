@@ -142,10 +142,10 @@ const EventDetailMY = () => {
                 🧑‍💼 Seekers
               </p>
               <div className="flex flex-col w-full gap-2 mt-2">
-                {event.participants.filter(
+                {event?.participants?.filter(
                   (p) => p.requestStatus === "requested"
                 ).length > 0 ? (
-                  event.participants
+                  event?.participants
                     .filter((p) => p.requestStatus === "requested")
                     .map((item) => (
                       <Link
@@ -230,13 +230,13 @@ const EventDetailMY = () => {
                     🤔 Thinking About It
                   </p>
                   <div className="flex flex-col w-full gap-2 mt-2">
-                    {event.participants.filter(
+                    {event?.participants?.filter(
                       (p) =>
                         p.rsvpStatus !== "yes" &&
                         p.requestStatus !== "requested"
                     ).length > 0 ? (
-                      event.participants
-                        .filter(
+                      event?.participants
+                        ?.filter(
                           (p) =>
                             p.rsvpStatus !== "yes" &&
                             p.requestStatus !== "requested"
