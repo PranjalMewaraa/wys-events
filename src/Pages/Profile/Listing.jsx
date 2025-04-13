@@ -48,7 +48,7 @@ const Listing = () => {
           <div className="mt-4 space-y-4">
             {user.eventsHosted && user.eventsHosted.length > 0 ? (
               user.eventsHosted.map((eventId, index) => (
-                <EventCard key={index} eventId={eventId} />
+                <EventCard key={index} eventId={eventId._id} />
               ))
             ) : (
               <p className="text-gray-500 text-sm text-center mt-8">

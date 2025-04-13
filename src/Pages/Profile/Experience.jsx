@@ -24,7 +24,6 @@ const Experience = () => {
           }
         );
         setUser(response.data.data);
-
       } catch (error) {
         console.error("Error fetching user:", error);
       }
@@ -47,17 +46,16 @@ const Experience = () => {
 
           {/* Event List */}
           <div className="mt-4 space-y-4">
-  {user.eventsAttended && user.eventsAttended.length > 0 ? (
-    user.eventsAttended.map((eventId, index) => (
-      <EventCard key={index} eventId={eventId} />
-    ))
-  ) : (
-    <p className="text-gray-500 text-sm text-center mt-8">
-      You haven’t attended any events yet.
-    </p>
-  )}
-</div>
-
+            {user.eventsAttended && user.eventsAttended.length > 0 ? (
+              user.eventsAttended.map((eventId, index) => (
+                <EventCard key={index} eventId={eventId._id} />
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm text-center mt-8">
+                You haven’t attended any events yet.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </Layout>

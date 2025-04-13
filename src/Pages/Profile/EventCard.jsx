@@ -45,7 +45,7 @@ const EventCard = ({ eventId }) => {
         alt={event.title}
         className="w-full rounded h-48 object-cover"
       />
-      <h2 className="text-lg font-bold mt-2 px-4">{event.title}</h2>
+      <h2 className="text-lg font-bold mt-2 px-4">{event.name}</h2>
 
       <p className="px-4 flex gap-2 text-sm md:text-base items-center">
         <FaRegCalendar />
