@@ -137,7 +137,45 @@ const EventDetailMY = () => {
                 </div>
               </div>
             </div>
-
+            <div className="mt-6">
+              <p className="flex gap-2 items-center text-lg font-semibold">
+                🧑‍💼 Seekers
+              </p>
+              <div className="flex flex-col w-full gap-2 mt-2">
+                {event.participants.filter(
+                  (p) => p.requestStatus === "requested"
+                ).length > 0 ? (
+                  event.participants
+                    .filter((p) => p.requestStatus === "requested")
+                    .map((item) => (
+                      <Link
+                        to={`/request/${event._id}/${item.user?._id}`}
+                        key={item.user?._id}
+                        className="w-full flex items-center gap-4"
+                      >
+                        <img
+                          src={item.user?.avatar}
+                          alt={item.user?.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div>
+                          <p className="text-sm font-medium">
+                            {item.user?.name}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Location: {item.user?.currentLocation || "N/A"}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Status: {item?.requestStatus}
+                          </p>
+                        </div>
+                      </Link>
+                    ))
+                ) : (
+                  <p className="text-gray-500 text-sm">No seekers yet.</p>
+                )}
+              </div>
+            </div>
             {/* Participants by RSVP Status */}
             {event.participants?.length > 0 ? (
               <>
@@ -184,22 +222,28 @@ const EventDetailMY = () => {
                 </div>
 
                 {/* 🤔 THINKING */}
+                {/* 🧑‍💼 Seekers */}
+
+                {/* 🤔 Thinking About It */}
                 <div className="mt-6">
                   <p className="flex gap-2 items-center text-lg font-semibold">
                     🤔 Thinking About It
                   </p>
                   <div className="flex flex-col w-full gap-2 mt-2">
-                    {event.participants.filter((p) => p.rsvpStatus !== "yes")
-                      .length > 0 ? (
+                    {event.participants.filter(
+                      (p) =>
+                        p.rsvpStatus !== "yes" &&
+                        p.requestStatus !== "requested"
+                    ).length > 0 ? (
                       event.participants
-                        .filter((p) => p.rsvpStatus !== "yes")
+                        .filter(
+                          (p) =>
+                            p.rsvpStatus !== "yes" &&
+                            p.requestStatus !== "requested"
+                        )
                         .map((item) => (
                           <Link
-                            to={
-                              item.requestStatus === "requested"
-                                ? `/request/${event._id}/${item.user?._id}`
-                                : `/people/detail/${item.user?._id}`
-                            }
+                            to={`/people/detail/${item.user?._id}`}
                             key={item.user?._id}
                             className="w-full flex items-center gap-4"
                           >
@@ -216,14 +260,14 @@ const EventDetailMY = () => {
                                 Location: {item.user?.currentLocation || "N/A"}
                               </p>
                               <p className="text-sm text-gray-600">
-                                Status: {item.requestStatus}
+                                Status: {item?.requestStatus}
                               </p>
                             </div>
                           </Link>
                         ))
                     ) : (
                       <p className="text-gray-500 text-sm">
-                        No participants are unsure yet.
+                        No one thinking about it yet.
                       </p>
                     )}
                   </div>

@@ -2,132 +2,109 @@ function getCategoryImage(category) {
   let images = [];
 
   switch (category) {
-    case "Music & Concerts":
+    case "Weekend Getaways":
       images = [
-        "/event/music/1.png",
-        "/event/music/2.png",
-        "/event/music/3.png",
-        "/event/music/4.png",
+        "/events/weekend/1.jpg",
+        "/events/weekend/2.jpg",
+        "/events/weekend/3.jpg",
       ];
       break;
-    case "Sports & Fitness":
+    case "Adventure & Treks":
       images = [
-        "/event/sports/1.png",
-        "/event/sports/2.png",
-        "/event/sports/3.png",
-        "/event/sports/4.png",
+        "/events/adventure/1.jpg",
+        "/events/adventure/2.jpg",
+        "/events/adventure/3.jpg",
       ];
       break;
-    case "Arts & Culture":
+    case "Camping & Bonfire Nights":
       images = [
-        "/event/art/1.png",
-        "/event/art/2.png",
-        "/event/art/3.png",
-        "/event/art/4.png",
+        "/events/camping/1.jpg",
+        "/events/camping/2.jpg",
+        "/events/camping/3.jpg",
       ];
       break;
-    case "Movies & Entertainment":
+    case "Beach & Island Escapes":
       images = [
-        "/event/movie/1.png",
-        "/event/movie/2.png",
-        "/event/movie/3.png",
-        "/event/movie/4.png",
+        "/events/beach/1.jpg",
+        "/events/beach/2.jpg",
+        "/events/beach/3.jpg",
       ];
       break;
-    case "Social & Networking":
+    case "Hill Stations & Scenic Stays":
       images = [
-        "/event/social/1.png",
-        "/event/social/2.png",
-        "/event/social/3.png",
-        "/event/social/4.png",
+        "/events/hill/1.jpg",
+        "/events/hill/2.jpg",
+        "/events/hill/3.jpg",
       ];
       break;
-    case "Food & Drink":
+    case "Cultural & Temple Trails":
       images = [
-        "/event/food/1.png",
-        "/event/food/2.png",
-        "/event/food/3.png",
-        "/event/food/4.png",
+        "/events/culture/1.jpg",
+        "/events/culture/2.jpg",
+        "/events/culture/3.jpg",
       ];
       break;
-    case "Education & Workshops":
+    case "City Heritage & Food Walks":
       images = [
-        "/event/ed/1.png",
-        "/event/ed/2.png",
-        "/event/ed/3.png",
-        "/event/ed/4.png",
+        "/events/heritage/1.jpg",
+        "/events/heritage/2.jpg",
+        "/events/heritage/3.jpg",
       ];
       break;
-    case "Wellness & Spirituality":
+    case "Nightlife & Social Meetups":
       images = [
-        "/event/wellness/1.png",
-        "/event/wellness/2.png",
-        "/event/wellness/3.png",
-        "/event/wellness/4.png",
+        "/events/nightlife/1.jpg",
+        "/events/nightlife/2.jpg",
+        "/events/nightlife/3.jpg",
       ];
       break;
-    case "Business & Tech":
+    case "Food & Coffee Trails":
       images = [
-        "/event/business/1.png",
-        "/event/business/2.png",
-        "/event/business/3.png",
-        "/event/business/4.png",
+        "/events/coffee/1.jpg",
+        "/events/coffee/2.jpg",
+        "/events/coffee/3.jpg",
       ];
       break;
-    case "Family & Kids":
+    case "Wellness & Yoga Retreats":
       images = [
-        "/event/family/1.png",
-        "/event/family/2.png",
-        "/event/family/4.png",
-        "/event/family/3.png",
+        "/events/yoga/1.jpg",
+        "/events/yoga/2.jpg",
+        "/events/yoga/3.jpg",
       ];
       break;
-    case "Outdoor & Adventure":
+    case "Bike Rides & Road Trips":
       images = [
-        "/event/outdoor/1.png",
-        "/event/outdoor/2.png",
-        "/event/outdoor/3.png",
-        "/event/outdoor/4.png",
+        "/events/bike/1.jpg",
+        "/events/bike/2.jpg",
+        "/events/bike/3.jpg",
       ];
       break;
-    case "Gaming & Esports":
+    case "Offbeat & Hidden Escapes":
       images = [
-        "/event/gaming/1.png",
-        "/event/gaming/2.png",
-        "/event/gaming/3.png",
-        "/event/gaming/4.png",
+        "/events/offbeat/1.jpg",
+        "/events/offbeat/2.jpg",
+        "/events/offbeat/3.jpg",
       ];
       break;
-    case "Volunteer & Causes":
+    case "Women-Only Trips":
       images = [
-        "/event/vol/1.png",
-        "/event/vol/2.png",
-        "/event/vol/3.png",
-        "/event/vol/4.png",
+        "/events/women/1.jpg",
+        "/events/women/2.jpg",
+        "/events/women/3.jpg",
       ];
       break;
-    case "Festivals & Celebrations":
+    case "Solo-Friendly Group Trips":
       images = [
-        "/event/celeb/1.png",
-        "/event/celeb/2.png",
-        "/event/celeb/3.png",
-        "/event/celeb/4.png",
+        "/events/solo/1.jpg",
+        "/events/solo/2.jpg",
+        "/events/solo/3.jpg",
       ];
       break;
-    case "Local & Community Events":
+    case "Create Your Own Scene (Other)":
       images = [
-        "/event/local/1.png",
-        "/event/local/2.png",
-        "/event/local/3.png",
-        "/event/local/4.png",
-      ];
-      break;
-    case "Other":
-      images = [
-        "/event/other/1.png",
-        "/event/other/2.png",
-        "/event/other/4.png",
-        "/event/other/3.png",
+        "/events/other/1.jpg",
+        "/events/other/2.jpg",
+        "/events/other/3.jpg",
       ];
       break;
     default:
@@ -138,4 +115,5 @@ function getCategoryImage(category) {
   const randomIndex = Math.floor(Math.random() * images.length);
   return images[randomIndex];
 }
+
 export default getCategoryImage;

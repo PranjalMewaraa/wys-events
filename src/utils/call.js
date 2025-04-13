@@ -34,9 +34,19 @@ apiClient.interceptors.response.use(
   (error) => {
     const message =
       error.response?.data?.message || error.message || "Something went wrong";
+    if (message.toLowerCase().includes("jwt expired")) {
+      handleTokenExpired();
+    }
     return Promise.reject(new Error(message));
   }
 );
+
+const handleTokenExpired = () => {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("accessToken");
+  }
+};
 
 // Example function to get user token from localStorage
 const getUserToken = () => {

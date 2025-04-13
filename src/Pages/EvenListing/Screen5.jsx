@@ -7,22 +7,27 @@ import { apiGet, apiPost } from "../../utils/call";
 import getCategoryImage from "../../utils/getImage";
 
 const Categories = [
-  { label: "Music & Concerts", value: "Music & Concerts" },
-  { label: "Sports & Fitness", value: "Sports & Fitness" },
-  { label: "Arts & Culture", value: "Arts & Culture" },
-  { label: "Movies & Entertainment", value: "Movies & Entertainment" },
-  { label: "Social & Networking", value: "Social & Networking" },
-  { label: "Food & Drink", value: "Food & Drink" },
-  { label: "Education & Workshops", value: "Education & Workshops" },
-  { label: "Wellness & Spirituality", value: "Wellness & Spirituality" },
-  { label: "Business & Tech", value: "Business & Tech" },
-  { label: "Family & Kids", value: "Family & Kids" },
-  { label: "Outdoor & Adventure", value: "Outdoor & Adventure" },
-  { label: "Gaming & Esports", value: "Gaming & Esports" },
-  { label: "Volunteer & Causes", value: "Volunteer & Causes" },
-  { label: "Festivals & Celebrations", value: "Festivals & Celebrations" },
-  { label: "Local & Community Events", value: "Local & Community Events" },
-  { label: "Other", value: "Other" },
+  { label: "Weekend Getaways", value: "Weekend Getaways" },
+  { label: "Adventure & Treks", value: "Adventure & Treks" },
+  { label: "Camping & Bonfire Nights", value: "Camping & Bonfire Nights" },
+  { label: "Beach & Island Escapes", value: "Beach & Island Escapes" },
+  {
+    label: "Hill Stations & Scenic Stays",
+    value: "Hill Stations & Scenic Stays",
+  },
+  { label: "Cultural & Temple Trails", value: "Cultural & Temple Trails" },
+  { label: "City Heritage & Food Walks", value: "City Heritage & Food Walks" },
+  { label: "Nightlife & Social Meetups", value: "Nightlife & Social Meetups" },
+  { label: "Food & Coffee Trails", value: "Food & Coffee Trails" },
+  { label: "Wellness & Yoga Retreats", value: "Wellness & Yoga Retreats" },
+  { label: "Bike Rides & Road Trips", value: "Bike Rides & Road Trips" },
+  { label: "Offbeat & Hidden Escapes", value: "Offbeat & Hidden Escapes" },
+  { label: "Women-Only Trips", value: "Women-Only Trips" },
+  { label: "Solo-Friendly Group Trips", value: "Solo-Friendly Group Trips" },
+  {
+    label: "Create Your Own Scene (Other)",
+    value: "Create Your Own Scene (Other)",
+  },
 ];
 
 function InputDesign() {
@@ -41,6 +46,7 @@ function InputDesign() {
     city: "",
     image: "",
     category: "",
+    customCategory: "",
     fromDate: "",
     toDate: "",
     time: "",
@@ -86,6 +92,10 @@ function InputDesign() {
 
     const finalData = {
       ...experience,
+      category:
+        experience.category === "Create Your Own Scene (Other)"
+          ? experience.customCategory
+          : experience.category,
       availableSlots: experience.totalSlots,
       cost: isCostInvolved && selectedOption === "fee" ? experience.cost : 0,
       paymentType: isCostInvolved ? experience.paymentType : null,
@@ -167,6 +177,16 @@ function InputDesign() {
             maxSelections={1}
             onChange={(val) => handleChange("category", val)}
           />
+
+          {experience.category === "Create Your Own Scene (Other)" && (
+            <input
+              type="text"
+              placeholder="Enter your custom category"
+              className="mt-3 w-full rounded-xl border border-zinc-800 p-2 text-sm"
+              value={experience.customCategory}
+              onChange={(e) => handleChange("customCategory", e.target.value)}
+            />
+          )}
 
           <label className="text-base text-black block mt-5">
             How many people can join you?
