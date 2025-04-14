@@ -173,6 +173,7 @@ const UnifiedAuth = () => {
 
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log(formData);
   };
 
   const handleSelectionChange = (value, name) => {
@@ -424,7 +425,6 @@ const UnifiedAuth = () => {
             <SelectGroup
               key={`step-${page}`}
               options={trustVerification}
-              isMulti
               onChange={(val) =>
                 handleSelectionChange(val, "trustVerification")
               }
