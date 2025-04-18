@@ -13,6 +13,7 @@ const DashboardAdminMatchmaking = () => {
   const getUsers = async () => {
     const res = await apiGet("/admin/users");
     console.log(res.data);
+    console.log('rishabh check');
     setUserData(res.data);
   };
 
