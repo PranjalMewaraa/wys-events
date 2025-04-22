@@ -34,7 +34,7 @@ apiClient.interceptors.response.use(
   (error) => {
     const message =
       error.response?.data?.message || error.message || "Something went wrong";
-    if (message.toLowerCase().includes("jwt expired")) {
+    if (message.toLowerCase().includes("jwt")) {
       handleTokenExpired();
     }
     return Promise.reject(new Error(message));

@@ -23,7 +23,7 @@ api.interceptors.response.use(
     const message =
       error.response?.data?.message || error.message || "Something went wrong";
 
-    if (message.toLowerCase().includes("jwt expired")) {
+    if (message.toLowerCase().includes("jwt")) {
       localStorage.removeItem("accessToken");
       window.location.href = "/signin";
     }

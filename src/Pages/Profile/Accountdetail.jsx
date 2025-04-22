@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
+import { FaStar } from "react-icons/fa6";
 
 const AccountDetail = () => {
   const [user, setUser] = useState(null);
@@ -12,7 +13,7 @@ const AccountDetail = () => {
 
   const token = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userID");
-
+  console.log(user.hostRating);
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -66,15 +67,34 @@ const AccountDetail = () => {
               </span>
               Events Hosted
             </div>
+            <div className="bg-green-700 text-white px-4 py-2 rounded-xl text-sm flex flex-col items-center font-semibold">
+              <span className="text-xs">Host Rating</span>
+              <span className="flex items-center text-xs text-yellow-300 gap-1 ">
+                <FaStar />
+                {user?.hostRating || "N/R"}
+              </span>
+            </div>
           </div>
 
           {/* Checklist with Links */}
           <div className="w-full mt-6 space-y-3 grid ">
             {[
               { label: "About you", done: true, link: "/profile/detail/about" },
-              { label: "Travel Preferences", done: true, link: "/profile/detail/preference" },
-              { label: "Companion Matching", done: true, link: "/profile/detail/matching" },
-              { label: "Trust & Safety", done: false, link: "/profile/detail/trust" },
+              {
+                label: "Travel Preferences",
+                done: true,
+                link: "/profile/detail/preference",
+              },
+              {
+                label: "Companion Matching",
+                done: true,
+                link: "/profile/detail/matching",
+              },
+              {
+                label: "Trust & Safety",
+                done: false,
+                link: "/profile/detail/trust",
+              },
             ].map((item, index) => (
               <Link to={item.link} key={index}>
                 <div className=" bg-gray-100 rounded-lg px-4 py-3 flex justify-between items-center hover:bg-gray-200 transition-all">
