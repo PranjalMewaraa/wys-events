@@ -223,10 +223,7 @@ const UnifiedAuth = () => {
     }
 
     if (typeof formData.trustVerification === "boolean") {
-      payload.append(
-        "trustVerification",
-        JSON.stringify(formData.trustVerification)
-      );
+      payload.set("trustVerification", JSON.stringify(formData.trustVerification));
     }
 
     // if (firebaseToken) {
