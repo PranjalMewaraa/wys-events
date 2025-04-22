@@ -43,7 +43,7 @@ const EventDetail = () => {
     if (!Array.isArray(participants) || participants.length === 0) {
       return { isPresent: false, status: null };
     }
-    const match = participants.find((p) => p.user === userId);
+    const match = participants.find((p) => p.user._id === userId);
     return {
       isPresent: !!match,
       status: match?.requestStatus || null,
