@@ -13,7 +13,7 @@ const AccountDetail = () => {
 
   const token = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userID");
-  console.log(user.hostRating);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
