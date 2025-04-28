@@ -55,16 +55,6 @@ const ExpandableSearchBar = ({
         {/* Expanded section */}
         {expanded && (
           <>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                alert("Nearby search logic not implemented");
-              }}
-              className="mt-4 w-full flex gap-2 items-center justify-center border border-black text-black py-2 rounded-lg font-medium"
-            >
-              <FaLocationArrow size={16} /> Find Nearby Events
-            </button>
-
             <div className="mt-4 flex justify-between gap-2">
               <label htmlFor="from" className="flex flex-col w-fit">
                 From

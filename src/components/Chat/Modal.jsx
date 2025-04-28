@@ -4,7 +4,10 @@ import useEventDetails, { useParticipants } from "../../utils/hooks/event";
 import { useGroupChat } from "../../utils/hooks/Groupmessage";
 import { cancelEvent, leaveEvent } from "../../utils/api";
 import { Link } from "react-router-dom";
-import { sendReviewMessage, sendRSVPMessage } from "../../utils/structureMessages";
+import {
+  sendReviewMessage,
+  sendRSVPMessage,
+} from "../../utils/structureMessages";
 
 const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
   const { userRole, isEventOver, event } = useEventDetails(eventId);
@@ -49,7 +52,7 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
         if (participants.length === 0) return;
         sendRSVPMessage(triggerPollMessage, eventId);
       } else {
-        sendReviewMessage(triggerPollMessage,userRole)
+        sendReviewMessage(triggerPollMessage, userRole);
       }
     } else {
       onShowPopup();
@@ -108,7 +111,7 @@ const Modal = ({ isOpen, onClose, onShowPopup, eventId, groupId }) => {
           to={
             userRole === "host"
               ? `/listing/myevent/detail/${eventId}`
-              : `/event/${eventId}`
+              : `/listing/upcoming/detail/${eventId}`
           }
         >
           <button

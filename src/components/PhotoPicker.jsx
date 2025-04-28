@@ -7,40 +7,55 @@ const PhotoPicker = ({
   maxSelections, // New prop for max selections when isMulti is true
 }) => {
   const [selectedImages, setSelectedImages] = useState([]);
+  const MAX_FILE_SIZE_MB = 5; // 5 MB size limit
 
   // Handle file input change
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
     if (files.length) {
       let newImages = [];
+      let validFiles = [];
 
-      if (isMulti) {
-        // Check if adding new images exceeds maxSelections
-        const totalAfterAdd = selectedImages.length + files.length;
-        if (maxSelections && totalAfterAdd > maxSelections) {
-          const allowedFiles = files.slice(
-            0,
-            maxSelections - selectedImages.length
-          );
-          newImages = [
-            ...selectedImages,
-            ...allowedFiles.map((file) => URL.createObjectURL(file)),
-          ];
-          console.log(`Maximum ${maxSelections} selections allowed`);
+      // Filter files exceeding the size limit
+      files.forEach((file) => {
+        if (file.size <= MAX_FILE_SIZE_MB * 1024 * 1024) {
+          validFiles.push(file);
         } else {
-          newImages = [
-            ...selectedImages,
-            ...files.map((file) => URL.createObjectURL(file)),
-          ];
+          alert(
+            `${file.name} exceeds the 5 MB size limit. Please select a smaller file.`
+          );
         }
-      } else {
-        // Single select: take only the first file
-        newImages = [URL.createObjectURL(files[0])];
-      }
+      });
 
-      setSelectedImages(newImages);
-      if (onImageSelect) {
-        onImageSelect(isMulti ? files : files[0]); // Pass File object(s) to parent
+      if (validFiles.length) {
+        if (isMulti) {
+          // Check if adding new images exceeds maxSelections
+          const totalAfterAdd = selectedImages.length + validFiles.length;
+          if (maxSelections && totalAfterAdd > maxSelections) {
+            const allowedFiles = validFiles.slice(
+              0,
+              maxSelections - selectedImages.length
+            );
+            newImages = [
+              ...selectedImages,
+              ...allowedFiles.map((file) => URL.createObjectURL(file)),
+            ];
+            alert(`Maximum ${maxSelections} selections allowed.`);
+          } else {
+            newImages = [
+              ...selectedImages,
+              ...validFiles.map((file) => URL.createObjectURL(file)),
+            ];
+          }
+        } else {
+          // Single select: take only the first valid file
+          newImages = [URL.createObjectURL(validFiles[0])];
+        }
+
+        setSelectedImages(newImages);
+        if (onImageSelect) {
+          onImageSelect(isMulti ? validFiles : validFiles[0]); // Pass valid File object(s) to parent
+        }
       }
     }
   };
@@ -48,7 +63,7 @@ const PhotoPicker = ({
   // Handle click on any box to trigger file input
   const handleClick = () => {
     if (isMulti && selectedImages.length >= maxSelections) {
-      console.log(`Maximum ${maxSelections} selections reached`);
+      alert(`Maximum ${maxSelections} selections reached.`);
       return;
     }
     document.getElementById("photo-input").click();
@@ -136,4 +151,5 @@ const PhotoPicker = ({
     </div>
   );
 };
+
 export default PhotoPicker;

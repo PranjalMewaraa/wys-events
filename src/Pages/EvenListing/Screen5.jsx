@@ -279,15 +279,22 @@ function InputDesign() {
               <label className="text-lg text-black">
                 Is there a cost involved?
               </label>
+
               <button
                 type="button"
                 role="switch"
                 aria-checked={isCostInvolved}
                 onClick={handleToggleCost}
-                className={`relative rounded-lg h-[18px] w-[37px] focus:outline-none ${
+                className={`relative inline-flex items-center h-[24px] w-[44px] rounded-full transition-colors duration-200 ${
                   isCostInvolved ? "bg-zinc-800" : "bg-zinc-300"
-                }`}
-              />
+                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500`}
+              >
+                <span
+                  className={`inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow transition-transform duration-200 ${
+                    isCostInvolved ? "translate-x-[20px]" : "translate-x-0"
+                  }`}
+                ></span>
+              </button>
             </div>
 
             {isCostInvolved && (

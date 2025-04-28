@@ -144,13 +144,13 @@ function EventListing7() {
           <section className="flex gap-10 self-center py-1.5 pr-3 pl-1 mt-5 w-full border-t border-b border-zinc-800 px-4 justify-between">
             <div className="flex flex-1 gap-2.5 mt-1.5 text-black">
               <img
-                src={creator.avatar}
+                src={creator?.avatar}
                 className="w-8 h-8 rounded-full bg-zinc-300"
               />
               <div className="flex flex-col">
-                <div className="text-xs">{creator.name}</div>
+                <div className="text-xs">{creator?.name}</div>
                 <div className="mt-2.5 text-xs">
-                  From {creator.currentLocation}
+                  From {creator?.currentLocation}
                 </div>
               </div>
             </div>
@@ -206,10 +206,10 @@ function EventListing7() {
                 </p>
                 <div className="flex flex-col w-full gap-2 mt-2">
                   {event?.participants?.filter(
-                    (p) => p.requestStatus === "requested"
+                    (p) => p?.requestStatus === "requested"
                   ).length > 0 ? (
                     event?.participants
-                      .filter((p) => p.requestStatus === "requested")
+                      .filter((p) => p?.requestStatus === "requested")
                       .map((item) => (
                         <div
                           key={item.user?._id}
@@ -243,10 +243,11 @@ function EventListing7() {
                       ✅ Going <SiTicktick color="orange" />
                     </p>
                     <div className="flex flex-col w-full gap-2 mt-2">
-                      {event.participants.filter((p) => p.rsvpStatus === "yes")
-                        .length > 0 ? (
-                        event.participants
-                          .filter((p) => p.rsvpStatus === "yes")
+                      {event?.participants.filter(
+                        (p) => p?.rsvpStatus === "yes"
+                      ).length > 0 ? (
+                        event?.participants
+                          .filter((p) => p?.rsvpStatus === "yes")
                           .map((item) => (
                             <Link
                               to={`/people/detail/${item?.user?._id}`}
@@ -288,14 +289,14 @@ function EventListing7() {
                     <div className="flex flex-col w-full gap-2 mt-2">
                       {event?.participants?.filter(
                         (p) =>
-                          p.rsvpStatus !== "yes" &&
-                          p.requestStatus !== "requested"
+                          p?.rsvpStatus !== "yes" &&
+                          p?.requestStatus !== "requested"
                       ).length > 0 ? (
                         event?.participants
                           ?.filter(
                             (p) =>
-                              p.rsvpStatus !== "yes" &&
-                              p.requestStatus !== "requested"
+                              p?.rsvpStatus !== "yes" &&
+                              p?.requestStatus !== "requested"
                           )
                           .map((item) => (
                             <Link
