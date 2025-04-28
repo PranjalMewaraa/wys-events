@@ -43,234 +43,236 @@ import FlagUserProfile from "./admin/FlagProfile";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* Public Route */}
-        <Route path="/signin" element={<UnifiedAuth />} />
+    <>
+      <Router>
+        <Routes>
+          {/* Public Route */}
+          <Route path="/signin" element={<UnifiedAuth />} />
 
-        {/* Protected User Routes */}
-        <Route
-          path="/"
-          element={
-            <AuthWrapper>
-              <Dashboard />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/events"
-          element={
-            <AuthWrapper>
-              <Home />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/event/:eventId"
-          element={
-            <AuthWrapper>
-              <EventDetail />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/people"
-          element={
-            <AuthWrapper>
-              <MatchingHome />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/people/detail/:userId"
-          element={
-            <AuthWrapper>
-              <Matching />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/onboarding"
-          element={
-            <AuthWrapper>
-              <OnBoarding />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/pre/onboarding"
-          element={
-            <AuthWrapper>
-              <PreOnboarding />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/listing"
-          element={
-            <AuthWrapper>
-              <EventsView />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/listing/upcoming/detail/:id"
-          element={
-            <AuthWrapper>
-              <EventListing7 />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/listing/input"
-          element={
-            <AuthWrapper>
-              <InputDesign />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/check"
-          element={
-            <AuthWrapper>
-              <EventListing7 />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/chat"
-          element={
-            <AuthWrapper>
-              <ChatOuter />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/chats/group/:groupId/:eventId"
-          element={
-            <AuthWrapper>
-              <ChatBox />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/chats/user/:userId"
-          element={
-            <AuthWrapper>
-              <ChatBox />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <AuthWrapper>
-              <Profile />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/experience"
-          element={
-            <AuthWrapper>
-              <Experience />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/detail"
-          element={
-            <AuthWrapper>
-              <AccountDetail />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/detail/preference"
-          element={
-            <AuthWrapper>
-              <Travelpreference />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/detail/matching"
-          element={
-            <AuthWrapper>
-              <CompanionMatching />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/detail/about"
-          element={
-            <AuthWrapper>
-              <Userdetailed />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/detail/trust"
-          element={
-            <AuthWrapper>
-              <Trust />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/companions"
-          element={
-            <AuthWrapper>
-              <Companions />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/profile/listing"
-          element={
-            <AuthWrapper>
-              <Listing />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/listing/myevent/detail/:id"
-          element={
-            <AuthWrapper>
-              <EventDetailMY />
-            </AuthWrapper>
-          }
-        />
-        <Route
-          path="/request/:event/:id"
-          element={
-            <AuthWrapper>
-              <Request />
-            </AuthWrapper>
-          }
-        />
+          {/* Protected User Routes */}
+          <Route
+            path="/"
+            element={
+              <AuthWrapper>
+                <Dashboard />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/events"
+            element={
+              <AuthWrapper>
+                <Home />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/event/:eventId"
+            element={
+              <AuthWrapper>
+                <EventDetail />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/people"
+            element={
+              <AuthWrapper>
+                <MatchingHome />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/people/detail/:userId"
+            element={
+              <AuthWrapper>
+                <Matching />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/onboarding"
+            element={
+              <AuthWrapper>
+                <OnBoarding />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/pre/onboarding"
+            element={
+              <AuthWrapper>
+                <PreOnboarding />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/listing"
+            element={
+              <AuthWrapper>
+                <EventsView />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/listing/upcoming/detail/:id"
+            element={
+              <AuthWrapper>
+                <EventListing7 />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/listing/input"
+            element={
+              <AuthWrapper>
+                <InputDesign />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/check"
+            element={
+              <AuthWrapper>
+                <EventListing7 />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <AuthWrapper>
+                <ChatOuter />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/chats/group/:groupId/:eventId"
+            element={
+              <AuthWrapper>
+                <ChatBox />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/chats/user/:userId"
+            element={
+              <AuthWrapper>
+                <ChatBox />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <AuthWrapper>
+                <Profile />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/experience"
+            element={
+              <AuthWrapper>
+                <Experience />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/detail"
+            element={
+              <AuthWrapper>
+                <AccountDetail />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/detail/preference"
+            element={
+              <AuthWrapper>
+                <Travelpreference />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/detail/matching"
+            element={
+              <AuthWrapper>
+                <CompanionMatching />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/detail/about"
+            element={
+              <AuthWrapper>
+                <Userdetailed />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/detail/trust"
+            element={
+              <AuthWrapper>
+                <Trust />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/companions"
+            element={
+              <AuthWrapper>
+                <Companions />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile/listing"
+            element={
+              <AuthWrapper>
+                <Listing />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/listing/myevent/detail/:id"
+            element={
+              <AuthWrapper>
+                <EventDetailMY />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/request/:event/:id"
+            element={
+              <AuthWrapper>
+                <Request />
+              </AuthWrapper>
+            }
+          />
 
-        {/* Admin Routes - All Wrapped in AuthWrapper */}
-        <Route
-          path="/admin"
-          element={
-            <AuthWrapper>
-              <Outlet />
-            </AuthWrapper>
-          }
-        >
-          <Route index element={<DashboardAdmin />} />
-          <Route path="people" element={<DashboardAdminMatchmaking />} />
-          <Route path="user/profile/:id" element={<UserProfile />} />
-          <Route path="people/match/:id" element={<MatchingDash />} />
-          <Route path="match/:id1/:id2" element={<MatchingInner />} />
-          <Route path="event" element={<EventAdmin />} />
-          <Route path="event/:id" element={<EventDetailAdmin />} />
-          <Route path="flag" element={<DashboardAdminFlag />} />
-          <Route path="flag/:id" element={<FlagUserProfile />} />
-        </Route>
-      </Routes>
-    </Router>
+          {/* Admin Routes - All Wrapped in AuthWrapper */}
+          <Route
+            path="/admin"
+            element={
+              <AuthWrapper>
+                <Outlet />
+              </AuthWrapper>
+            }
+          >
+            <Route index element={<DashboardAdmin />} />
+            <Route path="people" element={<DashboardAdminMatchmaking />} />
+            <Route path="user/profile/:id" element={<UserProfile />} />
+            <Route path="people/match/:id" element={<MatchingDash />} />
+            <Route path="match/:id1/:id2" element={<MatchingInner />} />
+            <Route path="event" element={<EventAdmin />} />
+            <Route path="event/:id" element={<EventDetailAdmin />} />
+            <Route path="flag" element={<DashboardAdminFlag />} />
+            <Route path="flag/:id" element={<FlagUserProfile />} />
+          </Route>
+        </Routes>
+      </Router>
+    </>
   );
 };
 
