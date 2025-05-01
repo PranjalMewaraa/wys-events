@@ -28,6 +28,8 @@ const AccountDetail = () => {
         );
         setUser(response.data.data);
       } catch (error) {
+        localStorage.removeItem("accessToken");
+        window.location.href = "/signin";
         console.error("Error fetching user:", error);
       }
     };

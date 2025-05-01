@@ -23,7 +23,10 @@ api.interceptors.response.use(
     const message =
       error.response?.data?.message || error.message || "Something went wrong";
 
-    if (message.toLowerCase().includes("jwt")) {
+    if (
+      message.toLowerCase().includes("jwt") ||
+      message.toLowerCase().includes("Access")
+    ) {
       localStorage.removeItem("accessToken");
       window.location.href = "/signin";
     }
