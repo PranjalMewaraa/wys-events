@@ -94,7 +94,7 @@ function InputDesign() {
       ...experience,
       category:
         experience.category === "Create Your Own Scene (Other)"
-          ? experience.customCategory
+          ? experience.category
           : experience.category,
       availableSlots: experience.totalSlots,
       cost: isCostInvolved && selectedOption === "fee" ? experience.cost : 0,
